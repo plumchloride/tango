@@ -25,3 +25,20 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 
 また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-manyo_1603」 [https://ccd.ninjal.ac.jp/unidic/]  
 「UniDic-manyo_1603」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。
+
+
+# ファイル
+GitHub/  
+　├ filtering/  
+　│　└ tango_filter.ipynb 単語辞書を作る際に利用したフィルター用コード  
+　├ Web/  
+　│　├ public/  
+　│　│　├ data/  
+　│　│　│　├ A_data.csv 単語が実在するかのチェック用データ  
+　│　│　│　└ Q_data.csv 問題に利用する単語のデータ  
+　│　│　└test.html  
+　│　└src/  
+　├ .gitignore  
+　├ COPYING 著作権表示等  
+　├ LICENSE BSDライセンス  
+　└ README.md  

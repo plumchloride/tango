@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8">
+  <title>ことば</title>
+  <meta name="description" content="1日1回単語推測パズルゲーム">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <h1>接続</h1>
+    <div id="output_csv"></div>
+  </body>
+  <script defer>
+    const outputElement = document.getElementById('output_csv');
+
+    function getCsvData(dataPath) {
+      const request = new XMLHttpRequest();
+      request.addEventListener('load', (event) => {
+        const response = event.target.responseText;
+        outputElement.innerHTML = response;
+      });
+      request.open('GET', dataPath, true);
+      request.send();
+    }
+    getCsvData('./sample.csv');
+  </script>
+</html>
