@@ -9,6 +9,11 @@
   <script src="../src/get_today_word.js" defer></script>
   <script src="../src/create_key_bord.js" defer></script>
   <script src="../src/wake_up.js" defer></script>
+  <script src="../src/check_answer.js" defer></script>
+  <script src="../src/display_setting.js" defer></script>
+  <script src="../src/create_answer_input.js" defer></script>
+  <script src="../src/create_display.js" defer></script>
+  <script src="../src/create_answer_keybord.js" defer></script>
   <link rel="stylesheet" href="./style.css"></link>
   </head>
   <body>
@@ -25,6 +30,16 @@
         </div>
       </div>
       <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+
+      <div id="eval_display"></div>
+
+      <div class="flex_center">
+        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
+      </div>
+      <div class="flex_center">
+        <button id="Decision_button">決定</button>
+      </div>
+
       <div id="keybord"></div>
     </div>
     <div id="hatena">

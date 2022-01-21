@@ -1,4 +1,4 @@
-let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"fin":false}
+let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"createKeybordEvent":false,"fin":false}
 GetCsvData('./data/A_data.csv',"A");
 GetCsvData('./data/Q_data.csv',"Q");
 
@@ -8,9 +8,14 @@ const Progress = ()=>{
     GetTodayWord();
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & !wake_up_progress["createKeybord"]){
     CreateKeybord();
-  }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & wake_up_progress["createKeybord"]){
+  }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & wake_up_progress["createKeybord"] & !wake_up_progress["createDisplay"]){
+    CreateDisplay();
+  }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & wake_up_progress["createKeybord"] & wake_up_progress["createDisplay"] & !wake_up_progress["createKeybordEvent"]){
+    AddKeybordEvent();
+  }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & wake_up_progress["createKeybord"] & wake_up_progress["createDisplay"] & wake_up_progress["createKeybordEvent"]){
     wake_up_progress["fin"] = true;
     setInterval(DisplayTime, 1000);
+    SolvHighlight();
   }
 }
 

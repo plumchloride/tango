@@ -12,7 +12,7 @@ const CreateKeybord = ()=>{
   $keybord = document.getElementById("keybord");
   element_array = [];
   for(let i = 0;i<9;i++){
-    // heを入れた後
+    // <hr>を入れた後
     if(i >= 5){
       if(i == 5)element_array.push(document.createElement("hr"));
       element_array.push(document.createElement("div"));
@@ -22,10 +22,12 @@ const CreateKeybord = ()=>{
         element_array[i+1].childNodes[z].setAttribute("data-key",KEYBORD_LIST[i][z]);
         element_array[i+1].childNodes[z].innerText = KEYBORD_LIST[i][z];
         if(KEYBORD_LIST[i][z] == "　"){
-          element_array[i+1].childNodes[z].setAttribute("class","space_bt")
-          element_array[i+1].childNodes[z].setAttribute("disabled","True")
+          element_array[i+1].childNodes[z].setAttribute("class","space_bt");
+          element_array[i+1].childNodes[z].setAttribute("disabled","True");
         }else if(["←","→","del"].includes(KEYBORD_LIST[i][z])){
-          element_array[i+1].childNodes[z].setAttribute("class","func_bt")
+          element_array[i+1].childNodes[z].setAttribute("class","func_bt");
+        }else{
+          element_array[i+1].childNodes[z].setAttribute("class","key_bt");
         }
       };
       // 入れる前
@@ -39,12 +41,14 @@ const CreateKeybord = ()=>{
         if(KEYBORD_LIST[i][z] == "　"){
           element_array[i].childNodes[z].setAttribute("class","space_bt");
           element_array[i].childNodes[z].setAttribute("disabled","True");
+        }else{
+          element_array[i].childNodes[z].setAttribute("class","key_bt");
         }
       };
     }
   };
   element_array.forEach((element)=>{
-    $keybord.appendChild(element)
+    $keybord.appendChild(element);
   })
 
   wake_up_progress["createKeybord"] = true;

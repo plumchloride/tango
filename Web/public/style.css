@@ -5,7 +5,7 @@ body{
   background-color: rgb(228,237,241);
 }
 #body {
-  width: 600px;
+  width: 30vw;
   display: inline-block;
   background-color: rgb(228,237,241);
   margin: 0 auto;
@@ -37,9 +37,73 @@ h1{
 }
 
 #time_left{
+  padding-top: 2px;
+  padding-bottom: 2px;
   color: rgb(211,147,93);
   text-align: right;
   padding-right: 0.5rem;
+}
+
+/* ディスプレイ */
+#eval_display{
+  padding-bottom:  10px ;
+}
+#eval_display .row{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
+#eval_display .display_num{
+  width: 8%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(228,237,241);
+  border: solid 2px rgb(167,210,141);
+  text-align: center;
+  font-weight: bold;
+  vertical-align:middle;
+}
+#eval_display .row_now_solve{
+  border: solid 2px rgb(211,147,93);
+}
+#eval_display .now_solve{
+  border: solid 2px rgb(128,197,222);
+}
+.right_display{
+  
+  border-radius: 50%!important;
+}
+/* ディスプレイ */
+
+
+.flex_center{
+  display: flex;
+  justify-content: center
+}
+
+
+#input_text{
+  font-size: 1.5em;
+  width: 9em;
+  text-align: center;
+  border: solid rgb(167,210,141) 2px;
+  background-color: rgb(228,237,241);
+  border-radius: 1em;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#Decision_button{
+  font-size: 2em;
+  margin:5px;
+  border: solid #555 0px;
+  background-color: rgb(211,147,93);
 }
 
 /* キーボード */
@@ -50,7 +114,7 @@ h1{
   padding-bottom: 0.5ex;
 }
 #keybord .row button{
-  width: 54px;
+  width: 9%;
   height: 5ex;
   font-weight: bold;
   border: solid #555 0px;
@@ -60,16 +124,35 @@ h1{
   background-color: rgb(228,237,241)!important;
   border:  dotted #555 1px !important;
 }
-
 #keybord .func_bt{
   background-color: rgb(128,197,222)!important;
 }
+#keybord hr{
+  margin:2px 0;
+  color: #555;
+}
+/* キーボード */
+@media screen and (max-width: 1400px) { /*ウィンドウ幅が最大1400pxまでの場合に適用*/
+  #body{
+    width: 40vw;
+  }
 
-@media screen and (max-width: 767px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/
+  #eval_display .row .display_num{
+    width: 8%;
+  }
+  #keybord .row button{
+    width: 9%;
+  }
+}
+
+@media screen and (max-width: 1000px) { /*ウィンドウ幅が最大1000pxまでの場合に適用*/
   #body{
     width: 100vw;
   }
 
+  #eval_display .row .display_num{
+    width: 8vw;
+  }
   #keybord .row button{
     width: 9vw;
   }
