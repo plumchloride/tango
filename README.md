@@ -1,4 +1,4 @@
-# たんご
+# ことのはたんご
 単語推理ゲーム「ことのはたんご」
 リンク ()
 
@@ -28,6 +28,7 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 
 
 # ファイル
+余裕があったら更新
 GitHub/  
 　├ filtering/  
 　│　└ tango_filter.ipynb 単語辞書を作る際に利用したフィルター用コード  

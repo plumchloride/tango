@@ -7,10 +7,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../src/get_csv.js" defer></script>
   <script src="../src/get_today_word.js" defer></script>
+  <script src="../src/create_key_bord.js" defer></script>
   <script src="../src/wake_up.js" defer></script>
+  <link rel="stylesheet" href="./style.css"></link>
   </head>
   <body>
-    <h1>ことのはたんご</h1>
-    <div id ="time_left"></div>
+    <div id="body">
+      <div id="header">
+        <div>
+          <img id="img_hatena" class = "inline-img" src="./img/hatena.svg" width="30" height="30" alt="what is this app">
+          <div id="place_holder"></div>
+        </div>
+        <h1>ことのはたんご</h1>
+        <div>
+          <img id="img_bar_graph" class = "inline-img-r" src="./img/bar_graph.svg" width="30" height="30" alt="setting">
+          <img id="img_setting" class = "inline-img-r" src="./img/set.svg" width="30" height="30" alt="setting">
+        </div>
+      </div>
+      <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+      <div id="keybord"></div>
+    </div>
+    <div id="hatena">
+
+    </div>
+    <div id="graph">
+
+    </div>
+    <div id="setting">
+
+    </div>
   </body>
 </html>

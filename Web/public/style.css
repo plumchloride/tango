@@ -1,0 +1,76 @@
+body{
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  background-color: rgb(228,237,241);
+}
+#body {
+  width: 600px;
+  display: inline-block;
+  background-color: rgb(228,237,241);
+  margin: 0 auto;
+}
+#header{
+  border-bottom: solid 1px rgb(167,210,141);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+h1{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: rgb(127,159,53);
+  font-size: 1.4em;
+}
+.inline-img{
+  margin-left: 10px;
+}
+.inline-img-r{
+  margin-right: 10px;
+}
+#place_holder{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+}
+
+#time_left{
+  color: rgb(211,147,93);
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+/* キーボード */
+#keybord .row{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
+#keybord .row button{
+  width: 54px;
+  height: 5ex;
+  font-weight: bold;
+  border: solid #555 0px;
+  background-color: rgb(133,202,200);
+}
+#keybord .space_bt{
+  background-color: rgb(228,237,241)!important;
+  border:  dotted #555 1px !important;
+}
+
+#keybord .func_bt{
+  background-color: rgb(128,197,222)!important;
+}
+
+@media screen and (max-width: 767px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/
+  #body{
+    width: 100vw;
+  }
+
+  #keybord .row button{
+    width: 9vw;
+  }
+}
