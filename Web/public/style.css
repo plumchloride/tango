@@ -58,6 +58,7 @@ h1{
   width: 8%;
   height: auto;
   aspect-ratio: 1 / 1;
+  font-size: 1.3em;
   border-radius: 0;
   display: flex;
   flex-direction: column;
@@ -75,16 +76,29 @@ h1{
 #eval_display .now_solve{
   border: solid 2px rgb(128,197,222);
 }
-.right_display{
-  
+#eval_display .right_display{
   border-radius: 50%!important;
+}
+#eval_display .word_hit{
+  background-color: rgb(167,210,141);
+  border: solid 2px rgb(167,210,141);
+}
+#eval_display .word_blow{
+  background-color: rgb(252, 201, 72);
+  border: solid 2px rgb(252, 201, 72);
+
+}
+#eval_display .word_none{
+  background-color: gray;
+  border: solid 2px gray;
+  color: white;
 }
 /* ディスプレイ */
 
 
 .flex_center{
   display: flex;
-  justify-content: center
+  justify-content: center;
 }
 
 
@@ -113,7 +127,7 @@ h1{
   padding-top: 0.5ex;
   padding-bottom: 0.5ex;
 }
-#keybord .row button{
+#keybord button{
   width: 9%;
   height: 5ex;
   font-weight: bold;
@@ -131,7 +145,44 @@ h1{
   margin:2px 0;
   color: #555;
 }
+#keybord .word_hit{
+  background-color: rgb(167,210,141);
+  border: solid 0px rgb(167,210,141);
+}
+#keybord .word_blow{
+  background-color: rgb(252, 201, 72);
+  border: solid 0px rgb(252, 201, 72);
+
+}
+#keybord .word_none{
+  background-color: gray;
+  border: solid 0px gray;
+  color: white;
+}
 /* キーボード */
+
+
+#alert{
+  width: 100vw;
+  position:absolute;
+  display: flex;
+  justify-content: center;
+}
+#alert div{
+  width:30vw;
+  background-color: rgb(211,147,93);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 0.5em;
+  margin: 1em;
+  padding:0.4em;
+}
+
+/* 見えない */
+.non_visi{
+  display: none!important;
+}
+
 @media screen and (max-width: 1400px) { /*ウィンドウ幅が最大1400pxまでの場合に適用*/
   #body{
     width: 40vw;
@@ -142,6 +193,9 @@ h1{
   }
   #keybord .row button{
     width: 9%;
+  }
+  #alert div{
+    width:40vw;
   }
 }
 
@@ -155,5 +209,8 @@ h1{
   }
   #keybord .row button{
     width: 9vw;
+  }
+  #alert div{
+    width:100vw;
   }
 }

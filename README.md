@@ -7,6 +7,7 @@
 
 
 Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製したフリーウェブアプリである「[Wordle](https://www.powerlanguage.co.uk/wordle/)」より多大な影響を受け作成しました。
+いわゆるWordleの日本語版です。
 
 # ゲーム説明
 

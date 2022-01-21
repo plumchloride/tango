@@ -1,13 +1,15 @@
 let title = "";
 let pronunciation = "";
+let save_day = "";
+let pass_day = 0;
 
 // シード値付きの乱数
 // https://sbfl.net/blog/2017/06/01/javascript-reproducible-random/
 class Random {
-  constructor(seed = 88675123) {
-    this.x = 415845311;
-    this.y = 845103456;
-    this.z = 561321120;
+  constructor(seed,x) {
+    this.x = x;
+    this.y = 4120343;
+    this.z = 856135;
     this.w = seed;
   }
   
@@ -27,9 +29,16 @@ class Random {
   }
 }
 const GetRandom = ()=>{
+  const  First_Day = new Date(new Date("2022/1/21").getTime()+((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
   jst = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  seed = (parseInt(String(jst.getFullYear())+String(jst.getMonth())+String(jst.getDate())) +801)*2001;
-  rand = new Random(seed);
+  timestamp = jst - First_Day;
+  pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
+  year = parseInt(String(jst.getFullYear()));
+  month = parseInt(String(jst.getMonth()));
+  day = parseInt(String(jst.getDate()));
+  save_day = String(year)+":"+String(month)+":"+String(day);
+  seed = year+month*801+day*13;
+  rand = new Random(seed,day*2001);
   random_num = rand.nextInt(0,Q_data["title"].length);
   return random_num;
 }
@@ -40,5 +49,7 @@ const GetTodayWord = ()=>{
   pronunciation  = Q_data["pronunciation"][random_num];
   console.log(title +":"+pronunciation);
   wake_up_progress.getWord = true;
+  //
+
   Progress();
 }

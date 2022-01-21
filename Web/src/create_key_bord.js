@@ -28,6 +28,7 @@ const CreateKeybord = ()=>{
           element_array[i+1].childNodes[z].setAttribute("class","func_bt");
         }else{
           element_array[i+1].childNodes[z].setAttribute("class","key_bt");
+          element_array[i+1].childNodes[z].setAttribute("id","btn_"+KEYBORD_LIST[i][z]);
         }
       };
       // 入れる前
@@ -43,6 +44,7 @@ const CreateKeybord = ()=>{
           element_array[i].childNodes[z].setAttribute("disabled","True");
         }else{
           element_array[i].childNodes[z].setAttribute("class","key_bt");
+          element_array[i].childNodes[z].setAttribute("id","btn_"+KEYBORD_LIST[i][z]);
         }
       };
     }
