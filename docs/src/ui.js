@@ -1,4 +1,4 @@
-let src = {"hatena":"./img/hatena.svg","bar":"./img/bar_graph.svg","set":"./img/set.svg","batu":"./img/x.svg"};
+let src = {"hatena":"./public/img/hatena.svg","bar":"./public/img/bar_graph.svg","set":"./public/img/set.svg","batu":"./public/img/x.svg"};
 let img_show = {"hatena":true,"bar":false,"set":false};
 let $img_btn = {"hatena":document.getElementById("img_hatena"),"bar":document.getElementById("img_bar_graph"),"set":document.getElementById("img_setting")}
 let $div = {"body":document.getElementById("body"),"hatena":document.getElementById("hatena"),"bar":document.getElementById("graph"),"set":document.getElementById("setting")}

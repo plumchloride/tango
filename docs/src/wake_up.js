@@ -1,6 +1,6 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
-GetCsvData('./data/A_data.csv',"A");
-GetCsvData('./data/Q_data.csv',"Q");
+GetCsvData('./public/data/A_data.csv',"A");
+GetCsvData('./public/data/Q_data.csv',"Q");
 
 const Progress = ()=>{
   console.log(wake_up_progress)
