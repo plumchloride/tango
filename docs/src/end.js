@@ -4,6 +4,7 @@ const end = (text)=>{
   end_tf = true;
   // 文字変更
   document.getElementById("result").innerText = text
+  document.getElementById("result_answer").innerText = `たんご：「"${title}"」（"${pronunciation}"）`
   // グラフ画面起動
   mode = "bar"
   allNonVisi();

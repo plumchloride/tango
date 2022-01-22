@@ -59,7 +59,7 @@ h2{
   font-weight: bold;
   border-radius: 0.5em;
   margin: 1vw;
-  padding:0.4em;
+  padding:2em;
 }
 #graph #graph_bt{
   display: flex;
@@ -86,9 +86,11 @@ h2{
 
 .inline-img{
   margin-left: 10px;
+  cursor: pointer;
 }
 .inline-img-r{
   margin-right: 10px;
+  cursor: pointer;
 }
 #place_holder{
   display: inline-block;

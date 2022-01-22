@@ -68,18 +68,29 @@ document.getElementById("graph_tw").addEventListener("click",(element)=>{
 document.getElementById("graph_close").addEventListener("click",(el)=>{
   mode = "bar"
   allNonVisi();
-      img_show[mode] = false;
-      $div.body.classList.remove("non_visi");
-      $img_btn[mode].setAttribute("src",src[mode]);
+  img_show[mode] = false;
+  $div.body.classList.remove("non_visi");
+  $img_btn[mode].setAttribute("src",src[mode]);
 });
 
 // 閉じるボタンでも説明をを閉じられるように
 document.getElementById("hatena_close").addEventListener("click",(el)=>{
   mode = "hatena"
   allNonVisi();
-      img_show[mode] = false;
-      $div.body.classList.remove("non_visi");
-      $img_btn[mode].setAttribute("src",src[mode]);
+  img_show[mode] = false;
+  $div.body.classList.remove("non_visi");
+  $img_btn[mode].setAttribute("src",src[mode]);
+});
+
+// タイトル名からゲーム画面に戻れるように
+document.getElementById("title").addEventListener("click",(el)=>{
+  allNonVisi();
+  Object.keys(img_show).forEach((key) => {
+    img_show[key] = false;
+    $img_btn[key].setAttribute("src",src[key]);
+  });
+
+  $div.body.classList.remove("non_visi");
 });
 
 // aタグでのリンクの実装が出来なかったため
