@@ -1,4 +1,5 @@
 body{
+  width: 100vw;
   margin: 0px;
   padding: 0px;
   display: flex;
@@ -22,7 +23,6 @@ body{
 #header{
   width: 30vw;
   background-color: rgb(228,237,241);
-  margin: 0 auto;
   border-bottom: solid 1px rgb(167,210,141);
   display: flex;
   justify-content: space-between;
@@ -44,7 +44,7 @@ h2{
 }
 
 #graph{
-  width: 100vw;
+  width: 98vw;
   position:absolute;
   display: flex;
   justify-content: center;
@@ -57,7 +57,7 @@ h2{
   text-align: center;
   font-weight: bold;
   border-radius: 0.5em;
-  margin: 1em;
+  margin: 1vw;
   padding:0.4em;
 }
 #graph #graph_bt{
@@ -286,6 +286,12 @@ h2{
   padding:0.4em;
 }
 
+#linek{
+  cursor: pointer;
+  color: rgb(128,197,222);
+  font-weight: bold;
+}
+
 /* 見えない */
 .non_visi{
   display: none!important;
@@ -315,7 +321,7 @@ h2{
 
 @media screen and (max-width: 1000px) { /*ウィンドウ幅が最大1000pxまでの場合に適用*/
   #body{
-    width: 100vw;
+    width: 98vw;
   }
 
   #eval_display .row .display_num{
@@ -325,12 +331,15 @@ h2{
     width: 9vw;
   }
   #alert div{
-    width:100vw;
+    width:96vw;
   }
   .explanation{
-    width: 98vw;
+    width: 94vw;
   }
   #header{
     width: 98vw;
+  }
+  #graph{
+    width: 94vw;
   }
 }

@@ -81,3 +81,8 @@ document.getElementById("hatena_close").addEventListener("click",(el)=>{
       $div.body.classList.remove("non_visi");
       $img_btn[mode].setAttribute("src",src[mode]);
 });
+
+// aタグでのリンクの実装が出来なかったため
+document.getElementById("linek").addEventListener("click",(e)=>{
+  window.open("https://www.powerlanguage.co.uk/wordle/","_brank")
+})

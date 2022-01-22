@@ -30,22 +30,8 @@
         <img id="img_setting" class = "inline-img-r" data-mode="set" src="./img/set.svg" width="30" height="30" alt="setting">
       </div>
     </div>
-    <div id="body" class="non_visi">
-      <div id ="time_left">今日の単語 残り時間：--:--:--</div>
-
-      <div id="eval_display"></div>
-
-      <div class="flex_center">
-        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
-      </div>
-      <div class="flex_center">
-        <button id="Decision_button">決定</button>
-      </div>
-
-      <div id="keybord"></div>
-    </div>
     <div id="hatena" class="explanation">
-      <p>日本語版の<a herf="https://www.powerlanguage.co.uk/wordle/">Wordle</a>として作成しました。<br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
+      <p>日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。<br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
       <p>日本語の特性上本家Wordleよりもだいぶ難易度が高いです（簡単にするために、4文字の物も構想中です）</p>
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
@@ -66,10 +52,26 @@
       </div>
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
+      <p>出題単語に対するフィルタリングを行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
       <h2 id="hatena_close"><u style="cursor: pointer;">説明を閉じる</u></h2>
       <hr>
       <div></div>
       <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
+      <img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
+    </div>
+    <div id="body" class="non_visi">
+      <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+
+      <div id="eval_display"></div>
+
+      <div class="flex_center">
+        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
+      </div>
+      <div class="flex_center">
+        <button id="Decision_button">決定</button>
+      </div>
+
+      <div id="keybord"></div>
     </div>
     <div id="graph" class="non_visi explanation">
       <div id="graph_body">
@@ -83,6 +85,17 @@
       </div>
     </div>
     <div id="setting" class="non_visi explanation">
+      <h2>ハードモード</h2>
+      <p>未実装</p>
+      <h2>ライセンス</h2>
+      <div style="font-size: 0.8em;">
+        <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。</p>
+        <p>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
+        <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-cwj_3.1.0」 [https://ccd.ninjal.ac.jp/unidic/]<br>
+          「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
+      </div>
+      <h2>バグ報告</h2>
+      <p>バグ等が発生した場合はGitHub上のissuesに投稿して下さい。また新規単語の登録希望は受け付けていません。</p>
     </div>
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>

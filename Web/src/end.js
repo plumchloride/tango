@@ -29,15 +29,6 @@ const end = (text)=>{
 
 const createEmoji = ()=>{
   base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n\r\n"
-  if(end_tf){
-    if(end_fin){
-      situation = "正解"
-    }else{
-      situation = "不正解"
-    }
-  }else{
-    situation = "途中経過"
-  }
   graph_text = ""
   history_of_hb.forEach((Element,index)=>{
     if(index<5){
@@ -52,5 +43,5 @@ const createEmoji = ()=>{
       })
     }
   })
-  return(base_text+situation+graph_text)
+  return(base_text+graph_text)
 }

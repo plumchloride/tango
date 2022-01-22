@@ -24,8 +24,8 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />この 作品 は <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。  
 この作品はくわえて、BSDライセンスの下に提供されています。
 
-また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-manyo_1603」 [https://ccd.ninjal.ac.jp/unidic/]  
-「UniDic-manyo_1603」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。
+また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-cwj_3.1.0」 [https://ccd.ninjal.ac.jp/unidic/]  
+「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。
 
 
 # ファイル
