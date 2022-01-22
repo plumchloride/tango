@@ -87,26 +87,45 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   history_of_hb_text.all = history_of_hb_text.all.concat(Array.from(all_word));
 
 
+
+  // 画面表示系計算
+  history_of_hb.push(hb_list);
+  history_of_anser.push(anser.toString().replace(/,/g, ""));
+  anser = ["　","　","　","　","　"];
+
+  if(now_solve.row == 9){
+    localStorage.setItem("now_solve", JSON.stringify(now_solve));
+    localStorage.setItem("history_of_hb_text", JSON.stringify(history_of_hb_text));
+    localStorage.setItem("history_of_hb", JSON.stringify(history_of_hb));
+    localStorage.setItem("history_of_anser", JSON.stringify(history_of_anser));
+    localStorage.setItem("pass_day", pass_day);
+    localStorage.setItem("fin", JSON.stringify({"tf":false,"text":undefined}));
+    end("不正解です",0);
+    return;
+  }
   // 回答したことを伝える
   now_solve.row += 1;
   now_solve.text = 0;
 
-  if(now_solve.row == 10){
-    end("不正解です");
-  }
+  // ローカルストレージに保存
+  localStorage.setItem("now_solve", JSON.stringify(now_solve));
+  localStorage.setItem("history_of_hb_text", JSON.stringify(history_of_hb_text));
+  localStorage.setItem("history_of_hb", JSON.stringify(history_of_hb));
+  localStorage.setItem("history_of_anser", JSON.stringify(history_of_anser));
+  localStorage.setItem("pass_day", pass_day);
+  localStorage.setItem("fin", JSON.stringify({"tf":false,"text":undefined}));
 
-  // 画面表示として反映
-  history_of_hb.push(hb_list);
-  history_of_anser.push(anser.toString().replace(/,/g, ""));
-  anser = ["　","　","　","　","　"];
+  //画面更新
   AnsDisplayUpdate(now_solve.row -1);
   ValueUpdate();
   DisplayUpdate();
 
 
+  console.log(now_solve.row)
+
   if(h_index.length == 5){
     end_fin = true;
-    end("正解しました");
+    end("正解しました",1);
   };
 
 });

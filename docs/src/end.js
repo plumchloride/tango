@@ -1,6 +1,32 @@
 end_tf = false;
 end_fin = false;
-const end = (text)=>{
+history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
+const end = (text,win=0)=>{
+  // このゲームの経験者であることを伝える
+  localStorage.setItem("experience", true);
+
+  // 今日初めての終了の場合データの更新を行う
+  if(!JSON.parse(localStorage.getItem("fin")).tf){
+    history_of_game.try_count += 1;
+    // 勝利の場合
+    if(win == 1){
+      history_of_game.win_count += 1;
+      history_of_game.current_streak += 1;
+      if(history_of_game.current_streak>history_of_game.max_streak){
+        history_of_game.max_streak = history_of_game.current_streak;
+      }
+      history_of_game.history[now_solve.row -1] += 1;
+    }else{
+      history_of_game.current_streak = 0;
+    }
+    localStorage.setItem("history_of_game", JSON.stringify(history_of_game));
+  }
+
+  // 戦歴表示
+  showHistory(history_of_game);
+
+  // 終了したことをwebstorageに伝える
+  localStorage.setItem("fin", JSON.stringify({"tf":true,"text":text}))
   end_tf = true;
   // 文字変更
   document.getElementById("result").innerText = text
@@ -29,7 +55,7 @@ const end = (text)=>{
   // }
 
 const createEmoji = ()=>{
-  base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n\r\n"
+  base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"
   graph_text = ""
   history_of_hb.forEach((Element,index)=>{
     if(index<5){

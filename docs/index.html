@@ -17,7 +17,10 @@
   <script src="./src/create_answer_keybord.js" defer></script>
   <script src="./src/end.js" defer></script>
   <script src="./src/ui.js" defer></script>
+  <script src="./src/webstorage.js" defer></script>
   <link rel="stylesheet" href="./public/style.css"></link>
+  <!-- chart js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
 
   <!-- twitter test -->
   <meta name="twitter:card" content="summary_large_image">
@@ -47,7 +50,7 @@
     </div>
     <div id="hatena" class="explanation">
       <p>日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。<br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
-      <p>日本語の特性上本家Wordleよりもだいぶ難易度が高いです（簡単にするために、4文字の物も構想中です）</p>
+      <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>（簡単にするために、4文字の物も構想中です）。</p>
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -104,6 +107,27 @@
           <div id="graph_copy" class="graph_bt_c">コピー</div>
           <div id="graph_tw" class="graph_bt_c">ツイート</div>
         </div>
+        <h2>戦歴</h2>
+        <div id="history">
+          <div class="row">
+            <div class="h-text">プレイ<br>回数</div>
+            <div class="h-number" id = "try_count"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text" style="padding-top: 1.5ex; height: 3.5ex;">勝率</div>
+            <div class="h-number" id = "win_rate"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text">現在の<br>連勝数</div>
+            <div class="h-number" id = "current_streak"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text">最大<br>連勝数</div>
+            <div class="h-number" id = "max_streak"> </div>
+          </div>
+        </div><br>
+        <div>正解分布表示</div>
+        <div id="cahrt_canvas"><canvas id="myChart"></canvas></div>
         <div id="graph_close"><u>閉じる</u></div>
       </div>
     </div>
@@ -111,7 +135,7 @@
       <h2>ハードモード</h2>
       <p>未実装</p>
       <h2>ライセンス</h2>
-      <div style="font-size: 0.8em;">
+      <div style="font-size: 0.9em;">
         <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
         <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-cwj_3.1.0」 [<a  href = "https://ccd.ninjal.ac.jp/unidic/"target="_blank">https://ccd.ninjal.ac.jp/unidic/</a>]<br>
           「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>

@@ -1,13 +1,13 @@
 let now_solve = {"row":0,"text":0}
 $input = document.getElementById("input_text");
 
-const SolvHighlight = ()=>{
+const SolvHighlight = (row = now_solve.row )=>{
   if(end_tf){return};
   for(let i = 0;i < 5;i++){
     if(i == now_solve.text){
-      document.getElementById("dis-"+String(now_solve.row)+"-"+String(i)).classList.add("now_solve");;
+      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("now_solve");;
     }else{
-      document.getElementById("dis-"+String(now_solve.row)+"-"+String(i)).classList.add("row_now_solve");
+      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("row_now_solve");
     }
   }
 }
@@ -18,12 +18,12 @@ const RemoveSolveHighlight = (row = now_solve.row)=>{
     }
   }
 
-const DisplayUpdate = ()=>{
+const DisplayUpdate = (row = now_solve.row)=>{
   if(end_tf){return};
   RemoveSolveHighlight();
   SolvHighlight();
   anser.forEach((element,index)=>{
-    document.getElementById("dis-"+String(now_solve.row)+"-"+String(index)).innerText = element
+    document.getElementById("dis-"+String(row)+"-"+String(index)).innerText = element
   });
 }
 const ValueUpdate = ()=>{

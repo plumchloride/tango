@@ -1,6 +1,5 @@
 let title = "";
 let pronunciation = "";
-let save_day = "";
 let pass_day = 0;
 
 // シード値付きの乱数
@@ -36,7 +35,7 @@ const GetRandom = ()=>{
   year = parseInt(String(jst.getFullYear()));
   month = parseInt(String(jst.getMonth()));
   day = parseInt(String(jst.getDate()));
-  save_day = String(year)+":"+String(month)+":"+String(day);
+  // save_day = String(year)+":"+String(month)+":"+String(day);
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
   random_num = rand.nextInt(0,Q_data["title"].length);

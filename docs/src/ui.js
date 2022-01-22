@@ -2,11 +2,12 @@ let src = {"hatena":"./public/img/hatena.svg","bar":"./public/img/bar_graph.svg"
 let img_show = {"hatena":true,"bar":false,"set":false};
 let $img_btn = {"hatena":document.getElementById("img_hatena"),"bar":document.getElementById("img_bar_graph"),"set":document.getElementById("img_setting")}
 let $div = {"body":document.getElementById("body"),"hatena":document.getElementById("hatena"),"bar":document.getElementById("graph"),"set":document.getElementById("setting")}
+let myChart = "A"
 
 
 $img_btn.hatena.setAttribute("src",src.batu);
 
-// いったんすべての表示を消す
+// いったんすべてのnavの表示を消す
 const allNonVisi = ()=>{
   Object.keys($div).forEach((key) => {
     $div[key].classList.add("non_visi");
@@ -16,7 +17,7 @@ const allNonVisi = ()=>{
   });
 }
 
-// イベントリスナー作製
+// nav用イベントリスナー作製
 Object.keys($img_btn).forEach((key) => {
   $img_btn[key].addEventListener("click",(e)=>{
     if(img_show[e.target.dataset.mode]){
@@ -42,6 +43,54 @@ Object.keys($img_btn).forEach((key) => {
     }
   });
 });
+
+// 戦歴表示機能
+const showHistory = (dir) =>{
+  // history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
+  document.getElementById("try_count").innerText = dir.try_count;
+  win_rate = String(Math.floor((dir.win_count/dir.try_count)*100))+"%";
+  if(!win_rate){
+    win_rate = 0;
+  }
+  document.getElementById("win_rate").innerText = win_rate;
+  document.getElementById("current_streak").innerText =dir.current_streak;
+  document.getElementById("max_streak").innerText =dir.max_streak;
+
+  // chart
+  Chart.defaults.plugins.legend.display = false;
+  labels = ["1","2","3","4","5","6","7","8","9","10"];
+  console.log(dir.history)
+  data = {
+    labels: labels,
+    datasets: [{
+      backgroundColor: 'rgb(128,197,222)',
+      borderColor: 'rgb(128,197,222)',
+      data: dir.history,
+      borderWidth: 0
+    }]
+  }
+  config = {
+    showTooltips: false,
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: false,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+    }
+  };
+
+  if(myChart != "A"){
+    myChart.destroy();
+  }
+  myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+}
 
 
 // graph コピー機能及びツイート機能

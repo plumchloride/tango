@@ -274,6 +274,24 @@ h2{
 }
 /* キーボード */
 
+/* 戦歴 */
+#history{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+#history .h-text{
+  height: 5ex;
+  text-align: center;
+  line-height:2ex;
+  vertical-align: middle;
+}
+#history #myChart{
+  height: 20ex;
+  width: 100%;
+}
+/* 戦歴 */
+
 
 #alert{
   width: 100vw;

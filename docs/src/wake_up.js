@@ -18,6 +18,8 @@ const Progress = ()=>{
     wake_up_progress["fin"] = true;
     setInterval(DisplayTime, 1000);
     SolvHighlight();
+    experienceCheck();
+    beforeDataCheck();
   }
 }
 
