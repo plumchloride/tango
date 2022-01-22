@@ -125,32 +125,32 @@ h2{
   justify-content: center;
   align-items: center;
   background-color: rgb(228,237,241);
-  border: solid 2px rgb(167,210,141);
+  border: solid 0.15em rgb(167,210,141);
   text-align: center;
   font-weight: bold;
   vertical-align:middle;
 }
 #eval_display .row_now_solve{
-  border: solid 2px rgb(211,147,93);
+  border: solid 0.15em rgb(211,147,93);
 }
 #eval_display .now_solve{
-  border: solid 2px rgb(128,197,222);
+  border: solid 0.15em rgb(128,197,222);
 }
 #eval_display .right_display{
   border-radius: 50%!important;
 }
 #eval_display .word_hit{
   background-color: rgb(167,210,141);
-  border: solid 2px rgb(167,210,141);
+  border: solid 0.15em rgb(167,210,141);
 }
 #eval_display .word_blow{
   background-color: rgb(252, 201, 72);
-  border: solid 2px rgb(252, 201, 72);
+  border: solid 0.15em rgb(252, 201, 72);
 
 }
 #eval_display .word_none{
   background-color: gray;
-  border: solid 2px gray;
+  border: solid 0.15em gray;
   color: white;
 }
 /* ディスプレイ */
