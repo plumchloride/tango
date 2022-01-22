@@ -1,6 +1,6 @@
 # ことのはたんご
 単語推理ゲーム「ことのはたんご」
-リンク ()
+リンク (https://plumchloride.github.io/tango/)
 
 本アプリケーションは営利目的での展開はしていません。
 著者によるリンク先でのアクセスログの取得や広告の掲示は行っていません。
@@ -29,7 +29,7 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 
 
 # ファイル
-余裕があったら更新
+時間があるときに更新
 GitHub/  
 　├ filtering/  
 　│　└ tango_filter.ipynb 単語辞書を作る際に利用したフィルター用コード  

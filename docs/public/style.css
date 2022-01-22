@@ -144,11 +144,11 @@ h2{
 }
 #eval_display .word_hit{
   background-color: rgb(167,210,141);
-  border: solid 0.15em rgb(167,210,141);
+  border: solid 0.15em #a7d28d;
 }
 #eval_display .word_blow{
   background-color: rgb(252, 201, 72);
-  border: solid 0.15em rgb(252, 201, 72);
+  border: solid 0.15em #fcc948;
 
 }
 #eval_display .word_none{
