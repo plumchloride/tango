@@ -31,12 +31,12 @@ const LoadData = (mode,data)=>{
 const StringToArray = (mode,data)=>{
   if(mode == "A"){
     _array_sp_n = [];
-    _array_sp_n = data.split("/\r\n|\n/");
+    _array_sp_n = data.split(/\r\n|\n/);
     return _array_sp_n
   }else if(mode == "Q"){
     _array = {"title":[],"pronunciation":[]};
     _array_sp_n = [];
-    _array_sp_n = data.split("/\r\n|\n/");
+    _array_sp_n = data.split(/\r\n|\n/);
     _array_sp_n.forEach(element => {
       _row = element.split(",")
       _array["title"].push(_row[0])
