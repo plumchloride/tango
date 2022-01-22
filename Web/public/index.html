@@ -36,7 +36,7 @@
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
-      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。</p>
+      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。タイルの形には有意的な差はありません。</p>
       <h2>例</h2>
       <div class="row">
         <div class="display_num word_hit">キ</div>
@@ -50,9 +50,13 @@
         <p><strong>「シ」</strong>はたんごに含まれているが場所が違います。</p>
         <p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
       </div>
+      <h2>入力方法</h2>
+      <p>入力方法はUIキーボードとキーボードの二種類あります。</p>
+      <p>現在オレンジ色で囲われている箇所が入力するテキストの枠です。その中で水色に囲われている箇所がUIキーボードにおける現在入力中の文字であり、該当箇所に文字の挿入及び削除がされます。</p>
+      <p>キーボードではひらがなを自動でカタカナに変換します。また英数字を入力することは可能ですが、決定時にエラーを吐きます。</p>
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
-      <p>出題単語に対するフィルタリングを行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
+      <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
       <h2 id="hatena_close"><u style="cursor: pointer;">説明を閉じる</u></h2>
       <hr>
       <div></div>
@@ -95,7 +99,13 @@
           「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
       </div>
       <h2>バグ報告</h2>
-      <p>バグ等が発生した場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=">GitHub上のissues</a>に投稿して下さい。また新規単語の登録希望は受け付けていません。</p>
+      <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=">GitHub上のissues</a>に投稿して下さい。また新規単語の登録希望は受け付けていません。</p>
+      <h2>その他</h2>
+      <p>コードに関しては以下のGitHubに掲載されています。</p>
+      <p><a href="https://github.com/plumchloride/tango"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
+      <p>コード作成時の考えや簡単な内部構造は以下のQiitaに記載されています。</p>
+      <p>制作途中</p>
+
     </div>
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>

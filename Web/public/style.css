@@ -292,6 +292,11 @@ h2{
   font-weight: bold;
 }
 
+#github_img{
+  max-width: 80vw;
+  border: 2px gray solid;
+}
+
 /* 見えない */
 .non_visi{
   display: none!important;
