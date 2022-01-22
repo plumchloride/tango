@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <!-- GITHUB PAGES用 -->
   <head>
   <meta charset="utf-8">
   <title>ことのはたんご | 単語推理ゲーム</title>
   <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="../src/get_csv.js" defer></script>
-  <script src="../src/get_today_word.js" defer></script>
-  <script src="../src/create_key_bord.js" defer></script>
-  <script src="../src/wake_up.js" defer></script>
-  <script src="../src/check_answer.js" defer></script>
-  <script src="../src/display_setting.js" defer></script>
-  <script src="../src/create_answer_input.js" defer></script>
-  <script src="../src/create_display.js" defer></script>
-  <script src="../src/create_answer_keybord.js" defer></script>
-  <script src="../src/end.js" defer></script>
-  <script src="../src/ui.js" defer></script>
-  <link rel="stylesheet" href="./style.css"></link>
+  <script src="./src/get_csv.js" defer></script>
+  <script src="./src/get_today_word.js" defer></script>
+  <script src="./src/create_key_bord.js" defer></script>
+  <script src="./src/wake_up.js" defer></script>
+  <script src="./src/check_answer.js" defer></script>
+  <script src="./src/display_setting.js" defer></script>
+  <script src="./src/create_answer_input.js" defer></script>
+  <script src="./src/create_display.js" defer></script>
+  <script src="./src/create_answer_keybord.js" defer></script>
+  <script src="./src/end.js" defer></script>
+  <script src="./src/ui.js" defer></script>
+  <link rel="stylesheet" href="./public/style.css"></link>
   </head>
   <body>
     <div id="header">
       <div>
-        <img id="img_hatena" class = "inline-img" data-mode="hatena" src="./img/hatena.svg" width="30" height="30" alt="what is this app">
+        <img id="img_hatena" class = "inline-img" data-mode="hatena" src="./public/img/hatena.svg" width="30" height="30" alt="what is this app">
         <div id="place_holder"></div>
       </div>
-      <h1>ことのはたんご</h1>
+      <h1 id="title" style="cursor: pointer;">ことのはたんご</h1>
       <div>
-        <img id="img_bar_graph" class = "inline-img-r" data-mode="bar" src="./img/bar_graph.svg" width="30" height="30" alt="setting">
-        <img id="img_setting" class = "inline-img-r" data-mode="set" src="./img/set.svg" width="30" height="30" alt="setting">
+        <img id="img_bar_graph" class = "inline-img-r" data-mode="bar" src="./public/img/bar_graph.svg" width="30" height="30" alt="setting">
+        <img id="img_setting" class = "inline-img-r" data-mode="set" src="./public/img/set.svg" width="30" height="30" alt="setting">
       </div>
     </div>
     <div id="hatena" class="explanation">
@@ -83,6 +84,7 @@
     <div id="graph" class="non_visi explanation">
       <div id="graph_body">
         <h2 id ="result">今日は正解していません</h2>
+        <p id="result_answer"></p>
         <p id="emoji_place"></p>
         <div id="graph_bt">
           <div id="graph_copy" class="graph_bt_c">コピー</div>

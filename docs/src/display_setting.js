@@ -63,7 +63,6 @@ const AnsDisplayUpdate = (row) =>{
   }
 
   // キーボード反映
-  console.log(Array.from(new Set(history_of_hb_text["all"])))
   Array.from(new Set(history_of_hb_text["all"])).forEach((element)=>{
     document.getElementById("btn_"+element).classList.add("word_none");
   })

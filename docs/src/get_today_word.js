@@ -47,7 +47,6 @@ const GetTodayWord = ()=>{
   random_num = GetRandom();
   title = Q_data["title"][random_num];
   pronunciation  = Q_data["pronunciation"][random_num];
-  console.log(title +":"+pronunciation);
   wake_up_progress.getWord = true;
   //
 
