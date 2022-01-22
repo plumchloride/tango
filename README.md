@@ -3,7 +3,7 @@
 リンク (https://plumchloride.github.io/tango/)
 
 本アプリケーションは営利目的での展開はしていません。
-著者によるリンク先でのアクセスログの取得や広告の掲示は行っていません。
+著者によるリンク先での広告の掲示は行っていません。
 
 
 Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製したフリーウェブアプリである「[Wordle](https://www.powerlanguage.co.uk/wordle/)」より多大な影響を受け作成しました。
