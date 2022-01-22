@@ -1,11 +1,12 @@
 body{
-  width: 100vw;
+  width: 99vw;
   margin: 0px;
   padding: 0px;
   display: flex;
   background-color: rgb(228,237,241);
   flex-direction: column;
-  align-items: center
+  align-items: center;
+  overflow:hidden scroll;
 }
 #body {
   width: 30vw;
@@ -226,6 +227,7 @@ h2{
   margin:5px;
   border: solid #555 0px;
   background-color: rgb(211,147,93);
+  color: black;
 }
 
 /* キーボード */
@@ -241,6 +243,7 @@ h2{
   font-weight: bold;
   border: solid #555 0px;
   background-color: rgb(133,202,200);
+  color: black;
 }
 #keybord .space_bt{
   background-color: rgb(228,237,241)!important;
