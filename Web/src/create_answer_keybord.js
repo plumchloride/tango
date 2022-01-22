@@ -2,6 +2,7 @@ const AddKeybordEvent = ()=>{
   func_array = Array.from(document.getElementsByClassName("func_bt"));
   func_array.forEach(element => {
     element.addEventListener("click",(e)=>{
+      if(end_tf){return};
       FuncButton(e.target.dataset.key);
     })
   });
@@ -9,6 +10,7 @@ const AddKeybordEvent = ()=>{
   text_array = Array.from(document.getElementsByClassName("key_bt"))
   text_array.forEach(element => {
     element.addEventListener("click",(e)=>{
+      if(end_tf){return};
       KeyButton(e.target.dataset.key);
     })
   });

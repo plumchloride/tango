@@ -4,6 +4,7 @@ let history_of_hb = [];
 let history_of_hb_text = {"hit":[],"blow":[],"all":[]}
 
 document.getElementById("Decision_button").addEventListener("click",(e)=>{
+  if(end_tf){return};
   check = false
   // 値の改変やバグチェック
   if(!wake_up_progress.fin){
@@ -26,7 +27,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
       ;
     }else{
       if(!check){
-        alertShow("注意\nひらがな・カタカナのみを5文字入力して確定を押して下さい",2000)
+        alertShow("注意\n入力した「たんご」はひらがな・カタカナの5文字のみです",2000)
         check = true;
       }
     }
@@ -40,7 +41,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   }else if(A_data.includes(text_anser)){
     ;
   }else{
-    alertShow("注意\n実在されている単語（本アプリの辞書に定められた物）を記入して下さい",2000)
+    alertShow("注意\nことのは（本アプリの辞書内の単語）を記入して下さい",2000)
     check = true;
     return;
   }
@@ -90,6 +91,10 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   now_solve.row += 1;
   now_solve.text = 0;
 
+  if(now_solve.row == 10){
+    end("不正解です");
+  }
+
   // 画面表示として反映
   history_of_hb.push(hb_list);
   history_of_anser.push(anser.toString().replace(/,/g, ""));
@@ -100,8 +105,8 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
 
 
   if(h_index.length == 5){
-    end();
-    setTimeout(()=>{alert("仮のアラートです。正解。")}, 500);
-  }
+    end_fin = true;
+    end("正解しました");
+  };
 
 });

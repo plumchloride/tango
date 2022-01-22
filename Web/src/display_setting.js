@@ -2,6 +2,7 @@ let now_solve = {"row":0,"text":0}
 $input = document.getElementById("input_text");
 
 const SolvHighlight = ()=>{
+  if(end_tf){return};
   for(let i = 0;i < 5;i++){
     if(i == now_solve.text){
       document.getElementById("dis-"+String(now_solve.row)+"-"+String(i)).classList.add("now_solve");;
@@ -18,6 +19,7 @@ const RemoveSolveHighlight = (row = now_solve.row)=>{
   }
 
 const DisplayUpdate = ()=>{
+  if(end_tf){return};
   RemoveSolveHighlight();
   SolvHighlight();
   anser.forEach((element,index)=>{
@@ -25,6 +27,7 @@ const DisplayUpdate = ()=>{
   });
 }
 const ValueUpdate = ()=>{
+  if(end_tf){return};
   $input = document.getElementById("input_text");
   // すべて空白だった場合は入力欄を空に
   all_space=false;
@@ -62,8 +65,6 @@ const AnsDisplayUpdate = (row) =>{
   // キーボード反映
   console.log(Array.from(new Set(history_of_hb_text["all"])))
   Array.from(new Set(history_of_hb_text["all"])).forEach((element)=>{
-    console.log(element)
-    console.log("btn_"+element)
     document.getElementById("btn_"+element).classList.add("word_none");
   })
   Array.from(new Set(history_of_hb_text["blow"])).forEach((element)=>{

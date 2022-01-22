@@ -3,7 +3,7 @@
   <head>
   <meta charset="utf-8">
   <title>ことのはたんご | 単語推理ゲーム</title>
-  <meta name="description" content="1日1回単語推測パズルゲーム">
+  <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="../src/get_csv.js" defer></script>
   <script src="../src/get_today_word.js" defer></script>
@@ -15,21 +15,22 @@
   <script src="../src/create_display.js" defer></script>
   <script src="../src/create_answer_keybord.js" defer></script>
   <script src="../src/end.js" defer></script>
+  <script src="../src/ui.js" defer></script>
   <link rel="stylesheet" href="./style.css"></link>
   </head>
   <body>
-    <div id="body">
-      <div id="header">
-        <div>
-          <img id="img_hatena" class = "inline-img" src="./img/hatena.svg" width="30" height="30" alt="what is this app">
-          <div id="place_holder"></div>
-        </div>
-        <h1>ことのはたんご</h1>
-        <div>
-          <img id="img_bar_graph" class = "inline-img-r" src="./img/bar_graph.svg" width="30" height="30" alt="setting">
-          <img id="img_setting" class = "inline-img-r" src="./img/set.svg" width="30" height="30" alt="setting">
-        </div>
+    <div id="header">
+      <div>
+        <img id="img_hatena" class = "inline-img" data-mode="hatena" src="./img/hatena.svg" width="30" height="30" alt="what is this app">
+        <div id="place_holder"></div>
       </div>
+      <h1>ことのはたんご</h1>
+      <div>
+        <img id="img_bar_graph" class = "inline-img-r" data-mode="bar" src="./img/bar_graph.svg" width="30" height="30" alt="setting">
+        <img id="img_setting" class = "inline-img-r" data-mode="set" src="./img/set.svg" width="30" height="30" alt="setting">
+      </div>
+    </div>
+    <div id="body" class="non_visi">
       <div id ="time_left">今日の単語 残り時間：--:--:--</div>
 
       <div id="eval_display"></div>
@@ -43,14 +44,45 @@
 
       <div id="keybord"></div>
     </div>
-    <div id="hatena" class="non_visi explanation">
-
+    <div id="hatena" class="explanation">
+      <p>日本語版の<a herf="https://www.powerlanguage.co.uk/wordle/">Wordle</a>として作成しました。<br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
+      <p>日本語の特性上本家Wordleよりもだいぶ難易度が高いです（簡単にするために、4文字の物も構想中です）</p>
+      <h2>遊び方</h2>
+      <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
+      <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
+      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。</p>
+      <h2>例</h2>
+      <div class="row">
+        <div class="display_num word_hit">キ</div>
+        <div class="display_num word_none">ョ</div>
+        <div class="display_num word_hit">ウ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">ツ</div>
+      </div>
+      <div style="font-size: 0.9em;">
+        <p><strong>「キ・ウ」</strong>はたんごに含まれており場所も正しいです。</p>
+        <p><strong>「シ」</strong>はたんごに含まれているが場所が違います。</p>
+        <p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
+      </div>
+      <h2>注意</h2>
+      <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
+      <h2 id="hatena_close"><u style="cursor: pointer;">説明を閉じる</u></h2>
+      <hr>
+      <div></div>
+      <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
     </div>
     <div id="graph" class="non_visi explanation">
-
+      <div id="graph_body">
+        <h2 id ="result">今日は正解していません</h2>
+        <p id="emoji_place"></p>
+        <div id="graph_bt">
+          <div id="graph_copy" class="graph_bt_c">コピー</div>
+          <div id="graph_tw" class="graph_bt_c">ツイート</div>
+        </div>
+        <div id="graph_close"><u>閉じる</u></div>
+      </div>
     </div>
     <div id="setting" class="non_visi explanation">
-
     </div>
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>
