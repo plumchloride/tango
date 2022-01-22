@@ -32,17 +32,32 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 
 
 # ファイル
-時間があるときに更新
 GitHub/  
 　├ filtering/  
 　│　└ tango_filter.ipynb 単語辞書を作る際に利用したフィルター用コード  
-　├ Web/  
+　├ docs/  
 　│　├ public/  
 　│　│　├ data/  
+　│　│　│　├ del.csv 分類語彙表より手動で辞書から削除したデータ  
+　│　│　│　├ rename.csv 分類語彙表より手動で読み方を変換したデータ  
 　│　│　│　├ A_data.csv 単語が実在するかのチェック用データ  
 　│　│　│　└ Q_data.csv 問題に利用する単語のデータ  
-　│　│　└test.html  
-　│　└src/  
+　│　│　├ img/ 省略  
+　│　│　└ style.css  
+　│　├ src/  
+　│　│　├ chek_answer.js 回答が正解と合っているか検証  
+　│　│　├ create_answer_input.js UIキーボードの入力をテキストに変換  
+　│　│　├ create_answer_keybord.js UIキーボードの入力を検知するイベントの生成  
+　│　│　├ create_display.js 10*5の単語表示スペースの作成  
+　│　│　├ create_key_bord.js UIキーボードの作成  
+　│　│　├ display_setting.js 単語表示スペースの操作  
+　│　│　├ end.js ゲーム終了時の処理  
+　│　│　├ get_csv.js 辞書データを取得する  
+　│　│　├ get_today_word.js 正解となる単語の取得  
+　│　│　├ ui.js nav等の操作  
+　│　│　├ wake_up.js アプリ起動時に様々なセットアップをする  
+　│　│　└ webstorage.js webストレージとの通信  
+　│　└ index.html  
 　├ .gitignore  
 　├ COPYING 著作権表示等  
 　├ LICENSE BSDライセンス  
