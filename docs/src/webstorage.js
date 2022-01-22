@@ -22,7 +22,7 @@ const beforeDataCheck = ()=>{
     history_of_anser = JSON.parse(localStorage.getItem("history_of_anser"));
     fin = JSON.parse(localStorage.getItem("fin"));
 
-    
+
     // ゲームのプレイ歴がない場合はデータを作成し、ある場合は取得する
     if(localStorage.getItem("history_of_game") == undefined){
       localStorage.setItem("history_of_game", JSON.stringify(history_of_game));
@@ -42,6 +42,6 @@ const beforeDataCheck = ()=>{
       end(fin.text);
     };
   }else{
-    console.log("the data is not today's data")
+    ;
   }
 }

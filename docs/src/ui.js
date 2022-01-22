@@ -59,7 +59,6 @@ const showHistory = (dir) =>{
   // chart
   Chart.defaults.plugins.legend.display = false;
   labels = ["1","2","3","4","5","6","7","8","9","10"];
-  console.log(dir.history)
   data = {
     labels: labels,
     datasets: [{
