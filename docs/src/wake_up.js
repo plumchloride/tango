@@ -2,7 +2,7 @@ let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"creat
 GetCsvData('./public/data/A_data_new.csv',"A");
 
 const Progress = ()=>{
-  console.log(wake_up_progress)
+  // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
     GetCsvData('./public/data/Q_data_new.csv',"Q");
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
@@ -26,6 +26,10 @@ const Progress = ()=>{
 
 const DisplayTime = ()=>{
   jst = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+  if((23-parseInt(jst.getHours())) == 0 & (59-parseInt(jst.getMinutes())) == 0 & (59-parseInt(jst.getSeconds())) == 0){
+    alert("日付が変わりました。単語が変わるためリロードします")
+    location.reload();
+  }
   time_left = ("0"+String(23-parseInt(jst.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(jst.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(jst.getSeconds()))).slice(-2);
-  document.getElementById("time_left").innerHTML = "今日の単語 残り時間："+time_left;
+  document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り時間："+time_left;
 }

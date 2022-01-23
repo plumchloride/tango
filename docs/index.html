@@ -36,6 +36,8 @@
   <meta name="twitter:url" content="https://plumchloride.github.io/tango/index.html">
   <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
   <meta property="og:locale" content="ja_JP" />
+  <!-- google -->
+  <meta name="google-site-verification" content="rY-IRXdg1Bb29JBtWd8LHxfsQgYsMHUmw4PHMnoi_TE" />
   </head>
   <body>
     <div id="header">
@@ -50,8 +52,9 @@
       </div>
     </div>
     <div id="hatena" class="explanation">
-      <p>日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。<br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
-      <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>（簡単にするために、4文字の物も構想中です）。</p>
+      <p>本家<span id="linek"><u>Wordle</u></span>様より大きな影響を受けて日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。ぜひ皆さん楽しんでみて下さい。<br><br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
+      <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
+      <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -143,12 +146,23 @@
         <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
       </div>
       <h2>バグ報告</h2>
-      <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>に投稿して下さい。また新規単語の登録希望は受け付けていません。</p>
+      <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>に投稿して下さい。</p>
+      <h2>新規単語登録</h2>
+      <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、辞書作りの参考にいたします。</p>
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
       <p>コード作成時の考えや簡単な内部構造は以下のQiitaに記載されています。</p>
-      <p>制作途中</p>
+      <p>> <a href="https://qiita.com/Ohnishi81/items/e67798e8573581130c04" target="_blank">Qiita</a></p>
+
+      <!-- エラーハンドリング用 -->
+      <div style="display: none;">
+        <div class="display_num right_display word_none" id="dis-10-0"> </div>
+        <div class="display_num right_display word_none" id="dis-10-1"> </div>
+        <div class="display_num right_display word_none" id="dis-10-2"> </div>
+        <div class="display_num right_display word_none" id="dis-10-3"> </div>
+        <div class="display_num right_display word_none" id="dis-10-4"> </div>
+      </div>
 
       <div style="display: flex;justify-content: center;">
         <address>

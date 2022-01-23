@@ -49,8 +49,8 @@ const showHistory = (dir) =>{
   // history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
   document.getElementById("try_count").innerText = dir.try_count;
   win_rate = String(Math.floor((dir.win_count/dir.try_count)*100))+"%";
-  if(!win_rate){
-    win_rate = 0;
+  if(!Math.floor((dir.win_count/dir.try_count)*100)){
+    win_rate = "0%";
   }
   document.getElementById("win_rate").innerText = win_rate;
   document.getElementById("current_streak").innerText =dir.current_streak;
@@ -59,7 +59,6 @@ const showHistory = (dir) =>{
   // chart
   Chart.defaults.plugins.legend.display = false;
   labels = ["1","2","3","4","5","6","7","8","9","10"];
-  console.log(dir.history)
   data = {
     labels: labels,
     datasets: [{

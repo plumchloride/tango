@@ -22,6 +22,7 @@ $input.addEventListener('input',(e)=>{
   b_ans = before_anser.slice(0,5);
   b_ans.push("　","　","　","　","　");
   anser = b_ans.slice(0,5);
-  $input.value = before_anser.slice(0,5).toString().replace(/,/g, "");
+  // キーボードの入力するフォームはいじらない方向で
+  // $input.value = before_anser.slice(0,5).toString().replace(/,/g, "");
   DisplayUpdate();
 })
