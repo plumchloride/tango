@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <!-- GitHub Pages用 -->
+  <head>
+  <meta charset="utf-8">
+  <title>ことのはたんご | 単語推理ゲーム</title>
+  <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <link rel="icon" type="image/png" href="./public/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="./src/get_csv.js" defer></script>
+  <script src="./src/get_today_word.js" defer></script>
+  <script src="./src/create_key_bord.js" defer></script>
+  <script src="./src/wake_up.js" defer></script>
+  <script src="./src/check_answer.js" defer></script>
+  <script src="./src/display_setting.js" defer></script>
+  <script src="./src/create_answer_input.js" defer></script>
+  <script src="./src/create_display.js" defer></script>
+  <script src="./src/create_answer_keybord.js" defer></script>
+  <script src="./src/end.js" defer></script>
+  <script src="./src/ui.js" defer></script>
+  <script src="./src/webstorage.js" defer></script>
+  <link rel="stylesheet" href="./public/style.css"></link>
+  <meta name="robots" content="noindex">
+  <!-- chart js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
+
+  <!-- twitter test -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@plum_chloride">
+  <meta name="twitter:creator" content="@plum_chloride">
+  <meta name="twitter:image" content="https://plumchloride.github.io/tango/public/img/card.png">
+  <meta property="og:title" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <meta name="twitter:description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <meta property="og:image" content="https://plumchloride.github.io/tango/public/img/card.png">
+  <meta property="og:url" content="https://plumchloride.github.io/tango/index.html" />
+  <meta name="twitter:url" content="https://plumchloride.github.io/tango/index.html">
+  <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:locale" content="ja_JP" />
+  </head>
+  <body>
+    <div id="header">
+      <div>
+        <img id="img_hatena" class = "inline-img" data-mode="hatena" src="./public/img/hatena.svg" width="30" height="30" alt="what is this app">
+        <div id="place_holder"></div>
+      </div>
+      <h1 id="title" style="cursor: pointer;">ことのはたんご</h1>
+      <div>
+        <img id="img_bar_graph" class = "inline-img-r" data-mode="bar" src="./public/img/bar_graph.svg" width="30" height="30" alt="setting">
+        <img id="img_setting" class = "inline-img-r" data-mode="set" src="./public/img/set.svg" width="30" height="30" alt="setting">
+      </div>
+    </div>
+    <div id="hatena" class="explanation">
+      <p>本家<span id="linek"><u>Wordle</u></span>様より大きな影響を受けて日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。ぜひ皆さん楽しんでみて下さい。<br><br>1日1回遊ぶことが出来る単語推理ゲームです。</p>
+      <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
+      <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
+      <h2>遊び方</h2>
+      <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
+      <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
+      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。タイルの形には有意的な差はありません。</p>
+      <h2>例</h2>
+      <div class="row">
+        <div class="display_num word_hit">キ</div>
+        <div class="display_num word_none">ョ</div>
+        <div class="display_num word_hit">ウ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">ツ</div>
+      </div>
+      <div style="font-size: 0.9em;">
+        <p><strong>「キ・ウ」</strong>はたんごに含まれており場所も正しいです。</p>
+        <p><strong>「シ」</strong>はたんごに含まれているが場所が違います。</p>
+        <p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
+      </div>
+      <h2>入力方法</h2>
+      <p>入力方法はUIキーボードとキーボードの二種類あります。</p>
+      <p>現在オレンジ色で囲われている箇所が入力するテキストの枠です。その中で水色に囲われている箇所がUIキーボードにおける現在入力中の文字であり、該当箇所に文字の挿入及び削除がされます。</p>
+      <p>キーボードではひらがなを自動でカタカナに変換します。また英数字を入力することは可能ですが、決定時にエラーを吐きます。</p>
+      <h2>UI・レスポンシブデザイン</h2>
+      <p>現在学習中の身でして、多少不便な箇所があると思います。ご了承下さい。</p>
+      <h2>注意</h2>
+      <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
+      <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
+
+      <h2 id="hatena_close"><u style="cursor: pointer;">説明を閉じる</u></h2>
+      <hr>
+      <div></div>
+      <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
+      <img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
+    </div>
+    <div id="body" class="non_visi">
+      <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+
+      <div id="eval_display"></div>
+
+      <div class="flex_center">
+        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
+      </div>
+      <div class="flex_center">
+        <button id="Decision_button">決定</button>
+      </div>
+
+      <div id="keybord"></div>
+    </div>
+    <div id="graph" class="non_visi explanation">
+      <div id="graph_body">
+        <h2 id ="result">今日は正解していません</h2>
+        <p id="result_answer"></p>
+        <p id="emoji_place"></p>
+        <div id="graph_bt">
+          <div id="graph_copy" class="graph_bt_c">コピー</div>
+          <div id="graph_tw" class="graph_bt_c">ツイート</div>
+        </div>
+        <h2>戦歴</h2>
+        <div id="history">
+          <div class="row">
+            <div class="h-text">プレイ<br>回数</div>
+            <div class="h-number" id = "try_count"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text" style="padding-top: 1.5ex; height: 3.5ex;">勝率</div>
+            <div class="h-number" id = "win_rate"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text">現在の<br>連勝数</div>
+            <div class="h-number" id = "current_streak"> </div>
+          </div>
+          <div class="row">
+            <div class="h-text">最大<br>連勝数</div>
+            <div class="h-number" id = "max_streak"> </div>
+          </div>
+        </div><br>
+        <div>正解分布表示</div>
+        <div id="cahrt_canvas"><canvas id="myChart"></canvas></div>
+        <div id="graph_close"><u>閉じる</u></div>
+      </div>
+    </div>
+    <div id="setting" class="non_visi explanation">
+      <h2>ハードモード</h2>
+      <p>未実装</p>
+      <h2>ライセンス</h2>
+      <div style="font-size: 0.9em;">
+        <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
+        <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-cwj_3.1.0」 [<a  href = "https://ccd.ninjal.ac.jp/unidic/"target="_blank">https://ccd.ninjal.ac.jp/unidic/</a>]<br>
+          「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
+        <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
+      </div>
+      <h2>バグ報告</h2>
+      <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>に投稿して下さい。</p>
+      <h2>新規単語登録</h2>
+      <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、辞書作りの参考にいたします。</p>
+      <h2>その他</h2>
+      <p>コードに関しては以下のGitHubに掲載されています。</p>
+      <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
+      <p>コード作成時の考えや簡単な内部構造は以下のQiitaに記載されています。</p>
+      <p>> <a href="https://qiita.com/Ohnishi81/items/e67798e8573581130c04" target="_blank">Qiita</a></p>
+
+      <!-- エラーハンドリング用 -->
+      <div style="display: none;">
+        <div class="display_num right_display word_none" id="dis-10-0"> </div>
+        <div class="display_num right_display word_none" id="dis-10-1"> </div>
+        <div class="display_num right_display word_none" id="dis-10-2"> </div>
+        <div class="display_num right_display word_none" id="dis-10-3"> </div>
+        <div class="display_num right_display word_none" id="dis-10-4"> </div>
+      </div>
+
+      <div style="display: flex;justify-content: center;">
+        <address>
+          &copy; 2022 Rikito Ohnishi
+        </address>
+      </div>
+
+    </div>
+    <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
+  </body>
+</html>
