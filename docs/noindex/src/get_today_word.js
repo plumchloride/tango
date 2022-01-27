@@ -34,7 +34,7 @@ const GetRandom = ()=>{
   pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
   year = parseInt(String(jst.getFullYear()));
   month = parseInt(String(jst.getMonth()));
-  day = parseInt(String(jst.getDate()));
+  day = parseInt(String(jst.getDate()))+2;
   // save_day = String(year)+":"+String(month)+":"+String(day);
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
