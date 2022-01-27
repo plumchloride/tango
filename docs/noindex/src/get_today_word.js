@@ -28,14 +28,14 @@ class Random {
   }
 }
 const GetRandom = ()=>{
-  const  First_Day = new Date(new Date("2022/1/21").getTime()+((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
   jst = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  timestamp = jst - First_Day;
+  const First_Day = Date.UTC(2022,1,21);
+  const Now_Day = Date.UTC(jst.getFullYear(),jst.getMonth()+1,jst.getDate());
+  timestamp = Now_Day - First_Day;
   pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
   year = parseInt(String(jst.getFullYear()));
   month = parseInt(String(jst.getMonth()));
   day = parseInt(String(jst.getDate()))+2;
-  // save_day = String(year)+":"+String(month)+":"+String(day);
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
   random_num = rand.nextInt(0,Q_data["title"].length);
