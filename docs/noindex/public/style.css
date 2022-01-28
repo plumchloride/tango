@@ -43,6 +43,12 @@ h2{
   color: rgb(127,159,53);
   font-size: 1.4em;
 }
+.hit_ex{
+  background-color: rgb(167,210,141);
+}
+.blow_ex{
+  background-color: rgb(252, 201, 72);
+}
 
 #graph{
   width: 98vw;
