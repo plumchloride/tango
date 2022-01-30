@@ -1,0 +1,379 @@
+body{
+  width: 99vw;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  background-color: rgb(228,237,241);
+  flex-direction: column;
+  align-items: center;
+  overflow:hidden scroll;
+}
+#body {
+  width: 30vw;
+  display: inline-block;
+  background-color: rgb(228,237,241);
+  margin: 0 auto;
+  overflow-wrap: break-word;
+}
+.explanation{
+  width: 28vw;
+  display: inline-block;
+  background-color: rgb(228,237,241);
+  margin: 1vw;
+}
+#header{
+  width: 30vw;
+  background-color: rgb(228,237,241);
+  border-bottom: solid 1px rgb(167,210,141);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+h1{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: rgb(127,159,53);
+  font-size: 1.4em;
+}
+h2{
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: rgb(127,159,53);
+  font-size: 1.4em;
+}
+.hit_ex{
+  background-color: rgb(167,210,141);
+}
+.blow_ex{
+  background-color: rgb(252, 201, 72);
+}
+
+#graph{
+  width: 98vw;
+  position:absolute;
+  display: flex;
+  justify-content: center;
+  margin-top: 10vh;
+  background-color: rgba(228, 237, 241, 0);
+}
+#graph #graph_body{
+  border: solid 3px rgb(211,147,93) ;
+  background-color: rgb(228,237,241);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 0.5em;
+  margin: 1vw;
+  padding:2em;
+}
+#graph #graph_bt{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#graph .graph_bt_c{
+  padding: 1em;
+  border-radius: 1em;
+  width: 4em;
+  cursor: pointer;
+}
+#graph #graph_copy{
+  background-color: rgb(252, 201, 72);
+}
+#graph #graph_tw{
+  background-color: rgb(128,197,222);
+}
+#graph #graph_close{
+  margin-top: 10px;
+  font-size: large;
+  cursor: pointer;
+}
+
+.inline-img{
+  margin-left: 10px;
+  cursor: pointer;
+}
+.inline-img-r{
+  margin-right: 10px;
+  cursor: pointer;
+}
+#place_holder{
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
+}
+
+#time_left{
+  padding-top: 2px;
+  padding-bottom: 2px;
+  color: rgb(211,147,93);
+  text-align: right;
+  padding-right: 0.5rem;
+}
+
+/* ディスプレイ */
+#eval_display{
+  padding-bottom:  10px ;
+}
+#eval_display .row{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
+#eval_display .display_num{
+  width: 8%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  font-size: 1.3em;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(228,237,241);
+  border: solid 0.15em rgb(167,210,141);
+  text-align: center;
+  font-weight: bold;
+  vertical-align:middle;
+}
+#eval_display .row_now_solve{
+  border: solid 0.15em rgb(211,147,93);
+}
+#eval_display .now_solve{
+  border: solid 0.15em rgb(128,197,222);
+}
+#eval_display .right_display{
+  border-radius: 50%!important;
+}
+#eval_display .word_hit{
+  background-color: rgb(167,210,141);
+  border: solid 0.15em #a7d28d;
+}
+#eval_display .word_blow{
+  background-color: rgb(252, 201, 72);
+  border: solid 0.15em #fcc948;
+
+}
+#eval_display .word_none{
+  background-color: gray;
+  border: solid 0.15em gray;
+  color: white;
+}
+/* ディスプレイ */
+
+/* 例示用 */
+#hatena .row{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
+#hatena .display_num{
+  width: 8%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  font-size: 1.3em;
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(228,237,241);
+  border: solid 2px rgb(167,210,141);
+  text-align: center;
+  font-weight: bold;
+  vertical-align:middle;
+}
+#hatena .row_now_solve{
+  border: solid 2px rgb(211,147,93);
+}
+#hatena .now_solve{
+  border: solid 2px rgb(128,197,222);
+}
+#hatena .right_display{
+  border-radius: 50%!important;
+}
+#hatena .word_hit{
+  background-color: rgb(167,210,141);
+  border: solid 2px rgb(167,210,141);
+}
+#hatena .word_blow{
+  background-color: rgb(252, 201, 72);
+  border: solid 2px rgb(252, 201, 72);
+
+}
+#hatena .word_none{
+  background-color: gray;
+  border: solid 2px gray;
+  color: white;
+}
+/*  */
+
+
+.flex_center{
+  display: flex;
+  justify-content: center;
+}
+
+
+#input_text{
+  font-size: 1.5em;
+  width: 9em;
+  text-align: center;
+  border: solid rgb(167,210,141) 2px;
+  background-color: rgb(228,237,241);
+  border-radius: 1em;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+#Decision_button{
+  font-size: 2em;
+  margin:5px;
+  border: solid #555 0px;
+  background-color: rgb(211,147,93);
+  color: black;
+}
+
+/* キーボード */
+#keybord .row{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
+#keybord button{
+  width: 9%;
+  height: 5ex;
+  font-weight: bold;
+  border: solid #555 0px;
+  background-color: rgb(133,202,200);
+  color: black;
+}
+#keybord .space_bt{
+  background-color: rgb(228,237,241)!important;
+  border:  dotted #555 1px !important;
+}
+#keybord .func_bt{
+  background-color: rgb(128,197,222)!important;
+}
+#keybord hr{
+  margin:2px 0;
+  color: #555;
+}
+#keybord .word_hit{
+  background-color: rgb(167,210,141);
+  border: solid 0px rgb(167,210,141);
+}
+#keybord .word_blow{
+  background-color: rgb(252, 201, 72);
+  border: solid 0px rgb(252, 201, 72);
+
+}
+#keybord .word_none{
+  background-color: gray;
+  border: solid 0px gray;
+  color: white;
+}
+/* キーボード */
+
+/* 戦歴 */
+#history{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+#history .h-text{
+  height: 5ex;
+  text-align: center;
+  line-height:2ex;
+  vertical-align: middle;
+}
+#history #myChart{
+  height: 20ex;
+  width: 100%;
+}
+/* 戦歴 */
+
+
+#alert{
+  width: 100vw;
+  position:absolute;
+  display: flex;
+  justify-content: center;
+}
+#alert div{
+  width:30vw;
+  background-color: rgb(211,147,93);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 0.5em;
+  margin: 1em;
+  padding:0.4em;
+}
+
+#linek{
+  cursor: pointer;
+  color: rgb(128,197,222);
+  font-weight: bold;
+}
+
+#github_img{
+  max-width: 80vw;
+  border: 2px gray solid;
+}
+
+/* 見えない */
+.non_visi{
+  display: none!important;
+}
+
+@media screen and (max-width: 1400px) { /*ウィンドウ幅が最大1400pxまでの場合に適用*/
+  #body{
+    width: 40vw;
+  }
+
+  #eval_display .row .display_num{
+    width: 8%;
+  }
+  #keybord .row button{
+    width: 9%;
+  }
+  #alert div{
+    width:40vw;
+  }
+  .explanation{
+    width: 40vw;
+  }
+  #header{
+    width: 40vw;
+  }
+}
+
+@media screen and (max-width: 1000px) { /*ウィンドウ幅が最大1000pxまでの場合に適用*/
+  #body{
+    width: 98vw;
+  }
+
+  #eval_display .row .display_num{
+    width: 8vw;
+  }
+  #keybord .row button{
+    width: 9vw;
+  }
+  #alert div{
+    width:96vw;
+  }
+  .explanation{
+    width: 94vw;
+  }
+  #header{
+    width: 98vw;
+  }
+  #graph{
+    width: 94vw;
+  }
+}
