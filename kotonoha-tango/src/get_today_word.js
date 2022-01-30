@@ -50,9 +50,9 @@ const GetTodayWord = ()=>{
   wake_up_progress.getWord = true;
 
   // 辞書変更時の単語を変更しないように
-  if(pass_day == 9){
-    title = "うめもどき"
-    pronunciation = "ウメモドキ"
+  if(pass_day == 10){
+    title = "足の甲"
+    pronunciation = "アシノコウ"
   }
 
   Progress();
