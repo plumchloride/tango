@@ -36,6 +36,7 @@ const GetRandom = ()=>{
   year = parseInt(String(jst.getFullYear()));
   month = parseInt(String(jst.getMonth()));
   day = parseInt(String(jst.getDate()));
+  // save_day = String(year)+":"+String(month)+":"+String(day);
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
   random_num = rand.nextInt(0,Q_data["title"].length);
@@ -47,7 +48,12 @@ const GetTodayWord = ()=>{
   title = Q_data["title"][random_num];
   pronunciation  = Q_data["pronunciation"][random_num];
   wake_up_progress.getWord = true;
-  //
+
+  // 辞書変更時の単語を変更しないように
+  if(pass_day == 9){
+    title = "うめもどき"
+    pronunciation = "ウメモドキ"
+  }
 
   Progress();
 }

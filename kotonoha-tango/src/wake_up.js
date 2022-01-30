@@ -1,10 +1,10 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
-GetCsvData('./public/data/A_data_new.csv',"A");
+GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/A_data_new.csv',"A");
 
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
-    GetCsvData('./public/data/Q_data_new.csv',"Q");
+    GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/Q_fil_ippan.csv',"Q");
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & !wake_up_progress["createKeybord"]){
@@ -20,6 +20,9 @@ const Progress = ()=>{
     SolvHighlight();
     experienceCheck();
     beforeDataCheck();
+    if(pass_day == 9|pass_day == 10){
+      alertShow("報告\n出題単語辞書に関して更新を行いました。\n詳細は左上のはてなマークをクリックしてnote記事よりご覧下さい\n9回目の単語に関しては変化はありません",8000)
+    }
   }
 }
 
