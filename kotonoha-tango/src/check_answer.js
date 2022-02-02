@@ -12,7 +12,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
     check = true;
     location.reload();
   }else if(!(anser.length == 5)){
-    alert("バグ、もしくは不正な操作です(ansleng)。リロードします。\n Error1: The length of the entered character is incorrect")
+    alert("バグ、もしくは不正な操作です。リロードします。\n Error2: The length of the entered character is incorrect")
     check = true;
     location.reload();
   }
@@ -27,7 +27,11 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
       ;
     }else{
       if(!check){
-        alertShow("注意\n入力した「たんご」はひらがな・カタカナの5文字のみです",2000)
+        if(lang_en){
+          alertShow('Attention\nNot enough letter or use only (hiragana or katakana)',2000);
+        }else{
+          alertShow("注意\n入力した「たんご」はひらがな・カタカナの5文字のみです",2000);
+        };
         check = true;
       }
     }
@@ -41,7 +45,11 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   }else if(A_data.includes(text_anser)){
     ;
   }else{
-    alertShow("注意\nことのは（本アプリの辞書内の単語）を記入して下さい",2000)
+    if(lang_en){
+      alertShow('Attention\nNot in the dictionary of this app)',2000);
+    }else{
+      alertShow("注意\nことのは（本アプリの辞書内の単語）を記入して下さい",2000)
+    };
     check = true;
     return;
   }
@@ -114,9 +122,17 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
 
   if(h_index.length == 5){
     end_fin = true;
-    end("正解しました",1);
+    if(lang_en){
+      end("You're correct",1);
+    }else{
+      end("正解です",1);
+    }
   }else if(now_solve.row == 10){
-    end("不正解です",0);
+    if(lang_en){
+      end("You're Incorrect",0);
+    }else{
+      end("不正解です",0);
+    }
   };
 
 });

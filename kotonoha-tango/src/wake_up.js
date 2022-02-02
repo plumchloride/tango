@@ -1,10 +1,10 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
-GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/A_data_new.csv',"A");
+GetCsvData('./public/data/A_data_new.csv',"A");
 
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
-    GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/Q_fil_ippan.csv',"Q");
+    GetCsvData('./public/data/Q_fil_ippan.csv',"Q");
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & !wake_up_progress["createKeybord"]){
@@ -20,19 +20,20 @@ const Progress = ()=>{
     SolvHighlight();
     experienceCheck();
     beforeDataCheck();
-    if(pass_day == 9|pass_day == 10){
-      alertShow("報告\n出題単語辞書に関して更新を行いました。\n詳細は左上のはてなマークをクリックしてnote記事よりご覧下さい\n9回目の単語に関しては変化はありません",8000)
-    }
   }
 }
 
 
 const DisplayTime = ()=>{
-  jst = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  if((23-parseInt(jst.getHours())) == 0 & (59-parseInt(jst.getMinutes())) == 0 & (59-parseInt(jst.getSeconds())) == 0){
-    alert("日付が変わりました。単語が変わるためリロードします")
+  nowtime = new Date();
+  if((23-parseInt(nowtime.getHours())) == 0 & (59-parseInt(nowtime.getMinutes())) == 0 & (59-parseInt(nowtime.getSeconds())) == 0){
+    alert("日付が変わりました。単語が変わるためリロードします\nThe date has changed. Reload for word change.")
     location.reload();
   }
-  time_left = ("0"+String(23-parseInt(jst.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(jst.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(jst.getSeconds()))).slice(-2);
-  document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り時間："+time_left;
+  time_left = ("0"+String(23-parseInt(nowtime.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getSeconds()))).slice(-2);
+  if(lang_en){
+    document.getElementById("time_left").innerHTML = "<strong>No."+String(pass_day)+"</strong>　Time left for today's word："+time_left;
+  }else{
+    document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り時間："+time_left;
+  }
 }

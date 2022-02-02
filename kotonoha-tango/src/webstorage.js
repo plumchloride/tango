@@ -16,13 +16,31 @@ const experienceCheck = ()=>{
 
 const beforeDataCheck = ()=>{
   // ゲームのプレイ歴がない場合はデータを作成し、ある場合は取得する
-  if(localStorage.getItem("history_of_game") == undefined){
+  if(localStorage.getItem("history_of_game") == null){
     localStorage.setItem("history_of_game", JSON.stringify(history_of_game));
     showHistory(history_of_game);
   }else{
 
     history_of_game = JSON.parse(localStorage.getItem("history_of_game"));
     showHistory(history_of_game);
+  }
+
+  // 言語の取得
+  if(localStorage.getItem("lang") == null){
+    localStorage.setItem("lang", lang_en);
+  }else if(localStorage.getItem("lang")| localStorage.getItem("lang") == "true" ){
+    // 英語
+    lang_en = true;
+    document.getElementById("hatena").innerHTML = HATENA_TEXT_EN;
+    document.getElementById("Decision_button").innerText="decision";
+    document.getElementById("input_text").setAttribute("placeholder","input column");
+    document.getElementById("setting").innerHTML = SET_TEXT_EN;
+
+    // グラフ画面変更
+    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect"])
+  }else{
+    // 日本語
+    lang_en = false;
   }
 
 
@@ -41,7 +59,21 @@ const beforeDataCheck = ()=>{
     ValueUpdate();
     DisplayUpdate();
     if(fin.tf){
-      end(fin.text);
+      en_tx_array = ["You're correct","You're Incorrect"]
+      jp_tx_array = ["正解です","不正解です"]
+      if(lang_en){
+        if(jp_tx_array.includes(fin.text)){
+          end(en_tx_array[jp_tx_array.indexOf(fin.text)]);
+        }else{
+          end(fin.text);
+        }
+      }else{
+        if(en_tx_array.includes(fin.text)){
+          end(jp_tx_array[en_tx_array.indexOf(fin.text)]);
+        }else{
+          end(fin.text);
+        }
+      }
     };
   }else{
     ;

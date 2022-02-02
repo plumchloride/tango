@@ -111,6 +111,16 @@ document.getElementById("graph_tw").addEventListener("click",(element)=>{
     window.open(url,"_blank");
 		}
 	});
+document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
+  s = createEmoji(true);
+  if (s != "") {
+    s = encodeURIComponent(s);
+    //投稿画面を開く
+    url = "https://twitter.com/intent/tweet?text=" + s;
+    window.open(url,"_blank");
+    }
+  });
+
 
 // 閉じるボタンでもgraphを閉じられるように
 document.getElementById("graph_close").addEventListener("click",(el)=>{
@@ -122,13 +132,7 @@ document.getElementById("graph_close").addEventListener("click",(el)=>{
 });
 
 // 閉じるボタンでも説明をを閉じられるように
-document.getElementById("hatena_close").addEventListener("click",(el)=>{
-  mode = "hatena"
-  allNonVisi();
-  img_show[mode] = false;
-  $div.body.classList.remove("non_visi");
-  $img_btn[mode].setAttribute("src",src[mode]);
-});
+// change to en.js に 移行
 
 // タイトル名からゲーム画面に戻れるように
 document.getElementById("title").addEventListener("click",(el)=>{
@@ -142,6 +146,6 @@ document.getElementById("title").addEventListener("click",(el)=>{
 });
 
 // aタグでのリンクの実装が出来なかったため
-document.getElementById("linek").addEventListener("click",(e)=>{
-  window.open("https://www.powerlanguage.co.uk/wordle/","_brank")
-})
+// document.getElementById("linek").addEventListener("click",(e)=>{
+//   window.open("https://www.powerlanguage.co.uk/wordle/","_brank")
+// })

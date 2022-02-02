@@ -28,14 +28,14 @@ class Random {
   }
 }
 const GetRandom = ()=>{
-  jst = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
-  const First_Day = Date.UTC(2022,1,21);
-  const Now_Day = Date.UTC(jst.getFullYear(),jst.getMonth()+1,jst.getDate());
+  nowtime = new Date();
+  First_Day = new Date("2022/1/21");
+  Now_Day = new Date();
   timestamp = Now_Day - First_Day;
   pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
-  year = parseInt(String(jst.getFullYear()));
-  month = parseInt(String(jst.getMonth()));
-  day = parseInt(String(jst.getDate()));
+  year = parseInt(String(nowtime.getFullYear()));
+  month = parseInt(String(nowtime.getMonth()));
+  day = parseInt(String(nowtime.getDate()));
   // save_day = String(year)+":"+String(month)+":"+String(day);
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
@@ -48,12 +48,6 @@ const GetTodayWord = ()=>{
   title = Q_data["title"][random_num];
   pronunciation  = Q_data["pronunciation"][random_num];
   wake_up_progress.getWord = true;
-
-  // 辞書変更時の単語を変更しないように
-  if(pass_day == 9){
-    title = "うめもどき"
-    pronunciation = "ウメモドキ"
-  }
 
   Progress();
 }

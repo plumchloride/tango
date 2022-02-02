@@ -19,6 +19,7 @@
   <script src="./src/end.js" defer></script>
   <script src="./src/ui.js" defer></script>
   <script src="./src/webstorage.js" defer></script>
+  <script src="./src/change_to_en.js" defer></script>
   <link rel="stylesheet" href="./public/style.css"></link>
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
@@ -59,6 +60,7 @@
       </div>
     </div>
     <div id="hatena" class="explanation">
+      <h2 id="switch_lang"><small><u id="switch_lang_u">Switch to English</u></small></h2>
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -77,7 +79,7 @@
         <p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
       </div>
       <h2>初めに</h2>
-      <p>本家<span id="linek"><u>Wordle</u></span>様より大きな影響を受けて日本語版の<span id="linek"><u>Wordle</u></span>として作成しました。</p>
+      <p>本家<a href="https://www.powerlanguage.co.uk/wordle/" target="_blank">Wordle</a>様より大きな影響を受けて日本語版の Wordle として作成しました。</p>
       <p>1日1回遊ぶことが出来る単語推理ゲームです。</p>
       <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
       <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
@@ -93,7 +95,7 @@
       <p>Wordleでは同じ単語を２回使うと、答えが２文字使われていない限り、１文字目のみに評価を行う仕様になっています。本アプリに置いてはこの機能は実装予定がありますが未実装なため、２箇所ハイライトされた場合でも答えに２文字使われているとは限りません。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
 
-      <h2 id="hatena_close"><u style="cursor: pointer;">説明を閉じる</u></h2>
+      <h2 id="hatena_close"><u style="cursor: pointer;" id="hatena_close_u">説明を閉じる</u></h2>
       <hr>
       <div></div>
       <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
@@ -104,10 +106,8 @@
 
       <div id="eval_display"></div>
 
-      <div class="flex_center">
+      <div class="inputs">
         <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
-      </div>
-      <div class="flex_center">
         <button id="Decision_button">決定</button>
       </div>
 
@@ -122,33 +122,34 @@
           <div id="graph_copy" class="graph_bt_c">コピー</div>
           <div id="graph_tw" class="graph_bt_c">ツイート</div>
         </div>
-        <h2>戦歴</h2>
+        <div id="graph_bt2">
+          <div id="graph_tw_url" class="graph_bt_url">URL付きでツイート</div>
+        </div>
+        <h2 id="history_h2">戦歴</h2>
         <div id="history">
           <div class="row">
-            <div class="h-text">プレイ<br>回数</div>
+            <div class="h-text" id="his_1">プレイ<br>回数</div>
             <div class="h-number" id = "try_count"> </div>
           </div>
           <div class="row">
-            <div class="h-text" style="padding-top: 1.5ex; height: 3.5ex;">勝率</div>
+            <div class="h-text" id="his_2" style="padding-top: 1.5ex; height: 3.5ex;">勝率</div>
             <div class="h-number" id = "win_rate"> </div>
           </div>
           <div class="row">
-            <div class="h-text">現在の<br>連勝数</div>
+            <div class="h-text" id="his_3">現在の<br>連勝数</div>
             <div class="h-number" id = "current_streak"> </div>
           </div>
           <div class="row">
-            <div class="h-text">最大<br>連勝数</div>
+            <div class="h-text" id="his_4">最大<br>連勝数</div>
             <div class="h-number" id = "max_streak"> </div>
           </div>
         </div><br>
-        <div>正解分布表示</div>
+        <div id="gr_title">正解分布表示</div>
         <div id="cahrt_canvas"><canvas id="myChart"></canvas></div>
         <div id="graph_close"><u>閉じる</u></div>
       </div>
     </div>
     <div id="setting" class="non_visi explanation">
-      <h2>ハードモード</h2>
-      <p>Wordle本家では一度当てた単語はその後常にその箇所に使わなければいけないモード。日本語でこれを実装すると詰むため実装しない。</p>
       <h2>ライセンス</h2>
       <div style="font-size: 0.9em;">
         <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
@@ -166,15 +167,6 @@
       <p>コード作成時の考えや簡単な内部構造は以下のQiitaに記載されています。</p>
       <p>> <a href="https://qiita.com/Ohnishi81/items/e67798e8573581130c04" target="_blank">Qiita</a></p>
 
-      <!-- エラーハンドリング用 -->
-      <div style="display: none;">
-        <div class="display_num right_display word_none" id="dis-10-0"> </div>
-        <div class="display_num right_display word_none" id="dis-10-1"> </div>
-        <div class="display_num right_display word_none" id="dis-10-2"> </div>
-        <div class="display_num right_display word_none" id="dis-10-3"> </div>
-        <div class="display_num right_display word_none" id="dis-10-4"> </div>
-      </div>
-
       <div style="display: flex;justify-content: center;">
         <address>
           &copy; 2022 Rikito Ohnishi
@@ -182,6 +174,15 @@
       </div>
 
     </div>
+    <!-- エラーハンドリング用 -->
+    <div style="display: none;">
+      <div class="display_num right_display word_none" id="dis-10-0"> </div>
+      <div class="display_num right_display word_none" id="dis-10-1"> </div>
+      <div class="display_num right_display word_none" id="dis-10-2"> </div>
+      <div class="display_num right_display word_none" id="dis-10-3"> </div>
+      <div class="display_num right_display word_none" id="dis-10-4"> </div>
+    </div>
+
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>
 </html>

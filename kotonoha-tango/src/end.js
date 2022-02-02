@@ -1,7 +1,15 @@
 end_tf = false;
 end_fin = false;
+copy_win = false; // 結果コピーに使う
 history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
 const end = (text,win=0)=>{
+  win_tx = ["正解です","You're correct"]
+  if(win_tx.includes(text)){
+    win = 1
+  }
+  if(win == 1){
+    copy_win = true;
+  }
   // このゲームの経験者であることを伝える
   localStorage.setItem("experience", true);
 
@@ -48,14 +56,19 @@ const end = (text,win=0)=>{
     document.getElementById("emoji_place").innerText = createEmoji();
   }
 }
-  // // クリップボードに送信
-  // var promise = navigator.clipboard.writeText(base_text+graph_text)
-  // if(promise){
-  //   alert("コピー完了");
-  // }
 
-const createEmoji = ()=>{
-  base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"
+const createEmoji = (URL = false)=>{
+  if(copy_win){
+    base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"
+  }else if(now_solve.row == 10){
+    base_text = "ことのはたんご 第"+String(pass_day)+"回  X/10\r\n"
+  }else{
+    base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"
+  }
+  if(URL){
+    base_text += "https://plum-chloride.jp/kotonoha-tango/index.html \r\n"
+  }
+
   graph_text = ""
   history_of_hb.forEach((Element,index)=>{
     if(index<5){
@@ -66,7 +79,7 @@ const createEmoji = ()=>{
     }else{
       graph_text+=" \r\n"
       Element.forEach((e)=>{
-        graph_text += e.replace("NO","⚪️").replace("BLOW","🟡").replace("HIT","🟢")
+        graph_text += e.replace("NO","⚪").replace("BLOW","🟡").replace("HIT","🟢")
       })
     }
   })
