@@ -32,7 +32,7 @@ const DisplayTime = ()=>{
   }
   time_left = ("0"+String(23-parseInt(nowtime.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getSeconds()))).slice(-2);
   if(lang_en){
-    document.getElementById("time_left").innerHTML = "<strong>No."+String(pass_day)+"</strong>　Time left for today's word："+time_left;
+    document.getElementById("time_left").innerHTML = "<strong>No."+String(pass_day)+"</strong>　Next Tango："+time_left;
   }else{
     document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り時間："+time_left;
   }

@@ -58,41 +58,34 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   if(check){
     return
   }
+
+
   // ヒットアンドブロー処理
   hb_pronunciation = pronunciation.split("");
-  b_word = new Set();
-  all_word = new Set();
-  non_dupli_anser = Array.from(new Set(anser));
-  non_dupli_anser.forEach((element)=>{
-    all_word.add(element);
-    if(hb_pronunciation.includes(element)){
-      b_word.add(element);
-    }
-  });
-  h_index = [];
-  h_word = new Set();
-  for(let i=0; i < 5;i++){
-    if(anser[i] == hb_pronunciation[i]){
-      h_index.push(i);
-      h_word.add(anser[i])
-    }
-  };
-
-  // ヒットアンドブロー処理結果をarrayに
+  h_word = [];
+  b_word = [];
+  all_word = [];
   hb_list = ["NO","NO","NO","NO","NO"];
+  hit_count = 0
   anser.forEach((element,index)=>{
-    if(b_word.has(element)){
+    if(element == hb_pronunciation[index]){
+      // hit
+      h_word.push(element)
+      hb_list[index] = "HIT"
+      hit_count += 1;
+    }else if(hb_pronunciation.includes(element)){
+      // blow
+      b_word.push(element);
       hb_list[index] = "BLOW";
+    }else{
+      all_word.push(element);
     }
-  });
-  h_index.forEach((element)=>{
-    hb_list[element] = "HIT";
   });
 
   // 文字情報取得
-  history_of_hb_text.hit = history_of_hb_text.hit.concat(Array.from(h_word));
-  history_of_hb_text.blow = history_of_hb_text.blow.concat(Array.from(b_word));
-  history_of_hb_text.all = history_of_hb_text.all.concat(Array.from(all_word));
+  history_of_hb_text.hit = Array.from(new Set(history_of_hb_text.hit.concat(h_word)));
+  history_of_hb_text.blow = Array.from(new Set(history_of_hb_text.blow.concat(b_word)));
+  history_of_hb_text.all = Array.from(new Set(history_of_hb_text.all.concat(all_word)));
 
 
 
@@ -120,8 +113,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   DisplayUpdate();
 
 
-  if(h_index.length == 5){
-    end_fin = true;
+  if(hit_count == 5){
     if(lang_en){
       end("You're correct",1);
     }else{

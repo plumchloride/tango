@@ -1,9 +1,8 @@
 end_tf = false;
-end_fin = false;
 copy_win = false; // 結果コピーに使う
 history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
 const end = (text,win=0)=>{
-  win_tx = ["正解です","You're correct"]
+  win_tx = ["正解です","You're correct","正解しました"]
   if(win_tx.includes(text)){
     win = 1
   }
