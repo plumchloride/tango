@@ -66,12 +66,12 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   b_word = [];
   all_word = [];
   hb_list = ["NO","NO","NO","NO","NO"];
-  hit_count = 0
+  hit_count = 0;
   anser.forEach((element,index)=>{
     if(element == hb_pronunciation[index]){
       // hit
-      h_word.push(element)
-      hb_list[index] = "HIT"
+      h_word.push(element);
+      hb_list[index] = "HIT";
       hit_count += 1;
     }else if(hb_pronunciation.includes(element)){
       // blow

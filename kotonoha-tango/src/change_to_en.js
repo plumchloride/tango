@@ -95,7 +95,7 @@ const HATENA_TEXT_EN = `
       <p>The area currently circled in orange is the frame for the text to be entered. The area in light blue is the text currently being entered on the UI keyboard, and the text will be inserted or deleted in the corresponding area.</p>
       <h2>CAUTION</h2>
       <p>Japanese has a huge number of words, so even if a word exists, it may not be registered in <strong>Kotonoha</strong>.</p>
-      <p>In Wordle, if you use the same word twice, only the first letter is evaluated, unless the answer uses two letters. In this app, this feature is planned to be implemented but not yet, so even if two places are highlighted, it does not mean that two letters are used in the answer.</p>
+      <p> When you enter the <strong>kotonoha</strong> that uses two or three of the same characters (ex:シュクシャ・シシオドシ), the evaluation will be displayed from the left for the number of characters included in the answer. However, this is not the case for green highlighting. <br> If the <strong>tango</strong> is "シュクシャ" and the <strong>kotonoha</strong> is "シシオドシ", the first character of "シ" is highlighted in green, the second character is highlighted in yellow, and the third character is highlighted in gray. </p>
       <p>We do not have a clear filtering system for the words in the questions. The words in this app do not contain "political, religious, sexist, or sexual" intentions.</p>
 
       <h2 id="hatena_close"><u style="cursor: pointer;" id="hatena_close_u">Close Description</u></h2>
@@ -138,7 +138,7 @@ const HATENA_TEXT_JP = `
       <p>現在オレンジ色で囲われている箇所が入力するテキストの枠です。その中で水色に囲われている箇所がUIキーボードにおける現在入力中の文字であり、該当箇所に文字の挿入及び削除がされます。</p>
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
-      <p>Wordleでは同じ単語を２回使うと、答えが２文字使われていない限り、１文字目のみに評価を行う仕様になっています。本アプリに置いてはこの機能は実装予定がありますが未実装なため、２箇所ハイライトされた場合でも答えに２文字使われているとは限りません。</p>
+      <p>同じ文字を２個、３個使う<strong>ことのは</strong>（例：シュクシャ・シシオドシ）を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。<br><strong>たんご</strong>が「シュクシャ」、入力した<strong>ことのは</strong>が「シシオドシ」の場合「シ」の１文字目が緑２文字目が黄色、３文字目がグレーにハイライトされます。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
 
       <h2 id="hatena_close"><u style="cursor: pointer;" id="hatena_close_u">説明を閉じる</u></h2>

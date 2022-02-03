@@ -70,11 +70,11 @@ const AnsDisplayUpdate = (row) =>{
               _row_hb = Dupli_1(ans_dupli,_row_hb,row_text_array,pr_array,true,element);
             })
           }else{
-            console.log("d2None")
+            row_hb = Dupli_2(ans_dupli,_row_hb,row_text_array,pr_array);
           }
           break;
         default:
-          console.log("ddNone")
+          console.log("ddNone");
       }
     }else{
       // 答えに重複ナシ
@@ -82,8 +82,11 @@ const AnsDisplayUpdate = (row) =>{
         case 1:
           row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array);
           break;
+        case 2:
+          row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
+          break;
         default:
-          console.log("ndNone")
+          console.log("ndNone");
       }
     }
   }
@@ -107,12 +110,12 @@ const AnsDisplayUpdate = (row) =>{
   })
   Array.from(new Set(history_of_hb_text["blow"])).forEach((element)=>{
     document.getElementById("btn_"+element).classList.remove("word_none");
-    document.getElementById("btn_"+element).classList.add("word_blow")
+    document.getElementById("btn_"+element).classList.add("word_blow");
   })
   Array.from(new Set(history_of_hb_text["hit"])).forEach((element)=>{
     document.getElementById("btn_"+element).classList.remove("word_none");
     document.getElementById("btn_"+element).classList.remove("word_blow");
-    document.getElementById("btn_"+element).classList.add("word_hit")
+    document.getElementById("btn_"+element).classList.add("word_hit");
   })
 }
 
@@ -133,29 +136,73 @@ const Dupli_1 = (pr_du_array,HB_array,Ans_array,pre_array,du=false,word=undefine
   };
   if(!pre_array.includes(String(Du))){
     // そもそも重複した箇所が回答と関係ない
-    return HB_array
+    return HB_array;
   }else if(pr_du_array.includes(String(Du))){
     // 回答が重複していて、文字も重複している場合はそのまま出力
-    return HB_array
+    return HB_array;
   }else if(pre_array.includes(String(Du))){
     if(HB_array[Ans_array.lastIndexOf(String(Du))] == "HIT"){
       // 後ろがHIT => 前を消す
-      index = Ans_array.indexOf(String(Du))
-      HB_array[index] = "NO"
-      return HB_array
+      index = Ans_array.indexOf(String(Du));
+      HB_array[index] = "NO";
+      return HB_array;
     }else if(HB_array[Ans_array.indexOf(String(Du))] == "HIT"){
       // 前がHIT => 後ろを消す
-      index = Ans_array.lastIndexOf(String(Du))
-      HB_array[index] = "NO"
-      return HB_array
+      index = Ans_array.lastIndexOf(String(Du));
+      HB_array[index] = "NO";
+      return HB_array;
     }else{
       // 両方BLOW => 後ろを消す
-      index = Ans_array.lastIndexOf(String(Du))
-      HB_array[index] = "NO"
-      return HB_array
+      index = Ans_array.lastIndexOf(String(Du));
+      HB_array[index] = "NO";
+      return HB_array;
     }
   }else{
-    // 答えには
+    console.log("想定外")
+  }
+}
+const Dupli_2 = (pr_du_array,HB_array,Ans_array,pre_array)=>{
+  Du = serchDupli(Ans_array);
+  if(!pre_array.includes(String(Du))){
+    // そもそも重複した箇所が回答と関係ない
+    return HB_array;
+  }else if(pr_du_array.includes(String(Du))){
+    // 回答が重複していて、文字も重複している場合
+    if(serchDupli(pr_du_array).length == 2){
+      // 文字の欠損が2+2文字の場合
+      f_index = Ans_array.indexOf(String(Du));
+      m_index = Ans_array.indexOf(String(Du),f_index+1);
+      l_index = Ans_array.lastIndexOf(String(Du));
+      index_list = [f_index,m_index,l_index]
+      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+      HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
+      return HB_array;
+
+    }else if(pre_array.length - new Set(pre_array).size == 2){
+      // 文字の欠損が３文字の場合そのまま出力
+      return HB_array;
+    }else{
+      // 文字の欠損が２文字の場合
+      f_index = Ans_array.indexOf(String(Du));
+      m_index = Ans_array.indexOf(String(Du),f_index+1);
+      l_index = Ans_array.lastIndexOf(String(Du));
+      index_list = [f_index,m_index,l_index]
+      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+      HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
+      return HB_array;
+    }
+  }else if(pre_array.includes(String(Du))){
+    // 答えに３文字の単語が１個のみ用いられている場合
+    f_index = Ans_array.indexOf(String(Du));
+    m_index = Ans_array.indexOf(String(Du),f_index+1);
+    l_index = Ans_array.lastIndexOf(String(Du));
+    index_list = [f_index,m_index,l_index]
+    hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+    HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
+    hb_3_list[hb_3_list.lastIndexOf("BLOW")] = "NO";
+    HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
+    return HB_array
+  }else{
     console.log("想定外")
   }
 }
