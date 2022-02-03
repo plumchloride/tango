@@ -1,6 +1,6 @@
 # ことのはたんご
 単語推理ゲーム「ことのはたんご」
-リンク (https://plumchloride.github.io/tango/)
+リンク (https://plum-chloride.jp/kotonoha-tango/index.html)
 
 本アプリケーションは営利目的での展開はしていません。
 著者によるリンク先での広告の掲示は行っていません。
