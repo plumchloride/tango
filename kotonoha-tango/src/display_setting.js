@@ -70,7 +70,7 @@ const AnsDisplayUpdate = (row) =>{
               _row_hb = Dupli_1(ans_dupli,_row_hb,row_text_array,pr_array,true,element);
             })
           }else{
-            row_hb = Dupli_2(ans_dupli,_row_hb,row_text_array,pr_array);
+            _row_hb = Dupli_2(ans_dupli,_row_hb,row_text_array,pr_array);
           }
           break;
         default:
@@ -80,16 +80,19 @@ const AnsDisplayUpdate = (row) =>{
       // 答えに重複ナシ
       switch (row_text_array.length-row_text_set.size){
         case 1:
-          row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array);
+          _row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array);
           break;
         case 2:
-          row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
+          _row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
           break;
         default:
           console.log("ndNone");
       }
     }
   }
+  //上記仕組みをストレージに反映
+  history_of_hb[row] = _row_hb;
+  localStorage.setItem("history_of_hb", JSON.stringify(history_of_hb));
 
 
   // ディスプレイ反映
@@ -173,8 +176,8 @@ const Dupli_2 = (pr_du_array,HB_array,Ans_array,pre_array)=>{
       f_index = Ans_array.indexOf(String(Du));
       m_index = Ans_array.indexOf(String(Du),f_index+1);
       l_index = Ans_array.lastIndexOf(String(Du));
-      index_list = [f_index,m_index,l_index]
-      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+      index_list = [f_index,m_index,l_index];
+      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
       HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
       return HB_array;
 
@@ -186,8 +189,8 @@ const Dupli_2 = (pr_du_array,HB_array,Ans_array,pre_array)=>{
       f_index = Ans_array.indexOf(String(Du));
       m_index = Ans_array.indexOf(String(Du),f_index+1);
       l_index = Ans_array.lastIndexOf(String(Du));
-      index_list = [f_index,m_index,l_index]
-      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+      index_list = [f_index,m_index,l_index];
+      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
       HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
       return HB_array;
     }
@@ -196,8 +199,8 @@ const Dupli_2 = (pr_du_array,HB_array,Ans_array,pre_array)=>{
     f_index = Ans_array.indexOf(String(Du));
     m_index = Ans_array.indexOf(String(Du),f_index+1);
     l_index = Ans_array.lastIndexOf(String(Du));
-    index_list = [f_index,m_index,l_index]
-    hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]]
+    index_list = [f_index,m_index,l_index];
+    hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
     HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
     hb_3_list[hb_3_list.lastIndexOf("BLOW")] = "NO";
     HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
