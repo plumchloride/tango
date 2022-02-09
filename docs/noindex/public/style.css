@@ -1,3 +1,6 @@
+html {
+  touch-action: manipulation;
+}
 body{
   width: 99vw;
   margin: 0px;
