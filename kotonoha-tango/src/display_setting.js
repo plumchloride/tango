@@ -83,7 +83,13 @@ const AnsDisplayUpdate = (row) =>{
           _row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array);
           break;
         case 2:
-          _row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
+          if(serchDupli(row_text_array).length == 2){
+            serchDupli(row_text_array).forEach((element)=>{
+              _row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array,true,element);
+            })
+          }else{
+            _row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
+          }
           break;
         default:
           console.log("ndNone");
