@@ -6,6 +6,7 @@ let katakana = ["ア","イ","ウ","エ","オ","カ","キ","ク","ケ","コ","サ
                 "ガ","ギ","グ","ゲ","ゴ","ザ","ジ","ズ","ゼ","ゾ","ダ","ヂ","ヅ","デ","ド","バ","ビ","ブ","ベ","ボ","パ","ピ","プ","ペ","ポ","ァ","ィ","ゥ","ェ","ォ","ッ","ャ","ュ","ョ","ー"];
 $input = document.getElementById("input_text");
 $input.addEventListener('input',(e)=>{
+  e.preventDefault();
   if(end_tf){return};
   $input = document.getElementById("input_text");
   _anser = $input.value.split('');

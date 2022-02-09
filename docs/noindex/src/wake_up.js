@@ -1,10 +1,10 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
-GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/A_data_new.csv',"A");
+GetCsvData('./public/data/A_data_new.csv',"A");
 
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
-    GetCsvData('https://plum-chloride.jp/kotonoha-tango/public/data/Q_fil_ippan.csv',"Q");
+    GetCsvData('./public/data/Q_fil_ippan.csv',"Q");
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & !wake_up_progress["createKeybord"]){
