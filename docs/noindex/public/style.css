@@ -364,6 +364,11 @@ h2{
   #eval_display .row .display_num{
     width: 8vw;
   }
+  #eval_display .row .display_num{
+    width: 8vw;
+    height: 8vw;
+    font-size: 1em;
+  }
   #keybord .row button{
     width: 9vw;
   }
