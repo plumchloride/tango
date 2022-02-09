@@ -45,17 +45,6 @@
 
     gtag('config', 'G-HZCPVJSXFG');
   </script>
-  <script>
-    /* ダブルタップによる拡大を禁止 */
-    let t_duble = 0;
-    document.documentElement.addEventListener('touchend', function (e) {
-      var now_duble = new Date().getTime();
-      if ((now_duble - t_duble) < 350){
-        e.preventDefault();
-      }
-      t_duble = now_duble;
-    }, false);
-  </script>
   </head>
   <body>
     <div id="header">
@@ -158,7 +147,7 @@
       </div>
     </div>
     <div id="setting" class="non_visi explanation">
-      <p>test v2</p>
+      <p>test v3</p>
       <h2>ハードモード</h2>
       <p>Wordle本家では一度当てた単語はその後常にその箇所に使わなければいけないモード。日本語でこれを実装すると詰むため実装しない。</p>
       <h2>ライセンス</h2>
