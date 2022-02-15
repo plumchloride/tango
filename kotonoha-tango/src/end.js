@@ -53,10 +53,20 @@ const end = (text,win=0)=>{
   if(mode == "bar"){
     $div["body"].classList.remove("non_visi");
     document.getElementById("emoji_place").innerText = createEmoji();
+    document.getElementById("emoji_place_re").innerText = createEmoji(false,true);
   }
 }
 
-const createEmoji = (URL = false)=>{
+const createEmoji = (URL = false,rem = false)=>{
+  // エラー処理
+  _remain = [...remain_history]
+  if(history_of_hb.length != _remain.length){
+    missnum = history_of_hb.length - _remain.length
+    minn_array = Array(missnum);
+    minn_array.fill(NaN);
+    _remain.unshift(...minn_array);
+  }
+
   if(copy_win){
     base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"
   }else if(now_solve.row == 10){
@@ -75,11 +85,13 @@ const createEmoji = (URL = false)=>{
       Element.forEach((e)=>{
         graph_text += e.replace("NO","⬜").replace("BLOW","🟨").replace("HIT","🟩")
       })
+      if(rem)graph_text+=" "+String(_remain[index]);
     }else{
       graph_text+=" \r\n"
       Element.forEach((e)=>{
         graph_text += e.replace("NO","⚪").replace("BLOW","🟡").replace("HIT","🟢")
       })
+      if(rem)graph_text+=" "+String(_remain[index]);
     }
   })
   return(base_text+graph_text)

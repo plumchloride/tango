@@ -46,6 +46,7 @@ const ValueUpdate = ()=>{
 
 // 回答をもとにヒットアンドブローを反映
 const AnsDisplayUpdate = (row) =>{
+  CheckRemaining_all();
   RemoveSolveHighlight(row);
   _row_hb = Array.from(history_of_hb[row]);
   row_text = history_of_anser[row];

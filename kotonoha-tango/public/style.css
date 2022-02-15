@@ -58,7 +58,7 @@ h2{
 }
 
 #graph{
-  width: 98vw;
+  width: 30vw;
   position:absolute;
   display: flex;
   justify-content: center;
@@ -97,20 +97,42 @@ h2{
   min-width: 50%;
   cursor: pointer;
 }
-#graph #graph_tw_url{
-  background-color: rgb(128,197,222);
+#graph #graph_bt3{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
-
+#graph #graph_bt4{
+  padding-top: 1ex;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
 #graph #graph_copy{
   background-color: rgb(252, 201, 72);
 }
 #graph #graph_tw{
   background-color: rgb(128,197,222);
 }
+#graph #graph_tw_url{
+  background-color: rgb(128,197,222);
+}
+#graph #graph_copy_re{
+  background-color: rgb(252, 201, 72);
+}
+#graph #graph_tw_re{
+  background-color: rgb(128,197,222);
+}
+#graph #graph_tw_url_re{
+  background-color: rgb(128,197,222);
+}
 #graph #graph_close{
   margin-top: 10px;
   font-size: large;
   cursor: pointer;
+}
+#graph #graph_body #emoji_place_re{
+  text-align: left;
 }
 
 .inline-img{
@@ -137,6 +159,10 @@ h2{
 }
 
 /* ディスプレイ */
+#remain_num{
+  color: rgb(211,147,93);
+  padding-left: 0.5rem;
+}
 #eval_display{
   padding-bottom:  10px ;
 }
@@ -335,6 +361,7 @@ h2{
   border: none;
   padding: 2px;
   border-radius: 10px;
+  color: black;
 }
 .cuurent{
   background-color: rgb(49, 170, 214);
@@ -353,9 +380,17 @@ h2{
   line-height:2ex;
   vertical-align: middle;
 }
+#cahrt_canvas{
+  display: flex;
+  justify-content: center;
+}
 #history #myChart{
   height: 20ex;
   width: 100%;
+}
+#remain_text{
+  max-width: 40ex;
+  overflow-wrap: break-word;
 }
 /* 戦歴 */
 

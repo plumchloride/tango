@@ -1,9 +1,11 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
 GetCsvData('./public/data/A_data_new.csv',"A");
+let filter_array = []
 
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
+    filter_array = Array.from(new Set([...A_data]));
     GetCsvData('./public/data/Q_fil_ippan.csv',"Q");
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
@@ -20,8 +22,9 @@ const Progress = ()=>{
     SolvHighlight();
     experienceCheck();
     beforeDataCheck();
-    if(pass_day == 25 | pass_day == 26| pass_day == 27){
-      alertShow("Update\nハイコントラストモードの追加\nUIの調整\nキーボードの種別変更機能の追加",3000);
+    CheckRemaining_all();
+    if(pass_day == 26| pass_day == 27){
+      alertShow("Update\nハイコントラストモードの追加\nUIの調整\nキーボードの種別変更機能の追加\n残り候補数表示",3000);
     }
   }
 }

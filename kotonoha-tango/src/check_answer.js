@@ -108,6 +108,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   localStorage.setItem("fin", JSON.stringify({"tf":false,"text":undefined}));
 
   //画面更新
+  CheckRemaining_all(true);
   AnsDisplayUpdate(now_solve.row -1);
   ValueUpdate();
   DisplayUpdate();

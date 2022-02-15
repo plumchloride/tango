@@ -41,7 +41,7 @@ const beforeDataCheck = ()=>{
     document.getElementById("kt_none").innerText = "hidden"
 
     // グラフ画面変更
-    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect"])
+    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","Copy","Tweet","Tweet with URL","With transition of remaining words"])
   }else{
     // 日本語
     lang_en = false;
@@ -54,6 +54,13 @@ const beforeDataCheck = ()=>{
   }else{
     color = JSON.parse(localStorage.getItem("color"));
     ChangeColor(...color);
+  }
+
+  // 残り候補数
+  if(localStorage.getItem("remain") == null){
+    localStorage.setItem("remain", JSON.stringify(remain_history));
+  }else{
+    remain_history = JSON.parse(localStorage.getItem("remain"));
   }
 
 

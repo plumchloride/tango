@@ -18,6 +18,7 @@
   <script src="./src/create_answer_keybord.js" defer></script>
   <script src="./src/end.js" defer></script>
   <script src="./src/ui.js" defer></script>
+  <script src="./src/check_remaining.js" defer></script>
   <script src="./src/webstorage.js" defer></script>
   <script src="./src/change_to_en.js" defer></script>
   <link rel="stylesheet" href="./public/style.css"></link>
@@ -103,6 +104,7 @@
     </div>
     <div id="body" class="non_visi">
       <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+      <div id="remain_num">残り候補数：---</div>
 
       <div id="eval_display"></div>
 
@@ -135,6 +137,15 @@
         </div>
         <div id="graph_bt2">
           <div id="graph_tw_url" class="graph_bt_url">URL付きでツイート</div>
+        </div>
+        <h2 id="remain_h2">残り候補数推移付き</h2>
+        <div class="flex_center"><p id="emoji_place_re"></p></div>
+        <div id="graph_bt3">
+          <div id="graph_copy_re" class="graph_bt_c">コピー</div>
+          <div id="graph_tw_re" class="graph_bt_c">ツイート</div>
+        </div>
+        <div id="graph_bt4">
+          <div id="graph_tw_url_re" class="graph_bt_url">URL付きでツイート</div>
         </div>
         <h2 id="history_h2">戦歴</h2>
         <div id="history">
@@ -180,8 +191,6 @@
         </label>
       </div>
       <br>
-      <h2>残り候補数</h2>
-      <p>現在取り組み中</p>
       <h2>新規単語登録</h2>
       <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
       <h2>バグ報告</h2>

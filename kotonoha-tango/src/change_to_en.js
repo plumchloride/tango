@@ -15,7 +15,7 @@ document.getElementById("hatena").addEventListener("click",(e)=>{
       document.getElementById("kt_none").innerText = "非表示"
 
       // グラフ画面変更
-      change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です"])
+      change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です","コピー","ツイート","URL付きでツイート","残り候補数推移付き"])
     }else{
       lang_en = true;
       document.getElementById("hatena").innerHTML = HATENA_TEXT_EN;
@@ -28,7 +28,7 @@ document.getElementById("hatena").addEventListener("click",(e)=>{
       document.getElementById("kt_none").innerText = "hidden"
 
       // グラフ画面変更
-      change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect"])
+      change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","Copy","Tweet","Tweet with URL","With transition of remaining words"])
     }
     // 現在の言語を保存
     localStorage.setItem("lang", lang_en);
@@ -68,6 +68,10 @@ const change_graph_lang= (text)=>{
   document.getElementById("his_4").innerHTML = text[8];
   document.getElementById("gr_title").innerText = text[9];
   document.getElementById("graph_close").innerHTML = text[10];
+  document.getElementById("graph_copy_re").innerText = text[13];
+  document.getElementById("graph_tw_re").innerText = text[14];
+  document.getElementById("graph_tw_url_re").innerText = text[15];
+  document.getElementById("remain_h2").innerText = text[16];
 
 }
 
@@ -220,8 +224,6 @@ const SET_TEXT_JP = `
   </label>
 </div>
 <br>
-<h2>残り候補数</h2>
-<p>現在取り組み中</p>
 <h2>新規単語登録</h2>
 <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
 <h2>バグ報告</h2>

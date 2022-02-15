@@ -112,8 +112,39 @@ document.getElementById("graph_tw").addEventListener("click",(element)=>{
     window.open(url,"_blank");
 		}
 	});
+// URL付き
 document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
   s = createEmoji(true);
+  if (s != "") {
+    s = encodeURIComponent(s);
+    //投稿画面を開く
+    url = "https://twitter.com/intent/tweet?text=" + s;
+    window.open(url,"_blank");
+    }
+  });
+
+// 推移コピー機能及びツイート機能
+// コピー クリップボードに送信
+document.getElementById("graph_copy_re").addEventListener("click",(element)=>{
+  var promise = navigator.clipboard.writeText(createEmoji(false,true));
+  if(promise){
+    alertShow("クリップボードにコピー完了",500);
+  }
+})
+
+// ツイート
+document.getElementById("graph_tw_re").addEventListener("click",(element)=>{
+	s = createEmoji(false,true);
+	if (s != "") {
+    s = encodeURIComponent(s);
+    //投稿画面を開く
+    url = "https://twitter.com/intent/tweet?text=" + s;
+    window.open(url,"_blank");
+		}
+	});
+// URL付き
+document.getElementById("graph_tw_url_re").addEventListener("click",(element)=>{
+  s = createEmoji(true,true);
   if (s != "") {
     s = encodeURIComponent(s);
     //投稿画面を開く
@@ -164,4 +195,13 @@ const ChangeColor = (color_hit = color[0] ,color_brow = color[1])=>{
       document.getElementById("colour_2").setAttribute("checked","");
       break;
   }
+}
+
+// 残り数反映
+const SecCheck = (remain_num = filter_array.length)=>{
+  if(lang_en){
+    document.getElementById("remain_num").innerText = `Remaining words：${remain_num}`;
+  }else{
+    document.getElementById("remain_num").innerText = `残り候補数：${remain_num}`;
+  };
 }
