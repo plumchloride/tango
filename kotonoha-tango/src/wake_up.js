@@ -20,6 +20,9 @@ const Progress = ()=>{
     SolvHighlight();
     experienceCheck();
     beforeDataCheck();
+    if(pass_day == 25 | pass_day == 26| pass_day == 27){
+      alertShow("Update\nハイコントラストモードの追加\nUIの調整\nキーボードの種別変更機能の追加",3000);
+    }
   }
 }
 
@@ -34,6 +37,6 @@ const DisplayTime = ()=>{
   if(lang_en){
     document.getElementById("time_left").innerHTML = "<strong>No."+String(pass_day)+"</strong>　Next Tango："+time_left;
   }else{
-    document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り時間："+time_left;
+    document.getElementById("time_left").innerHTML = "<strong>第"+String(pass_day)+"回</strong>　今日の単語 残り："+time_left;
   }
 }

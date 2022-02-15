@@ -9,6 +9,10 @@ document.getElementById("hatena").addEventListener("click",(e)=>{
       document.getElementById("Decision_button").innerText="決定";
       document.getElementById("input_text").setAttribute("placeholder","キーボード入力用");
       document.getElementById("setting").innerHTML = SET_TEXT_JP;
+      document.getElementById("kt_all").innerText = "全種"
+      document.getElementById("kt_normal").innerText = "50音"
+      document.getElementById("kt_ga").innerText = "濁点等"
+      document.getElementById("kt_none").innerText = "非表示"
 
       // グラフ画面変更
       change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です"])
@@ -18,12 +22,18 @@ document.getElementById("hatena").addEventListener("click",(e)=>{
       document.getElementById("Decision_button").innerText="decision";
       document.getElementById("input_text").setAttribute("placeholder","input column");
       document.getElementById("setting").innerHTML = SET_TEXT_EN;
+      document.getElementById("kt_all").innerText = "All"
+      document.getElementById("kt_normal").innerText = "top half"
+      document.getElementById("kt_ga").innerText = "bottom half"
+      document.getElementById("kt_none").innerText = "hidden"
 
       // グラフ画面変更
       change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect"])
     }
     // 現在の言語を保存
     localStorage.setItem("lang", lang_en);
+    // 色保存
+    ChangeColor();
   }
 
   // 表示閉じる処理
@@ -149,6 +159,27 @@ const HATENA_TEXT_JP = `
 `
 
 const SET_TEXT_EN = `
+<h2>Color change</h2>
+<p>The resulting color of the text output will not change.</p>
+<div id="change_colour">
+  <label>
+    <input type="radio" id="colour_0" name="colour" value="0" onclick="ChangeColor('rgb(167,210,141)','rgb(252, 201, 72)')">
+    <div class="colour_ex_box" style="background-color: rgb(167,210,141);"></div><div class="colour_ex_box" style="background-color: rgb(252, 201, 72);"></div>
+  </label>
+  <br>
+  <label>
+    <input type="radio" id="colour_1" name="colour" value="1" onclick="ChangeColor('#F5793A','#85C0F9')">
+    <div class="colour_ex_box" style="background-color: #F5793A;"></div><div class="colour_ex_box" style="background-color: #85C0F9;"></div>
+  </label>
+  <br>
+  <label>
+    <input type="radio" id="colour_2" name="colour" value="2" onclick="ChangeColor('rgb(115, 145, 97)','rgb(188, 230, 163)')">
+    <div class="colour_ex_box" style="background-color: rgb(115, 145, 97);"></div><div class="colour_ex_box" style="background-color: rgb(188, 230, 163);"></div>
+  </label>
+</div>
+<br>
+<h2>Register new words</h2>
+<p>If you want to register a new word, please submit it <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">Google Form</a>. It may take some time for the new word to be added to the dictionary, but it will be added under certain conditions.</p>
 <h2>License</h2>
 <div style="font-size: 0.9em;">
   <p>This work is licensed under the BSD License.<br>This work is also licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
@@ -156,8 +187,6 @@ const SET_TEXT_EN = `
   "UniDic-cwj_3.1.0" is licensed under the BSD License and Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
   <p>This work also uses software from the following author: 国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0) is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
 </div>
-<h2>Register new words</h2>
-<p>If you want to register a new word, please submit it <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">Google Form</a>. It may take some time for the new word to be added to the dictionary, but it will be added under certain conditions.</p>
 <h2>Bug Reports</h2>
 <p>If you encounter any bugs and want to share them, please post them <a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">Issues on GitHub</a>.</p>
 <h2>Other</h2>
@@ -172,6 +201,31 @@ const SET_TEXT_EN = `
 </div>
 `
 const SET_TEXT_JP = `
+<h2>色変更</h2>
+<p>結果としてテキスト出力される色は変わりません。</p>
+<div id="change_colour">
+  <label>
+    <input type="radio" id="colour_0" name="colour" value="0" onclick="ChangeColor('rgb(167,210,141)','rgb(252, 201, 72)')">
+    <div class="colour_ex_box" style="background-color: rgb(167,210,141);"></div><div class="colour_ex_box" style="background-color: rgb(252, 201, 72);"></div>
+  </label>
+  <br>
+  <label>
+    <input type="radio" id="colour_1" name="colour" value="1" onclick="ChangeColor('#F5793A','#85C0F9')">
+    <div class="colour_ex_box" style="background-color: #F5793A;"></div><div class="colour_ex_box" style="background-color: #85C0F9;"></div>
+  </label>
+  <br>
+  <label>
+    <input type="radio" id="colour_2" name="colour" value="2" onclick="ChangeColor('rgb(115, 145, 97)','rgb(188, 230, 163)')">
+    <div class="colour_ex_box" style="background-color: rgb(115, 145, 97);"></div><div class="colour_ex_box" style="background-color: rgb(188, 230, 163);"></div>
+  </label>
+</div>
+<br>
+<h2>残り候補数</h2>
+<p>現在取り組み中</p>
+<h2>新規単語登録</h2>
+<p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
+<h2>バグ報告</h2>
+<p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
 <h2>ライセンス</h2>
 <div style="font-size: 0.9em;">
   <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
@@ -179,15 +233,11 @@ const SET_TEXT_JP = `
     「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
   <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
 </div>
-<h2>新規単語登録</h2>
-<p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
-<h2>バグ報告</h2>
-<p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>に投稿して下さい。</p>
 <h2>その他</h2>
 <p>コードに関しては以下のGitHubに掲載されています。</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-<p>コード作成時の考えや簡単な内部構造は以下のQiitaに記載されています。</p>
-<p>> <a href="https://qiita.com/Ohnishi81/items/e67798e8573581130c04" target="_blank">Qiita</a></p>
+<h2>その他報告</h2>
+<p>もし感想を送る場合やバグ報告の際は<a href="https://twitter.com/plum_chloride" target="_blank">こちらのTwitter</a>より連絡して下さい</p>
 
 <div style="display: flex;justify-content: center;">
   <address>

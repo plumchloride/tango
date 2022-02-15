@@ -3,6 +3,7 @@ let img_show = {"hatena":true,"bar":false,"set":false};
 let $img_btn = {"hatena":document.getElementById("img_hatena"),"bar":document.getElementById("img_bar_graph"),"set":document.getElementById("img_setting")}
 let $div = {"body":document.getElementById("body"),"hatena":document.getElementById("hatena"),"bar":document.getElementById("graph"),"set":document.getElementById("setting")}
 let myChart = "A"
+let color = ["rgb(167,210,141)","rgb(252, 201, 72)"]
 
 
 $img_btn.hatena.setAttribute("src",src.batu);
@@ -145,7 +146,22 @@ document.getElementById("title").addEventListener("click",(el)=>{
   $div.body.classList.remove("non_visi");
 });
 
-// aタグでのリンクの実装が出来なかったため
-// document.getElementById("linek").addEventListener("click",(e)=>{
-//   window.open("https://www.powerlanguage.co.uk/wordle/","_brank")
-// })
+// 色変更機能
+const ChangeColor = (color_hit = color[0] ,color_brow = color[1])=>{
+  document.documentElement.style.setProperty('--hit',color_hit);
+  document.documentElement.style.setProperty('--brow',color_brow);
+  color[0] = color_hit;
+  color[1] = color_brow;
+  localStorage.setItem("color", JSON.stringify(color));
+  switch(color_brow){
+    case "rgb(252, 201, 72)":
+      document.getElementById("colour_0").setAttribute("checked","");
+      break;
+    case "#85C0F9":
+      document.getElementById("colour_1").setAttribute("checked","");
+      break;
+    case "rgb(188, 230, 163)":
+      document.getElementById("colour_2").setAttribute("checked","");
+      break;
+  }
+}

@@ -20,7 +20,6 @@ const beforeDataCheck = ()=>{
     localStorage.setItem("history_of_game", JSON.stringify(history_of_game));
     showHistory(history_of_game);
   }else{
-
     history_of_game = JSON.parse(localStorage.getItem("history_of_game"));
     showHistory(history_of_game);
   }
@@ -36,11 +35,25 @@ const beforeDataCheck = ()=>{
     document.getElementById("input_text").setAttribute("placeholder","input column");
     document.getElementById("setting").innerHTML = SET_TEXT_EN;
 
+    document.getElementById("kt_all").innerText = "All"
+    document.getElementById("kt_normal").innerText = "top half"
+    document.getElementById("kt_ga").innerText = "bottom half"
+    document.getElementById("kt_none").innerText = "hidden"
+
     // グラフ画面変更
     change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect"])
   }else{
     // 日本語
     lang_en = false;
+  }
+
+  // 色調調整
+  if(localStorage.getItem("color") == null){
+    localStorage.setItem("color", JSON.stringify(color));
+    ChangeColor(...color);
+  }else{
+    color = JSON.parse(localStorage.getItem("color"));
+    ChangeColor(...color);
   }
 
 
@@ -60,7 +73,7 @@ const beforeDataCheck = ()=>{
     DisplayUpdate();
     if(fin.tf){
       en_tx_array = ["You're correct","You're Incorrect"]
-      jp_tx_array = ["正解です","不正解です"]
+      jp_tx_array = ["正解です","不正解です","正解しました"]
       if(lang_en){
         if(jp_tx_array.includes(fin.text)){
           end(en_tx_array[jp_tx_array.indexOf(fin.text)]);

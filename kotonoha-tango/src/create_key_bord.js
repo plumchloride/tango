@@ -15,9 +15,12 @@ const CreateKeybord = ()=>{
   for(let i = 0;i<10;i++){
     // <hr>を入れた後
     if(i >= 5){
-      if(i == 5)element_array.push(document.createElement("hr"));
+      if(i == 5){
+        element_array.push(document.createElement("hr"))
+        element_array[5].setAttribute("id","keybord_hr")
+      };
       element_array.push(document.createElement("div"));
-      element_array[i+1].setAttribute("class","row");
+      element_array[i+1].setAttribute("class","row bt_ga");
       for(let z = 0;z<10;z++){
         element_array[i+1].appendChild(document.createElement("button"));
         element_array[i+1].childNodes[z].setAttribute("data-key",KEYBORD_LIST[i][z]);
@@ -35,7 +38,7 @@ const CreateKeybord = ()=>{
       // 入れる前
     }else{
       element_array.push(document.createElement("div"));
-      element_array[i].setAttribute("class","row");
+      element_array[i].setAttribute("class","row bt_normal");
       for(let z = 0;z<10;z++){
         element_array[i].appendChild(document.createElement("button"));
         element_array[i].childNodes[z].setAttribute("data-key",KEYBORD_LIST[i][z]);

@@ -1,3 +1,10 @@
+:root {
+  --hit: rgb(167,210,141);
+  --brow: rgb(252, 201, 72);
+}
+html {
+  touch-action: manipulation;
+}
 body{
   width: 99vw;
   margin: 0px;
@@ -44,10 +51,10 @@ h2{
   font-size: 1.4em;
 }
 .hit_ex{
-  background-color: rgb(167,210,141);
+  background-color: var(--hit);
 }
 .blow_ex{
-  background-color: rgb(252, 201, 72);
+  background-color: var(--brow);
 }
 
 #graph{
@@ -165,12 +172,12 @@ h2{
   border-radius: 50%!important;
 }
 #eval_display .word_hit{
-  background-color: rgb(167,210,141);
-  border: solid 0.15em #a7d28d;
+  background-color: var(--hit);
+  border: solid 0.15em var(--hit);
 }
 #eval_display .word_blow{
-  background-color: rgb(252, 201, 72);
-  border: solid 0.15em #fcc948;
+  background-color: var(--brow);
+  border: solid 0.15em var(--brow);
 
 }
 #eval_display .word_none{
@@ -216,12 +223,12 @@ h2{
   border-radius: 50%!important;
 }
 #hatena .word_hit{
-  background-color: rgb(167,210,141);
-  border: solid 2px rgb(167,210,141);
+  background-color: var(--hit);
+  border: solid 2px var(--hit);
 }
 #hatena .word_blow{
-  background-color: rgb(252, 201, 72);
-  border: solid 2px rgb(252, 201, 72);
+  background-color: var(--brow);
+  border: solid 2px var(--brow);
 
 }
 #hatena .word_none{
@@ -292,18 +299,45 @@ h2{
   color: #555;
 }
 #keybord .word_hit{
-  background-color: rgb(167,210,141);
-  border: solid 0px rgb(167,210,141);
+  background-color: var(--hit);
+  border: solid 0px var(--hit);
 }
 #keybord .word_blow{
-  background-color: rgb(252, 201, 72);
-  border: solid 0px rgb(252, 201, 72);
+  background-color: var(--brow);
+  border: solid 0px var(--brow);
 
 }
 #keybord .word_none{
   background-color: gray;
   border: solid 0px gray;
   color: white;
+}
+
+#keybord_move{
+  margin-top: 1ex;
+  margin-bottom: 2ex;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+#keybord_type{
+  margin-top: 1ex;
+  margin-bottom: 2ex;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+}
+.key_type_bt{
+  width: 20%;
+  background-color: rgb(128,197,222);
+  font-size: large;
+  border: none;
+  padding: 2px;
+  border-radius: 10px;
+}
+.cuurent{
+  background-color: rgb(49, 170, 214);
 }
 /* キーボード */
 
@@ -325,6 +359,21 @@ h2{
 }
 /* 戦歴 */
 
+/* 色切り替え */
+#change_colour{
+  font-size: large;
+}
+#change_colour label{
+  display: grid;
+  grid-template-columns: 20% 20% 20%;
+  align-items: center;
+  cursor: pointer;
+}
+.colour_ex_box{
+  width: 50%;
+  aspect-ratio: 1;
+}
+/* 色切り替え */
 
 #alert{
   width: 100vw;
@@ -395,6 +444,8 @@ h2{
 
   #eval_display .row .display_num{
     width: 8vw;
+    height: 8vw;
+    font-size: 1em;
   }
   #keybord .row button{
     width: 9vw;
