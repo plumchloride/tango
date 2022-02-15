@@ -40,6 +40,7 @@ Object.keys($img_btn).forEach((key) => {
       if(e.target.dataset.mode == "bar"){
         $div["body"].classList.remove("non_visi");
         document.getElementById("emoji_place").innerText = createEmoji();
+        document.getElementById("emoji_place_re").innerText = createEmoji(false,true);
       }
     }
   });
