@@ -1,6 +1,10 @@
 let none_re_array = []; // 含んでいない単語を何回もフィルタリングすることは付加になるので、1度行ったフィルタリングを再度行わない
 let remain_history = []
 const CheckRemaining_all = (progress_re = false) =>{
+  if(!filter_array | filter_array.length == 0){
+    alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is empty",2000);
+    return;
+  }
   // blow hit 重複削除
   history_of_hb_text["hit"].forEach((element) => {
     if(history_of_hb_text["blow"].length != 0 & history_of_hb_text["blow"].includes(element)){

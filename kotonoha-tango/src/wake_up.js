@@ -5,8 +5,8 @@ let filter_array = []
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
-    filter_array = Array.from(new Set([...A_data]));
     GetCsvData('./public/data/Q_fil_ippan.csv',"Q");
+    filter_array = Array.from(new Set([...A_data]));
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & !wake_up_progress["createKeybord"]){

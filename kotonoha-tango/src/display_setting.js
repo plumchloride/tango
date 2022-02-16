@@ -46,7 +46,6 @@ const ValueUpdate = ()=>{
 
 // 回答をもとにヒットアンドブローを反映
 const AnsDisplayUpdate = (row) =>{
-  CheckRemaining_all();
   RemoveSolveHighlight(row);
   _row_hb = Array.from(history_of_hb[row]);
   row_text = history_of_anser[row];
@@ -127,6 +126,12 @@ const AnsDisplayUpdate = (row) =>{
     document.getElementById("btn_"+element).classList.remove("word_blow");
     document.getElementById("btn_"+element).classList.add("word_hit");
   })
+
+  if(!filter_array){
+    alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000)
+  }else{
+    CheckRemaining_all();
+  }
 }
 
 // 重複をリストで変換
