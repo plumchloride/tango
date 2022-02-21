@@ -71,7 +71,7 @@ const KryTypeChange = (type)=>{
           e.classList.remove("non_visi");
         });
         document.getElementById("keybord_hr").classList.remove("non_visi");
-        document.getElementById("keybord_move").classList.add("non_visi");
+        document.getElementById("keybord_move").classList.remove("non_visi");
         break;
       case "normal":
         Array.prototype.filter.call(document.getElementsByClassName("bt_normal"),(e)=>{

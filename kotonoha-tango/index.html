@@ -8,20 +8,21 @@
   <link rel="icon" type="image/png" href="./public/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="./src/get_csv.js" defer></script>
-  <script src="./src/get_today_word.js" defer></script>
+  <script src="./src/get_today_word.js?ver=3.0.0" defer></script>
   <script src="./src/create_key_bord.js" defer></script>
-  <script src="./src/wake_up.js" defer></script>
-  <script src="./src/check_answer.js" defer></script>
-  <script src="./src/display_setting.js" defer></script>
+  <script src="./src/check_answer.js?ver=3.0.0" defer></script>
+  <script src="./src/display_setting.js?ver=3.0.0" defer></script>
   <script src="./src/create_answer_input.js" defer></script>
   <script src="./src/create_display.js" defer></script>
-  <script src="./src/create_answer_keybord.js" defer></script>
-  <script src="./src/end.js" defer></script>
-  <script src="./src/ui.js" defer></script>
-  <script src="./src/check_remaining.js" defer></script>
-  <script src="./src/webstorage.js" defer></script>
-  <script src="./src/change_to_en.js" defer></script>
-  <link rel="stylesheet" href="./public/style.css"></link>
+  <script src="./src/create_answer_keybord.js?ver=3.0.0" defer></script>
+  <script src="./src/end.js?ver=3.0.0" defer></script>
+  <script src="./src/ui.js?ver=3.0.0" defer></script>
+  <script src="./src/check_remaining.js?ver=3.0.0" defer></script>
+  <script src="./src/webstorage.js?ver=3.0.0" defer></script>
+  <script src="./src/change_to_en.js?ver=3.0.0" defer></script>
+  <script src="./src/wake_up.js?ver=3.0.0" defer></script>
+  <script src="./src/random_word_gene.js?ver=3.0.0" defer></script>
+  <link rel="stylesheet" href="./public/style.css?ver=3.0.0"></link>
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
 
@@ -52,7 +53,7 @@
       </div>
     </div>
     <div id="hatena" class="explanation">
-      <h2 id="switch_lang"><small><u id="switch_lang_u">Switch to English</u></small></h2>
+      <h2 id="switch_lang"><small><u id="switch_lang_u" onclick="changeLang();">Switch to English</u></small></h2>
       <h2>遊び方</h2>
       <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -87,7 +88,7 @@
       <p>同じ文字を２個、３個使う<strong>ことのは</strong>（例：シュクシャ・シシオドシ）を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。<br><strong>たんご</strong>が「シュクシャ」、入力した<strong>ことのは</strong>が「シシオドシ」の場合「シ」の１文字目が緑２文字目が黄色、３文字目がグレーにハイライトされます。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
 
-      <h2 id="hatena_close"><u style="cursor: pointer;" id="hatena_close_u">説明を閉じる</u></h2>
+      <h2 id="hatena_close" style="cursor: pointer;" onclick="closeHatena();"><u>説明を閉じる</u></h2>
       <hr>
       <div></div>
       <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
@@ -95,7 +96,7 @@
     </div>
     <div id="body" class="non_visi">
       <div id ="time_left">今日の単語 残り時間：--:--:--</div>
-      <div id="remain_num">残り候補数：---</div>
+      <div><span id="remain_num">残り候補数：---</span><span id="remain_unvisi" onclick="toggle_remain_show();">（非表示）</span></div>
 
       <div id="eval_display"></div>
 
@@ -105,7 +106,7 @@
       </div>
 
       <div id="keybord"></div>
-      <div id="keybord_move" class="non_visi">
+      <div id="keybord_move">
         <button class="key_type_bt" onclick="FuncButton('←');return false;">←</button>
         <button class="key_type_bt" onclick="FuncButton('→');return false;">→</button>
         <button class="key_type_bt" onclick="FuncButton('del');return false;">del</button>
@@ -116,27 +117,24 @@
         <button id = "kt_ga" class="key_type_bt" onclick="KryTypeChange('ga');return false;">濁点等</button>
         <button id = "kt_none" class="key_type_bt" onclick="KryTypeChange('none');return false;">非表示</button>
       </div>
+      <div id="kotonoha_rando_div">
+        <button id="kotonoha_rando" onclick="createRandomAnsower()">「ことのは」ランダム生成</button>
+      </div>
     </div>
     <div id="graph" class="non_visi explanation">
       <div id="graph_body">
+        <h2 id="before_tango_h2">昨日のたんご</h2>
+        <p id="before_tango">＝＝：〇〇〇</p>
         <h2 id ="result">今日は正解していません</h2>
+        <div id="remain_toggle"><label><input type="checkbox" id="remain_toggle_input" checked onclick="RemainToggleChange();"><span id="remain_span">　残り候補数推移</span></label></div>
         <p id="result_answer"></p>
-        <p id="emoji_place"></p>
+        <div class="flex_center"><p id="emoji_place"></p></div>
         <div id="graph_bt">
           <div id="graph_copy" class="graph_bt_c">コピー</div>
           <div id="graph_tw" class="graph_bt_c">ツイート</div>
         </div>
         <div id="graph_bt2">
           <div id="graph_tw_url" class="graph_bt_url">URL付きでツイート</div>
-        </div>
-        <h2 id="remain_h2">残り候補数推移付き</h2>
-        <div class="flex_center"><p id="emoji_place_re"></p></div>
-        <div id="graph_bt3">
-          <div id="graph_copy_re" class="graph_bt_c">コピー</div>
-          <div id="graph_tw_re" class="graph_bt_c">ツイート</div>
-        </div>
-        <div id="graph_bt4">
-          <div id="graph_tw_url_re" class="graph_bt_url">URL付きでツイート</div>
         </div>
         <h2 id="history_h2">戦歴</h2>
         <div id="history">
@@ -196,10 +194,9 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <h2>その他報告</h2>
-      <p>もし感想を送る場合やバグ報告の際は<a href="https://twitter.com/plum_chloride" target="_blank">こちらのTwitter</a>より連絡して下さい</p>
-
-      <div style="display: flex;justify-content: center;">
+      <div class="flex_center"><small>ことのはたんご ver 3.0.0</small></div>
+      <br>
+      <div class="flex_center">
         <address>
           &copy; 2022 Rikito Ohnishi
         </address>

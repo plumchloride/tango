@@ -97,17 +97,6 @@ h2{
   min-width: 50%;
   cursor: pointer;
 }
-#graph #graph_bt3{
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-#graph #graph_bt4{
-  padding-top: 1ex;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
 #graph #graph_copy{
   background-color: rgb(252, 201, 72);
 }
@@ -117,21 +106,12 @@ h2{
 #graph #graph_tw_url{
   background-color: rgb(128,197,222);
 }
-#graph #graph_copy_re{
-  background-color: rgb(252, 201, 72);
-}
-#graph #graph_tw_re{
-  background-color: rgb(128,197,222);
-}
-#graph #graph_tw_url_re{
-  background-color: rgb(128,197,222);
-}
 #graph #graph_close{
   margin-top: 10px;
   font-size: large;
   cursor: pointer;
 }
-#graph #graph_body #emoji_place_re{
+#graph #graph_body #emoji_place{
   text-align: left;
 }
 
@@ -163,6 +143,10 @@ h2{
   color: rgb(211,147,93);
   padding-left: 0.5rem;
 }
+#remain_unvisi{
+  cursor: pointer;
+  padding-left: 0.5rem;
+}
 #eval_display{
   padding-bottom:  10px ;
 }
@@ -190,9 +174,12 @@ h2{
 }
 #eval_display .row_now_solve{
   border: solid 0.15em rgb(211,147,93);
+  color: black;
+  cursor: pointer;
 }
 #eval_display .now_solve{
   border: solid 0.15em rgb(128,197,222);
+  color: black;
 }
 #eval_display .right_display{
   border-radius: 50%!important;
@@ -200,10 +187,12 @@ h2{
 #eval_display .word_hit{
   background-color: var(--hit);
   border: solid 0.15em var(--hit);
+  color: black;
 }
 #eval_display .word_blow{
   background-color: var(--brow);
   border: solid 0.15em var(--brow);
+  color: black;
 
 }
 #eval_display .word_none{
@@ -255,7 +244,6 @@ h2{
 #hatena .word_blow{
   background-color: var(--brow);
   border: solid 2px var(--brow);
-
 }
 #hatena .word_none{
   background-color: gray;
@@ -352,7 +340,6 @@ h2{
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-
 }
 .key_type_bt{
   width: 20%;
@@ -365,6 +352,21 @@ h2{
 }
 .cuurent{
   background-color: rgb(49, 170, 214);
+}
+#kotonoha_rando_div{
+  display: flex;
+  justify-content: center;
+}
+#kotonoha_rando{
+  cursor: pointer;
+  width: 100%;
+  background-color: rgb(128,197,222);
+  font-size: large;
+  border: none;
+  padding: 2px;
+  border-radius: 10px;
+  margin-bottom: 2vh;
+  color: black;
 }
 /* キーボード */
 
@@ -424,6 +426,8 @@ h2{
   border-radius: 0.5em;
   margin: 1em;
   padding:0.4em;
+  position: fixed;
+  top: 1vw;
 }
 
 #linek{

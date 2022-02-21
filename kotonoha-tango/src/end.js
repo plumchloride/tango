@@ -37,7 +37,7 @@ const end = (text,win=0)=>{
   end_tf = true;
   // 文字変更
   document.getElementById("result").innerText = text
-  document.getElementById("result_answer").innerText = `たんご：「"${title}"」（"${pronunciation}"）`
+  document.getElementById("result_answer").innerText = `たんご：「${title}」（${pronunciation}）`
   // グラフ画面起動
   mode = "bar"
   allNonVisi();
@@ -52,20 +52,22 @@ const end = (text,win=0)=>{
   $img_btn[mode].setAttribute("src",src.batu);
   if(mode == "bar"){
     $div["body"].classList.remove("non_visi");
-    document.getElementById("emoji_place").innerText = createEmoji();
-    document.getElementById("emoji_place_re").innerText = createEmoji(false,true);
+    document.getElementById("emoji_place").innerText = createEmoji(false,document.getElementById("remain_toggle_input").checked);
   }
 }
 
 const createEmoji = (URL = false,rem = false)=>{
   // エラー処理
-  _remain = [...remain_history]
-  if(history_of_hb.length != _remain.length){
-    missnum = history_of_hb.length - _remain.length
-    minn_array = Array(missnum);
-    minn_array.fill(NaN);
-    _remain.unshift(...minn_array);
+  if(rem){
+    _remain = [...remain_history]
+    if(history_of_hb.length != _remain.length){
+      missnum = history_of_hb.length - _remain.length
+      minn_array = Array(missnum);
+      minn_array.fill(NaN);
+      _remain.unshift(...minn_array);
+    }
   }
+
 
   if(copy_win){
     base_text = "ことのはたんご 第"+String(pass_day)+"回  "+String(now_solve.row)+"/10\r\n"

@@ -12,6 +12,8 @@ const experienceCheck = ()=>{
 
     $div.body.classList.remove("non_visi");
   }
+  wake_up_progress["expericheck"] = true;
+  Progress();
 }
 
 const beforeDataCheck = ()=>{
@@ -29,22 +31,9 @@ const beforeDataCheck = ()=>{
     localStorage.setItem("lang", lang_en);
   }else if(localStorage.getItem("lang")| localStorage.getItem("lang") == "true" ){
     // 英語
-    lang_en = true;
-    document.getElementById("hatena").innerHTML = HATENA_TEXT_EN;
-    document.getElementById("Decision_button").innerText="decision";
-    document.getElementById("input_text").setAttribute("placeholder","input column");
-    document.getElementById("setting").innerHTML = SET_TEXT_EN;
-
-    document.getElementById("kt_all").innerText = "All"
-    document.getElementById("kt_normal").innerText = "top half"
-    document.getElementById("kt_ga").innerText = "bottom half"
-    document.getElementById("kt_none").innerText = "hidden"
-
-    // グラフ画面変更
-    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","Copy","Tweet","Tweet with URL","With transition of remaining words"])
+    changeLang();
   }else{
     // 日本語
-    lang_en = false;
   }
 
   // 色調調整
@@ -56,13 +45,6 @@ const beforeDataCheck = ()=>{
     ChangeColor(...color);
   }
 
-  // 残り候補数
-  if(localStorage.getItem("remain") == null){
-    localStorage.setItem("remain", JSON.stringify(remain_history));
-  }else{
-    remain_history = JSON.parse(localStorage.getItem("remain"));
-  }
-
 
   if(localStorage.getItem("pass_day")==pass_day){
     now_solve = JSON.parse(localStorage.getItem("now_solve"));
@@ -70,6 +52,13 @@ const beforeDataCheck = ()=>{
     history_of_hb = JSON.parse(localStorage.getItem("history_of_hb"));
     history_of_anser = JSON.parse(localStorage.getItem("history_of_anser"));
     fin = JSON.parse(localStorage.getItem("fin"));
+
+    // 残り候補数
+    if(localStorage.getItem("remain") == null){
+      localStorage.setItem("remain", JSON.stringify(remain_history));
+    }else{
+      remain_history = JSON.parse(localStorage.getItem("remain"));
+    }
 
 
 
@@ -80,7 +69,7 @@ const beforeDataCheck = ()=>{
     DisplayUpdate();
     if(fin.tf){
       en_tx_array = ["You're correct","You're Incorrect"]
-      jp_tx_array = ["正解です","不正解です","正解しました"]
+      jp_tx_array = ["正解です","不正解です"]
       if(lang_en){
         if(jp_tx_array.includes(fin.text)){
           end(en_tx_array[jp_tx_array.indexOf(fin.text)]);
@@ -98,4 +87,7 @@ const beforeDataCheck = ()=>{
   }else{
     ;
   }
+
+  wake_up_progress["beforeDataCheck"] = true;
+  Progress();
 }

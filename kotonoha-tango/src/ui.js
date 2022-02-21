@@ -39,8 +39,7 @@ Object.keys($img_btn).forEach((key) => {
       $img_btn[e.target.dataset.mode].setAttribute("src",src.batu);
       if(e.target.dataset.mode == "bar"){
         $div["body"].classList.remove("non_visi");
-        document.getElementById("emoji_place").innerText = createEmoji();
-        document.getElementById("emoji_place_re").innerText = createEmoji(false,true);
+        document.getElementById("emoji_place").innerText = createEmoji(false,document.getElementById("remain_toggle_input").checked);
       }
     }
   });
@@ -97,7 +96,7 @@ const showHistory = (dir) =>{
 // graph コピー機能及びツイート機能
 // コピー クリップボードに送信
 document.getElementById("graph_copy").addEventListener("click",(element)=>{
-  var promise = navigator.clipboard.writeText(createEmoji());
+  var promise = navigator.clipboard.writeText(createEmoji(false,document.getElementById("remain_toggle_input").checked));
   if(promise){
     alertShow("クリップボードにコピー完了",500);
   }
@@ -105,7 +104,7 @@ document.getElementById("graph_copy").addEventListener("click",(element)=>{
 
 // ツイート
 document.getElementById("graph_tw").addEventListener("click",(element)=>{
-	s = createEmoji();
+	s = createEmoji(false,document.getElementById("remain_toggle_input").checked);
 	if (s != "") {
     s = encodeURIComponent(s);
     //投稿画面を開く
@@ -115,7 +114,7 @@ document.getElementById("graph_tw").addEventListener("click",(element)=>{
 	});
 // URL付き
 document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
-  s = createEmoji(true);
+  s = createEmoji(true,document.getElementById("remain_toggle_input").checked);
   if (s != "") {
     s = encodeURIComponent(s);
     //投稿画面を開く
@@ -124,35 +123,6 @@ document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
     }
   });
 
-// 推移コピー機能及びツイート機能
-// コピー クリップボードに送信
-document.getElementById("graph_copy_re").addEventListener("click",(element)=>{
-  var promise = navigator.clipboard.writeText(createEmoji(false,true));
-  if(promise){
-    alertShow("クリップボードにコピー完了",500);
-  }
-})
-
-// ツイート
-document.getElementById("graph_tw_re").addEventListener("click",(element)=>{
-	s = createEmoji(false,true);
-	if (s != "") {
-    s = encodeURIComponent(s);
-    //投稿画面を開く
-    url = "https://twitter.com/intent/tweet?text=" + s;
-    window.open(url,"_blank");
-		}
-	});
-// URL付き
-document.getElementById("graph_tw_url_re").addEventListener("click",(element)=>{
-  s = createEmoji(true,true);
-  if (s != "") {
-    s = encodeURIComponent(s);
-    //投稿画面を開く
-    url = "https://twitter.com/intent/tweet?text=" + s;
-    window.open(url,"_blank");
-    }
-  });
 
 
 // 閉じるボタンでもgraphを閉じられるように
@@ -165,7 +135,13 @@ document.getElementById("graph_close").addEventListener("click",(el)=>{
 });
 
 // 閉じるボタンでも説明をを閉じられるように
-// change to en.js に 移行
+const closeHatena = ()=>{
+  mode = "hatena"
+  allNonVisi();
+  img_show[mode] = false;
+  $div.body.classList.remove("non_visi");
+  $img_btn[mode].setAttribute("src",src[mode]);
+}
 
 // タイトル名からゲーム画面に戻れるように
 document.getElementById("title").addEventListener("click",(el)=>{
@@ -200,9 +176,22 @@ const ChangeColor = (color_hit = color[0] ,color_brow = color[1])=>{
 
 // 残り数反映
 const SecCheck = (remain_num = filter_array.length)=>{
-  if(lang_en){
-    document.getElementById("remain_num").innerText = `Remaining words：${remain_num}`;
+  if(remain_tf){
+    if(lang_en){
+      document.getElementById("remain_num").innerText = `Remaining words：${remain_num}`;
+    }else{
+      document.getElementById("remain_num").innerText = `残り候補数：${remain_num}`;
+    };
   }else{
-    document.getElementById("remain_num").innerText = `残り候補数：${remain_num}`;
-  };
+    if(lang_en){
+      document.getElementById("remain_num").innerText = `Remaining words：〇〇〇`;
+    }else{
+      document.getElementById("remain_num").innerText = `残り候補数：〇〇〇`;
+    };
+  }
+}
+
+// 残り単語数推移機能のオンオフ検知
+const RemainToggleChange = ()=>{
+  document.getElementById("emoji_place").innerText = createEmoji(false,document.getElementById("remain_toggle_input").checked);
 }

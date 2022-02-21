@@ -1,5 +1,6 @@
-let none_re_array = []; // 含んでいない単語を何回もフィルタリングすることは付加になるので、1度行ったフィルタリングを再度行わない
+let none_re_array = []; // 含んでいない単語を何回もフィルタリングすることは負荷になるので、1度行ったフィルタリングを再度行わない
 let remain_history = []
+let remain_tf = true;
 const CheckRemaining_all = (progress_re = false) =>{
   if(!filter_array | filter_array.length == 0){
     alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is empty",2000);
@@ -37,6 +38,9 @@ const CheckRemaining_all = (progress_re = false) =>{
           if(history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
             filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
           }
+        }else if(e == "NO" & history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
+          // 二重処理の場合,NOの箇所に含んでいない
+          filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
         }
       })
     })
@@ -54,6 +58,9 @@ const CheckRemaining_all = (progress_re = false) =>{
           if(history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
             filter_array = filter_array.filter((word)=>history_of_anser[index][index2] == word[index2]);
           }
+        }else if(e == "NO" & history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
+          // 二重処理の場合,NOの箇所に含んでいない
+          filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
         }
       })
     })
@@ -66,4 +73,23 @@ const CheckRemaining_all = (progress_re = false) =>{
     remain_history.push(filter_array.length);
     localStorage.setItem("remain", JSON.stringify(remain_history));
   };
+}
+
+// 残り候補数非表示機能
+const toggle_remain_show = ()=>{
+  if(lang_en){
+    if(remain_tf){
+      document.getElementById("remain_unvisi").innerText="（Show）"
+    }else{
+      document.getElementById("remain_unvisi").innerText="（Hide）"
+    }
+  }else{
+    if(remain_tf){
+      document.getElementById("remain_unvisi").innerText="（表示）"
+    }else{
+      document.getElementById("remain_unvisi").innerText="（非表示）"
+    }
+  }
+  remain_tf = !remain_tf
+  SecCheck();
 }

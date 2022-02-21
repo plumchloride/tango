@@ -36,11 +36,23 @@ const GetRandom = ()=>{
   year = parseInt(String(nowtime.getFullYear()));
   month = parseInt(String(nowtime.getMonth()));
   day = parseInt(String(nowtime.getDate()));
-  // save_day = String(year)+":"+String(month)+":"+String(day);
+  // console.log(`${year}/${month+1}/${day}`)
   seed = year+month*801+day*13;
   rand = new Random(seed,day*2001);
   random_num = rand.nextInt(0,Q_data["title"].length);
   return random_num;
+}
+
+const GetRandom_before = ()=>{
+  b_nowtime = new Date();
+  b_nowtime = new Date(b_nowtime.setDate(b_nowtime.getDate() - 1));
+  b_year = parseInt(String(b_nowtime.getFullYear()));
+  b_month = parseInt(String(b_nowtime.getMonth()));
+  b_day = parseInt(String(b_nowtime.getDate()));
+  b_seed = b_year+b_month*801+b_day*13;
+  b_rand = new Random(b_seed,b_day*2001);
+  b_random_num = b_rand.nextInt(0,Q_data["title"].length);
+  return b_random_num;
 }
 
 const GetTodayWord = ()=>{
@@ -48,6 +60,13 @@ const GetTodayWord = ()=>{
   title = Q_data["title"][random_num];
   pronunciation  = Q_data["pronunciation"][random_num];
   wake_up_progress.getWord = true;
-
   Progress();
+}
+
+// 昨日の単語
+const getYesterdayTango = ()=>{
+  random_num = GetRandom_before();
+  b_title = Q_data["title"][random_num];
+  b_pronunciation  = Q_data["pronunciation"][random_num];
+  document.getElementById("before_tango").innerText = `「${b_title}」（${b_pronunciation}）`
 }

@@ -1,11 +1,11 @@
-let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"fin":false}
-GetCsvData('./public/data/A_data_new.csv',"A");
+let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"expericheck":false,"beforeDataCheck":false,"fin":false}
+GetCsvData('./public/data/A_data_new.csv?ver=3.0.0',"A");
 let filter_array = []
 
 const Progress = ()=>{
   // console.log(wake_up_progress)
   if(wake_up_progress["getAdata"] & !wake_up_progress["getQdata"]){
-    GetCsvData('./public/data/Q_fil_ippan.csv',"Q");
+    GetCsvData('./public/data/Q_fil_ippan.csv?ver=3.0.0',"Q");
     filter_array = Array.from(new Set([...A_data]));
   }else  if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & !wake_up_progress["getWord"]){
     GetTodayWord();
@@ -16,16 +16,18 @@ const Progress = ()=>{
   }else if(wake_up_progress["getAdata"] & wake_up_progress["getQdata"] & wake_up_progress["getWord"] & wake_up_progress["createKeybord"] & wake_up_progress["createDisplay"] & !wake_up_progress["createKeybordEvent"]){
     wake_up_progress["fin_create"] = true;
     AddKeybordEvent();
-  }else if(wake_up_progress["fin_create"] & wake_up_progress["createKeybordEvent"]){
-    wake_up_progress["fin"] = true;
+  }else if(wake_up_progress["fin_create"] & wake_up_progress["createKeybordEvent"] & !wake_up_progress["expericheck"]){
     setInterval(DisplayTime, 1000);
     SolvHighlight();
     experienceCheck();
+  }else if(wake_up_progress["fin_create"] & wake_up_progress["createKeybordEvent"] & wake_up_progress["expericheck"]& !wake_up_progress["beforeDataCheck"]){
     beforeDataCheck();
+  }else if(wake_up_progress["fin_create"] & wake_up_progress["createKeybordEvent"] & wake_up_progress["expericheck"] & wake_up_progress["beforeDataCheck"] & !wake_up_progress["fin"]){
+    wake_up_progress["fin"] = true;
     CheckRemaining_all();
-    if(pass_day == 26| pass_day == 27){
-      alertShow("Update\nハイコントラストモードの追加\nUIの調整\nキーボードの種別変更機能の追加\n残り候補数表示",3000);
-    }
+    getYesterdayTango();
+  }else{
+    console.log("想定外")
   }
 }
 

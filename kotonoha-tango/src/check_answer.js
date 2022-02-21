@@ -109,9 +109,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
 
   //画面更新
   // remaing_check
-  _text_re = document.getElementById("remain_num").innerText;
-  _text_re = _text_re.substring(_text_re.indexOf("：")+1, _text_re.length)
-  if(isNaN(_text_re) | !filter_array){
+  if(!filter_array){
     alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000)
   }else{
     CheckRemaining_all(true);

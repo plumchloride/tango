@@ -5,9 +5,11 @@ const SolvHighlight = (row = now_solve.row )=>{
   if(end_tf){return};
   for(let i = 0;i < 5;i++){
     if(i == now_solve.text){
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("now_solve");;
+      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("now_solve");
+      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
     }else{
       document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("row_now_solve");
+      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
     }
   }
 }
@@ -15,6 +17,7 @@ const RemoveSolveHighlight = (row = now_solve.row)=>{
   for(let i = 0;i < 5;i++){
     document.getElementById("dis-"+String(row)+"-"+String(i)).classList.remove("row_now_solve");
     document.getElementById("dis-"+String(row)+"-"+String(i)).classList.remove("now_solve");
+    document.getElementById("dis-"+String(row)+"-"+String(i)).removeEventListener("click",displayClick);
     }
   }
 
@@ -227,4 +230,12 @@ const alertShow = (text,time = 1000)=>{
   document.getElementById("alert").classList.remove("non_visi")
   document.getElementById("alert_text").innerText = text
   setTimeout(()=>{document.getElementById("alert").classList.add("non_visi")},time);
+}
+
+
+// ディスプレイクリック
+const displayClick = (e)=>{
+  now_solve.text = parseInt(e.target.id.slice(-1));
+  RemoveSolveHighlight();
+  SolvHighlight();
 }
