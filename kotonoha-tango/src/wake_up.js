@@ -1,5 +1,5 @@
 let wake_up_progress = {"getAdata":false,"getQdata":false,"getWord":false,"createKeybord":false,"createDisplay":false,"fin_create":false,"createKeybordEvent":false,"expericheck":false,"beforeDataCheck":false,"fin":false}
-GetCsvData('./public/data/A_data_new.csv?ver=3.0.0',"A");
+GetCsvData('./public/data/A_data_new.csv?ver=3.1.0',"A");
 let filter_array = []
 
 const Progress = ()=>{

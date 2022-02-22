@@ -114,23 +114,28 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   }else{
     CheckRemaining_all(true);
   }
-
-  AnsDisplayUpdate(now_solve.row -1);
+  sleep_time = 0;
+  if(hit_count == 5 | now_solve.row == 10){
+    sleep_time = 500;
+    window.scroll({top: 0, behavior: 'smooth'});
+  }
+  AnsDisplayUpdate(now_solve.row -1,sleep_time);
   ValueUpdate();
   DisplayUpdate();
 
 
   if(hit_count == 5){
+    console.log("here")
     if(lang_en){
-      end("You're correct",1);
+      setTimeout(end, 3000,"You're correct",1);
     }else{
-      end("正解です",1);
+      setTimeout(end, 3000,"正解です",1);
     }
   }else if(now_solve.row == 10){
     if(lang_en){
-      end("You're Incorrect",0);
+      setTimeout(end, 3000,"You're Incorrect",0);
     }else{
-      end("不正解です",0);
+      setTimeout(end, 3000,"不正解です",0);
     }
   };
 

@@ -48,7 +48,7 @@ const ValueUpdate = ()=>{
 }
 
 // 回答をもとにヒットアンドブローを反映
-const AnsDisplayUpdate = (row) =>{
+const AnsDisplayUpdate = (row,sleep_time = 0) =>{
   RemoveSolveHighlight(row);
   _row_hb = Array.from(history_of_hb[row]);
   row_text = history_of_anser[row];
@@ -105,15 +105,19 @@ const AnsDisplayUpdate = (row) =>{
 
 
   // ディスプレイ反映
-  for(let i = 0;i<5;i++){
-    document.getElementById("dis-"+String(row)+"-"+String(i)).innerText = row_text[i];
-    if(_row_hb[i] == "HIT"){
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_hit");
-    }else if(_row_hb[i] == "BLOW"){
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_blow");
-    }else{
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_none");
+  if(sleep_time == 0){
+    for(let i = 0;i<5;i++){
+      document.getElementById("dis-"+String(row)+"-"+String(i)).innerText = row_text[i];
+      if(_row_hb[i] == "HIT"){
+        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_hit");
+      }else if(_row_hb[i] == "BLOW"){
+        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_blow");
+      }else{
+        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_none");
+      }
     }
+  }else{
+    setTimeout(answer_production,sleep_time,_row_hb,row,0,sleep_time);
   }
 
   // キーボード反映
@@ -134,6 +138,20 @@ const AnsDisplayUpdate = (row) =>{
     alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000)
   }else{
     CheckRemaining_all();
+  }
+}
+
+const answer_production = (hb,row,index,time)=>{
+  document.getElementById("dis-"+String(row)+"-"+String(index)).innerText = row_text[index];
+  if(hb[index] == "HIT"){
+    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_hit");
+  }else if(hb[index] == "BLOW"){
+    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_blow");
+  }else{
+    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_none");
+  }
+  if(index < 4){
+    setTimeout(answer_production,time,hb,row,index+1,time);
   }
 }
 

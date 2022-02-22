@@ -10,8 +10,8 @@
   <script src="./src/get_csv.js" defer></script>
   <script src="./src/get_today_word.js?ver=3.0.0" defer></script>
   <script src="./src/create_key_bord.js" defer></script>
-  <script src="./src/check_answer.js?ver=3.0.0" defer></script>
-  <script src="./src/display_setting.js?ver=3.0.0" defer></script>
+  <script src="./src/check_answer.js?ver=3.1.0" defer></script>
+  <script src="./src/display_setting.js?ver=3.1.0" defer></script>
   <script src="./src/create_answer_input.js" defer></script>
   <script src="./src/create_display.js" defer></script>
   <script src="./src/create_answer_keybord.js?ver=3.0.0" defer></script>
@@ -19,10 +19,10 @@
   <script src="./src/ui.js?ver=3.0.0" defer></script>
   <script src="./src/check_remaining.js?ver=3.0.0" defer></script>
   <script src="./src/webstorage.js?ver=3.0.0" defer></script>
-  <script src="./src/change_to_en.js?ver=3.0.0" defer></script>
-  <script src="./src/wake_up.js?ver=3.0.0" defer></script>
+  <script src="./src/change_to_en.js?ver=3.0.2" defer></script>
+  <script src="./src/wake_up.js?ver=3.1.0" defer></script>
   <script src="./src/random_word_gene.js?ver=3.0.0" defer></script>
-  <link rel="stylesheet" href="./public/style.css?ver=3.0.0"></link>
+  <link rel="stylesheet" href="./public/style.css?ver=3.0.2"></link>
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
 
@@ -39,6 +39,15 @@
   <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
   <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
   <meta property="og:locale" content="ja_JP" />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HZCPVJSXFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HZCPVJSXFG');
+  </script>
   </head>
   <body>
     <div id="header">
@@ -117,14 +126,13 @@
         <button id = "kt_ga" class="key_type_bt" onclick="KryTypeChange('ga');return false;">濁点等</button>
         <button id = "kt_none" class="key_type_bt" onclick="KryTypeChange('none');return false;">非表示</button>
       </div>
-      <div id="kotonoha_rando_div">
+      <!-- <div id="kotonoha_rando_div">
         <button id="kotonoha_rando" onclick="createRandomAnsower()">「ことのは」ランダム生成</button>
-      </div>
+      </div> -->
     </div>
     <div id="graph" class="non_visi explanation">
       <div id="graph_body">
-        <h2 id="before_tango_h2">昨日のたんご</h2>
-        <p id="before_tango">＝＝：〇〇〇</p>
+        <small><span id="before_tango_h2">昨日のたんご：</span><p id="before_tango">＝＝：〇〇〇</p></small>
         <h2 id ="result">今日は正解していません</h2>
         <div id="remain_toggle"><label><input type="checkbox" id="remain_toggle_input" checked onclick="RemainToggleChange();"><span id="remain_span">　残り候補数推移</span></label></div>
         <p id="result_answer"></p>
@@ -194,7 +202,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 3.0.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 3.1.0</small></div>
       <br>
       <div class="flex_center">
         <address>
