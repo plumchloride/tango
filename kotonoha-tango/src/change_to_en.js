@@ -10,8 +10,7 @@ const changeLang = () =>{
     document.getElementById("kt_normal").innerText = "50音";
     document.getElementById("kt_ga").innerText = "濁点等";
     document.getElementById("kt_none").innerText = "非表示";
-    document.getElementById("kotonoha_rando").innerText = "「ことのは」ランダム生成";
-    document.getElementById("before_tango_h2").innerText ="昨日のたんご";
+    document.getElementById("before_tango_h2").innerText ="昨日のたんご：";
     if(!remain_tf){
       document.getElementById("remain_unvisi").innerText="（表示）";
     }else{
@@ -30,8 +29,7 @@ const changeLang = () =>{
     document.getElementById("kt_normal").innerText = "top half";
     document.getElementById("kt_ga").innerText = "bottom half";
     document.getElementById("kt_none").innerText = "hidden";
-    document.getElementById("kotonoha_rando").innerText = "Random input generation";
-    document.getElementById("before_tango_h2").innerText = "Yesterday たんご";
+    document.getElementById("before_tango_h2").innerText = "Yesterday たんご：";
     if(!remain_tf){
       document.getElementById("remain_unvisi").innerText="（Show）";
     }else{
@@ -84,13 +82,14 @@ const HATENA_TEXT_EN = `
         <div class="display_num word_hit">キ</div>
         <div class="display_num word_none">ョ</div>
         <div class="display_num word_hit">ウ</div>
-        <div class="display_num word_blow">シ</div>
-        <div class="display_num word_none">ツ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_blow">ツ</div>
       </div>
       <div style="font-size: 0.9em;">
         <p>The letter <strong class="hit_ex">「キ・ウ」</strong> is <strong class="hit_ex">in word and in the correct spot</strong>.</p>
         <p>The letter <strong class="blow_ex">「シ」</strong> is <strong class="blow_ex">in word but in the wrong spot</strong>。</p>
         <p>The letter <strong>「ョ・ツ」</strong> is not in the word.</p>
+        <p>In this case, the correct tango is 「急追：キュウツイ」.</p>
       </div>
       <h2>In the beginning</h2>
       <p>I was greatly inspired by <a href="https://www.powerlanguage.co.uk/wordle/" target="_blank">Wordle</a> to create this app.</p>
@@ -101,12 +100,50 @@ const HATENA_TEXT_EN = `
       <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
       <h2>About word updates and dictionary data<br>(Only Japanese)</h2>
       <p>＞ <a href="https://note.com/plumchloride/n/n8d25cad96348" target="_blank">note記事</a></p>
-      <h2>Input Method</h2>
-      <p>There are two input methods: UI keyboard and keyboard.</p>
-      <p>The area currently circled in orange is the frame for the text to be entered. The area in light blue is the text currently being entered on the UI keyboard, and the text will be inserted or deleted in the corresponding area.</p>
+      <h2>About duplicate display</h2>
+      <p>When you enter the <strong>kotonoha</strong> that uses two or three of the same characters, the evaluation will be displayed from the left for the number of characters included in the answer. However, this is not the case for green highlighting.</p>
+      <p><strong>The correct tango is「シュウカイ」</strong></p>
+      <div class="row">
+        <div class="display_num word_hit">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>The correct tango is「スソナオシ」</strong></p>
+      <div class="row">
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_hit">シ</div>
+      </div>
+      <p><strong>The correct tango is「アカシヤキ」</strong></p>
+      <div class="row">
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>The correct tango is「シュクシャ」</strong></p>
+      <div class="row">
+        <div class="display_num word_hit">シ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>The correct tango is「ブンシシキ」</strong></p>
+      <div class="row">
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
       <h2>CAUTION</h2>
       <p>Japanese has a huge number of words, so even if a word exists, it may not be registered in <strong>Kotonoha</strong>.</p>
-      <p> When you enter the <strong>kotonoha</strong> that uses two or three of the same characters (ex:シュクシャ・シシオドシ), the evaluation will be displayed from the left for the number of characters included in the answer. However, this is not the case for green highlighting. <br> If the <strong>tango</strong> is "シュクシャ" and the <strong>kotonoha</strong> is "シシオドシ", the first character of "シ" is highlighted in green, the second character is highlighted in yellow, and the third character is highlighted in gray. </p>
       <p>We do not have a clear filtering system for the words in the questions. The words in this app do not contain "political, religious, sexist, or sexual" intentions.</p>
 
       <h2  id="hatena_close" style="cursor: pointer;" onclick="closeHatena();"><u>Close Description</u></h2>
@@ -119,21 +156,22 @@ const HATENA_TEXT_EN = `
 const HATENA_TEXT_JP = `
 <h2 id="switch_lang"><small><u id="switch_lang_u" onclick="changeLang();">Switch to English</u></small></h2>
 <h2>遊び方</h2>
-<p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
+<p>10回の試行で決められた5文字である1つの<strong>たんご</strong>を当てて下さい。</p>
 <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
-<p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。</p>
-<h2>例</h2>
+<p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行います。</p>
+<h2>評価例</h2>
 <div class="row">
-<div class="display_num word_hit">キ</div>
-<div class="display_num word_none">ョ</div>
-<div class="display_num word_hit">ウ</div>
-<div class="display_num word_blow">シ</div>
-<div class="display_num word_none">ツ</div>
+  <div class="display_num word_hit">キ</div>
+  <div class="display_num word_none">ョ</div>
+  <div class="display_num word_hit">ウ</div>
+  <div class="display_num word_none">シ</div>
+  <div class="display_num word_blow">ツ</div>
 </div>
 <div style="font-size: 0.9em;">
-<p><strong class="hit_ex">「キ・ウ」</strong>はたんごに<strong class="hit_ex">含まれており場所も正しい</strong>です。</p>
-<p><strong class="blow_ex">「シ」</strong>はたんごに含まれているが<strong class="blow_ex">場所が違います</strong>。</p>
-<p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
+  <p><strong class="hit_ex">「キ・ウ」</strong>はたんごに<strong class="hit_ex">含まれており場所も正しい</strong>です。</p>
+  <p><strong class="blow_ex">「ツ」</strong>はたんごに含まれているが<strong class="blow_ex">場所が違います</strong>。</p>
+  <p><strong>「ョ・シ」</strong>はたんごに含まれていません。</p>
+  <p>この場合の正解のたんごは「急追：キュウツイ」です</p>
 </div>
 <h2>初めに</h2>
 <p>本家<a href="https://www.powerlanguage.co.uk/wordle/" target="_blank">Wordle</a>様より大きな影響を受けて日本語版の Wordle として作成しました。</p>
@@ -144,14 +182,51 @@ const HATENA_TEXT_JP = `
 <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
 <h2>単語更新・辞書データについて</h2>
 <p>＞ <a href="https://note.com/plumchloride/n/n8d25cad96348" target="_blank">note記事</a></p>
-<h2>入力方法</h2>
-<p>入力方法はUIキーボードとキーボードの二種類あります。</p>
-<p>現在オレンジ色で囲われている箇所が入力するテキストの枠です。その中で水色に囲われている箇所がUIキーボードにおける現在入力中の文字であり、該当箇所に文字の挿入及び削除がされます。</p>
+<h2>重複表示について</h2>
+<p>同じ文字を２個、３個使う<strong>ことのは</strong>を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。</p>
+<p><strong>例：正解のたんごが「シュウカイ」の場合</strong></p>
+<div class="row">
+  <div class="display_num word_hit">シ</div>
+  <div class="display_num word_none">シ</div>
+  <div class="display_num word_none">オ</div>
+  <div class="display_num word_none">ド</div>
+  <div class="display_num word_none">シ</div>
+</div>
+<p><strong>例：正解のたんごが「スソナオシ」の場合</strong></p>
+<div class="row">
+  <div class="display_num word_none">シ</div>
+  <div class="display_num word_none">シ</div>
+  <div class="display_num word_none">オ</div>
+  <div class="display_num word_none">ド</div>
+  <div class="display_num word_hit">シ</div>
+</div>
+<p><strong>例：正解のたんごが「アカシヤキ」の場合</strong></p>
+<div class="row">
+  <div class="display_num word_blow">シ</div>
+  <div class="display_num word_none">シ</div>
+  <div class="display_num word_none">オ</div>
+  <div class="display_num word_none">ド</div>
+  <div class="display_num word_none">シ</div>
+</div>
+<p><strong>例：正解のたんごが「シュクシャ」の場合</strong></p>
+<div class="row">
+  <div class="display_num word_hit">シ</div>
+  <div class="display_num word_blow">シ</div>
+  <div class="display_num word_none">オ</div>
+  <div class="display_num word_none">ド</div>
+  <div class="display_num word_none">シ</div>
+</div>
+<p><strong>例：正解のたんごが「ブンシシキ」の場合</strong></p>
+<div class="row">
+  <div class="display_num word_blow">シ</div>
+  <div class="display_num word_blow">シ</div>
+  <div class="display_num word_none">オ</div>
+  <div class="display_num word_none">ド</div>
+  <div class="display_num word_none">シ</div>
+</div>
 <h2>注意</h2>
 <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
-<p>同じ文字を２個、３個使う<strong>ことのは</strong>（例：シュクシャ・シシオドシ）を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。<br><strong>たんご</strong>が「シュクシャ」、入力した<strong>ことのは</strong>が「シシオドシ」の場合「シ」の１文字目が緑２文字目が黄色、３文字目がグレーにハイライトされます。</p>
 <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
-
 <h2 id="hatena_close" style="cursor: pointer;" onclick="closeHatena();"><u>説明を閉じる</u></h2>
 <hr>
 <div></div>
@@ -194,7 +269,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 3.0.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
 <br>
 <div class="flex_center">
   <address>
@@ -238,7 +313,7 @@ const SET_TEXT_JP = `
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 <h2>その他報告</h2>
 <p>もし感想を送る場合やバグ報告の際は<a href="https://twitter.com/plum_chloride" target="_blank">こちらのTwitter</a>より連絡して下さい</p>
-<div class="flex_center"><small>ことのはたんご ver 3.0.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
 <br>
 <div class="flex_center">
   <address>

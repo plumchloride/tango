@@ -30,43 +30,40 @@ const CheckRemaining_all = (progress_re = false) =>{
   history_of_hb_text["blow"].forEach((e) =>{
     filter_array = filter_array.filter((word)=>word.includes(e));
   })
-  // blow 該当箇所に含んでいない。
-  if(history_of_hb_text["blow"].length != 0){
-    history_of_hb.forEach((element,index)=>{
-      element.forEach((e,index2)=>{
-        if(e == "BLOW"){
-          if(history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
-            filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
-          }
-        }else if(e == "NO" & history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
-          // 二重処理の場合,NOの箇所に含んでいない
-          filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
-        }
-      })
-    })
-  }
-
   // hit 含んでいること
   history_of_hb_text["hit"].forEach((e) =>{
     filter_array = filter_array.filter((word)=>word.includes(e));
   })
-  // hit 該当箇所に含んでいること
-  if(history_of_hb_text["hit"].length != 0){
-    history_of_hb.forEach((element,index)=>{
-      element.forEach((e,index2)=>{
-        if(e == "HIT"){
-          if(history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
-            filter_array = filter_array.filter((word)=>history_of_anser[index][index2] == word[index2]);
-          }
-        }else if(e == "NO" & history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
-          // 二重処理の場合,NOの箇所に含んでいない
-          filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
+
+  // hbリストを参照
+  history_of_hb.forEach((element,index)=>{
+    // 各試行
+    hit_blow_list = []
+    element.forEach((e,index2)=>{
+      // 各文字の評価(HIT BLOW)
+      if(e == "BLOW"){
+        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
+        if(hit_blow_list.includes(history_of_anser[index][index2])){
+          // HIT or BLOWが同じ試行で同じたんごに対して、2個出た場合
+          filter_array = filter_array.filter((word) => word.indexOf(history_of_anser[index][index2]) != word.lastIndexOf(history_of_anser[index][index2]));
         }
-      })
+        hit_blow_list.push(history_of_anser[index][index2]);
+      }else if(e == "NO" & history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
+        // 二重処理の場合,NOの箇所に含んでいない
+        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
+      }else if(e == "HIT"){
+        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] == word[index2]);
+        if(hit_blow_list.includes(history_of_anser[index][index2])){
+          // HIT or BLOWが同じ試行で同じたんごに対して、2個出た場合
+          filter_array = filter_array.filter((word) => word.indexOf(history_of_anser[index][index2]) != word.lastIndexOf(history_of_anser[index][index2]));
+        }
+        hit_blow_list.push(history_of_anser[index][index2]);
+      }else if(e == "NO" & history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
+        // 二重処理の場合,NOの箇所に含んでいない
+        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
+      }
     })
-  }
-
-
+  });
 
   SecCheck(filter_array.length);
   if(progress_re){

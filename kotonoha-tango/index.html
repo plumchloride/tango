@@ -17,10 +17,10 @@
   <script src="./src/create_answer_keybord.js?ver=3.0.0" defer></script>
   <script src="./src/end.js?ver=3.0.0" defer></script>
   <script src="./src/ui.js?ver=3.0.0" defer></script>
-  <script src="./src/check_remaining.js?ver=3.0.0" defer></script>
+  <script src="./src/check_remaining.js?ver=3.2.0" defer></script>
   <script src="./src/webstorage.js?ver=3.0.0" defer></script>
-  <script src="./src/change_to_en.js?ver=3.0.2" defer></script>
-  <script src="./src/wake_up.js?ver=3.1.0" defer></script>
+  <script src="./src/change_to_en.js?ver=3.2.0" defer></script>
+  <script src="./src/wake_up.js?ver=3.2.0" defer></script>
   <script src="./src/random_word_gene.js?ver=3.0.0" defer></script>
   <link rel="stylesheet" href="./public/style.css?ver=3.0.2"></link>
   <!-- chart js -->
@@ -64,21 +64,22 @@
     <div id="hatena" class="explanation">
       <h2 id="switch_lang"><small><u id="switch_lang_u" onclick="changeLang();">Switch to English</u></small></h2>
       <h2>遊び方</h2>
-      <p>10回の試行で決められた<strong>たんご</strong>を当てて下さい。</p>
+      <p>10回の試行で決められた5文字である1つの<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
-      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行っています。</p>
-      <h2>例</h2>
+      <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行います。</p>
+      <h2>評価例</h2>
       <div class="row">
         <div class="display_num word_hit">キ</div>
         <div class="display_num word_none">ョ</div>
         <div class="display_num word_hit">ウ</div>
-        <div class="display_num word_blow">シ</div>
-        <div class="display_num word_none">ツ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_blow">ツ</div>
       </div>
       <div style="font-size: 0.9em;">
         <p><strong class="hit_ex">「キ・ウ」</strong>はたんごに<strong class="hit_ex">含まれており場所も正しい</strong>です。</p>
-        <p><strong class="blow_ex">「シ」</strong>はたんごに含まれているが<strong class="blow_ex">場所が違います</strong>。</p>
-        <p><strong>「ョ・ツ」</strong>はたんごに含まれていません。</p>
+        <p><strong class="blow_ex">「ツ」</strong>はたんごに含まれているが<strong class="blow_ex">場所が違います</strong>。</p>
+        <p><strong>「ョ・シ」</strong>はたんごに含まれていません。</p>
+        <p>この場合の正解のたんごは「急追：キュウツイ」です</p>
       </div>
       <h2>初めに</h2>
       <p>本家<a href="https://www.powerlanguage.co.uk/wordle/" target="_blank">Wordle</a>様より大きな影響を受けて日本語版の Wordle として作成しました。</p>
@@ -89,14 +90,51 @@
       <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
       <h2>単語更新・辞書データについて</h2>
       <p>＞ <a href="https://note.com/plumchloride/n/n8d25cad96348" target="_blank">note記事</a></p>
-      <h2>入力方法</h2>
-      <p>入力方法はUIキーボードとキーボードの二種類あります。</p>
-      <p>現在オレンジ色で囲われている箇所が入力するテキストの枠です。その中で水色に囲われている箇所がUIキーボードにおける現在入力中の文字であり、該当箇所に文字の挿入及び削除がされます。</p>
+      <h2>重複表示について</h2>
+      <p>同じ文字を２個、３個使う<strong>ことのは</strong>を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。</p>
+      <p><strong>例：正解のたんごが「シュウカイ」の場合</strong></p>
+      <div class="row">
+        <div class="display_num word_hit">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>例：正解のたんごが「スソナオシ」の場合</strong></p>
+      <div class="row">
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_hit">シ</div>
+      </div>
+      <p><strong>例：正解のたんごが「アカシヤキ」の場合</strong></p>
+      <div class="row">
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>例：正解のたんごが「シュクシャ」の場合</strong></p>
+      <div class="row">
+        <div class="display_num word_hit">シ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
+      <p><strong>例：正解のたんごが「ブンシシキ」の場合</strong></p>
+      <div class="row">
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_blow">シ</div>
+        <div class="display_num word_none">オ</div>
+        <div class="display_num word_none">ド</div>
+        <div class="display_num word_none">シ</div>
+      </div>
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
-      <p>同じ文字を２個、３個使う<strong>ことのは</strong>（例：シュクシャ・シシオドシ）を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。<br><strong>たんご</strong>が「シュクシャ」、入力した<strong>ことのは</strong>が「シシオドシ」の場合「シ」の１文字目が緑２文字目が黄色、３文字目がグレーにハイライトされます。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
-
       <h2 id="hatena_close" style="cursor: pointer;" onclick="closeHatena();"><u>説明を閉じる</u></h2>
       <hr>
       <div></div>
@@ -202,7 +240,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 3.1.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
       <br>
       <div class="flex_center">
         <address>
