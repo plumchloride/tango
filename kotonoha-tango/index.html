@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- AWS用 -->
+  <!-- 4.0.0 -->
   <head>
   <meta charset="utf-8">
   <title>ことのはたんご | 単語推理ゲーム</title>
   <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
   <link rel="icon" type="image/png" href="./public/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="./src/get_csv.js" defer></script>
-  <script src="./src/get_today_word.js?ver=3.0.0" defer></script>
-  <script src="./src/create_key_bord.js" defer></script>
-  <script src="./src/check_answer.js?ver=3.1.0" defer></script>
-  <script src="./src/display_setting.js?ver=3.1.0" defer></script>
-  <script src="./src/create_answer_input.js" defer></script>
-  <script src="./src/create_display.js" defer></script>
-  <script src="./src/create_answer_keybord.js?ver=3.0.0" defer></script>
-  <script src="./src/end.js?ver=3.0.0" defer></script>
-  <script src="./src/ui.js?ver=3.0.0" defer></script>
-  <script src="./src/check_remaining.js?ver=3.2.0" defer></script>
-  <script src="./src/webstorage.js?ver=3.0.0" defer></script>
-  <script src="./src/change_to_en.js?ver=3.2.0" defer></script>
-  <script src="./src/wake_up.js?ver=3.2.0" defer></script>
-  <script src="./src/random_word_gene.js?ver=3.0.0" defer></script>
-  <link rel="stylesheet" href="./public/style.css?ver=3.0.2"></link>
+  <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
+  <script src="./src/kotonoha.min.js?ver=4.0.0" defer></script>
+  <link rel="stylesheet" href="./public/style.css?ver=4.0.0"></link>
+
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
 
@@ -39,26 +27,17 @@
   <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
   <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
   <meta property="og:locale" content="ja_JP" />
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HZCPVJSXFG"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-HZCPVJSXFG');
-  </script>
   </head>
   <body>
     <div id="header">
       <div>
-        <img id="img_hatena" class = "inline-img" data-mode="hatena" src="./public/img/hatena.svg" width="30" height="30" alt="what is this app">
+        <img id="img_hatena" class = "inline-img" onclick="mode_change('game');" src="./public/img/x.svg" width="30" height="30" alt="what is this app">
         <div id="place_holder"></div>
       </div>
-      <h1 id="title" style="cursor: pointer;">ことのはたんご</h1>
+      <h1 id="title" style="cursor: pointer;" onclick="mode_change('game');">ことのはたんご</h1>
       <div>
-        <img id="img_bar_graph" class = "inline-img-r" data-mode="bar" src="./public/img/bar_graph.svg" width="30" height="30" alt="setting">
-        <img id="img_setting" class = "inline-img-r" data-mode="set" src="./public/img/set.svg" width="30" height="30" alt="setting">
+        <img id="img_bar_graph" class = "inline-img-r" onclick="mode_change('bar');" src="./public/img/bar_graph.svg" width="30" height="30" alt="setting">
+        <img id="img_setting" class = "inline-img-r" onclick="mode_change('set');" src="./public/img/set.svg" width="30" height="30" alt="setting">
       </div>
     </div>
     <div id="hatena" class="explanation">
@@ -67,6 +46,7 @@
       <p>10回の試行で決められた5文字である1つの<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
       <p>各試行のたびに文字のタイルの色が変わり、試行した単語に対して評価を行います。</p>
+      <p><strong>たんご</strong>には<strong>外来語</strong>や<strong>同じ文字が複数含まれる単語</strong>が出題されます。</p>
       <h2>評価例</h2>
       <div class="row">
         <div class="display_num word_hit">キ</div>
@@ -135,7 +115,7 @@
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
-      <h2 id="hatena_close" style="cursor: pointer;" onclick="closeHatena();"><u>説明を閉じる</u></h2>
+      <h2 id="hatena_close" style="cursor: pointer;" onclick="mode_change('game');"><u>説明を閉じる</u></h2>
       <hr>
       <div></div>
       <p><small>たんごは乱数を用いて毎日辞書より生成しています。内部のJavaScriptを解析すると取得出来ますが、そのような行動はお控え下さい。</small></p>
@@ -173,7 +153,7 @@
         <small><span id="before_tango_h2">昨日のたんご：</span><p id="before_tango">＝＝：〇〇〇</p></small>
         <h2 id ="result">今日は正解していません</h2>
         <div id="remain_toggle"><label><input type="checkbox" id="remain_toggle_input" checked onclick="RemainToggleChange();"><span id="remain_span">　残り候補数推移</span></label></div>
-        <p id="result_answer"></p>
+        <p id="result_answer" class="non_visi"></p>
         <div class="flex_center"><p id="emoji_place"></p></div>
         <div id="graph_bt">
           <div id="graph_copy" class="graph_bt_c">コピー</div>
@@ -229,7 +209,9 @@
       <h2>新規単語登録</h2>
       <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
       <h2>バグ報告</h2>
-      <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
+      <p>バグ等が発生した場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
+      <h2>Twitter comunity</h2>
+      <p><a href="https://twitter.com/i/communities/1498893000176328705" target="_blank">こちらのコミュニティ</a>に参加するとTLを邪魔せず、Twitterのcomunity宛てに投稿できるようになります。もしよろしければ参加してみてください。</p>
       <h2>ライセンス</h2>
       <div style="font-size: 0.9em;">
         <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
@@ -240,7 +222,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 4.0.0</small></div>
       <br>
       <div class="flex_center">
         <address>
