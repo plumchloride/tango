@@ -1,5 +1,5 @@
 const a_csv_version = "4.0.0";
-const q_csv_version = "4.0.0";
+const q_csv_version = "4.0.1";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+q_csv_version;
 const KEYBORD_LIST = [["ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア"],
@@ -266,7 +266,7 @@ const GetYesterdayTango = ()=>{
 // === 残り候補数表示機能 ===
 const CheckRemaining_all = (progress_re = false) =>{
   if(!filter_array | filter_array.length == 0){
-    alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is empty",2000);
+    alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000);
     return;
   }
   var history_of_hb_text = history.hb_text;
@@ -416,6 +416,14 @@ const TodayDataCheck = ()=>{
       flag.remain_show = _flag.remain_show;
     }
 
+    // たんご検出
+    if(JSON.parse(localStorage.getItem("tango")) != null){
+      if(JSON.parse(localStorage.getItem("tango")).yomi != tango.yomi){
+        tango = JSON.parse(localStorage.getItem("tango"));
+        alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error5: The saved word and the retrieved word are different.",2000);
+      }
+    }
+
     // 残り候補数推移
     if(localStorage.getItem("remain") != null){
       history.remain = JSON.parse(localStorage.getItem("remain"));
@@ -535,12 +543,13 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
   localStorage.setItem("pass_day", daily_data.pass_day);
   localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+  localStorage.setItem("tango",JSON.stringify(tango));
 
   // 画面更新 エラー確認
   // remaing_check
   var remaing_check_tf = false;
   if(!filter_array){
-    alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000)
+    alertShow("バグです。動作に一部影響が出ています。\n Error4: The number of remaining words is not defined",2000)
   }else{
     remaing_check_tf = true;
   }
@@ -654,7 +663,7 @@ const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false) =>{
   })
 
   if(!filter_array){
-    alertShow("バグです。動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000)
+    alertShow("バグです。動作に一部影響が出ています。\n Error4: The number of remaining words is not defined",2000)
   }else{
     CheckRemaining_all(remain_tf_up);
   }
@@ -814,6 +823,19 @@ const End = ()=>{
   document.getElementById("result_answer").classList.remove("non_visi");
   // グラフ画面起動
   mode_change("bar");
+
+  // api用
+  var api_num = 0
+  if (game_data.now_solve.row == 11){
+    if(flag.game_win){
+      api_num = 10
+    }else{
+      api_num = 11
+    }
+  }else{
+    api_num = game_data.now_solve.row;
+  }
+  console.log({"pass_day":daily_data.pass_day,"ans":api_num,"k":tango.kanzi,"y":tango.yomi})
 }
 // === game終了処理 ここまで ===
 
@@ -978,14 +1000,14 @@ const FuncButton = (key)=>{
       ValueUpdate();
       break;
     default:
-      alert("ERROR3:\n keyname is invalid");
+      alert("バグ、もしくは不正な操作です。リロードします。\nERROR3: keyname is invalid");
       location.reload();
   }
 }
 // graph コピー機能及びツイート機能
 // コピー クリップボードに送信
 document.getElementById("graph_copy").addEventListener("click",(element)=>{
-  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked));
+  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false));
   if(promise){
     alertShow("クリップボードにコピー完了",500);
   }
@@ -999,7 +1021,7 @@ document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
   tweet_btn(true);
 });
 const tweet_btn = (url_flag) => {
-  s = createEmoji(url_flag,HTML_element.remain_toggle.checked);
+  s = createEmoji(url_flag,HTML_element.remain_toggle.checked,true);
   if (s != "") {
     s = encodeURIComponent(s);
     //投稿画面を開く
@@ -1569,7 +1591,7 @@ $input.addEventListener('input',(e)=>{
   DisplayUpdate();
 })
 // 絵文字（戦歴コピー）作製
-const createEmoji = (url_flag,rem_flag)=>{
+const createEmoji = (url_flag,rem_flag,twitter_flag)=>{
   // エラー処理
   if(rem_flag){
     _remain = [...history.remain]
@@ -1580,13 +1602,24 @@ const createEmoji = (url_flag,rem_flag)=>{
       _remain.unshift(...minn_array);
     }
   }
-  if(flag.game_win){
-    base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
-  }else if(game_data.now_solve.row == 10){
-    base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  X/10\r\n"
+  if(twitter_flag){
+    if(flag.game_win){
+      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
+    }else if(game_data.now_solve.row == 10){
+      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  X/10\r\n"
+    }else{
+      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
+    }
   }else{
-    base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
+    if(flag.game_win){
+      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
+    }else if(game_data.now_solve.row == 10){
+      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  X/10\r\n"
+    }else{
+      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
+    }
   }
+
   if(url_flag){
     base_text += "https://plum-chloride.jp/kotonoha-tango/index.html \r\n"
   }

@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="./public/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
-  <script src="./src/kotonoha.min.js?ver=4.0.0" defer></script>
+  <script src="./src/kotonoha.min.js?ver=4.0.1" defer></script>
   <link rel="stylesheet" href="./public/style.css?ver=4.0.0"></link>
 
   <!-- chart js -->
@@ -27,6 +27,15 @@
   <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
   <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
   <meta property="og:locale" content="ja_JP" />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HZCPVJSXFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HZCPVJSXFG');
+  </script>
   </head>
   <body>
     <div id="header">
@@ -134,15 +143,15 @@
 
       <div id="keybord"></div>
       <div id="keybord_move">
-        <button class="key_type_bt" onclick="FuncButton('←');return false;">←</button>
-        <button class="key_type_bt" onclick="FuncButton('→');return false;">→</button>
-        <button class="key_type_bt" onclick="FuncButton('del');return false;">del</button>
+        <button class="key_type_bt" onclick="FuncButton('←');">←</button>
+        <button class="key_type_bt" onclick="FuncButton('→');">→</button>
+        <button class="key_type_bt" onclick="FuncButton('del');">del</button>
       </div>
       <div id="keybord_type">
-        <button id = "kt_all" class="key_type_bt cuurent" onclick="KryTypeChange('all');return false;">全種</button>
-        <button id = "kt_normal" class="key_type_bt" onclick="KryTypeChange('normal');return false;">50音</button>
-        <button id = "kt_ga" class="key_type_bt" onclick="KryTypeChange('ga');return false;">濁点等</button>
-        <button id = "kt_none" class="key_type_bt" onclick="KryTypeChange('none');return false;">非表示</button>
+        <button id = "kt_all" class="key_type_bt cuurent" onclick="KryTypeChange('all');">全種</button>
+        <button id = "kt_normal" class="key_type_bt" onclick="KryTypeChange('normal');">50音</button>
+        <button id = "kt_ga" class="key_type_bt" onclick="KryTypeChange('ga');">濁点等</button>
+        <button id = "kt_none" class="key_type_bt" onclick="KryTypeChange('none');">非表示</button>
       </div>
       <!-- <div id="kotonoha_rando_div">
         <button id="kotonoha_rando" onclick="createRandomAnsower()">「ことのは」ランダム生成</button>
@@ -222,7 +231,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 4.0.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 4.0.1</small></div>
       <br>
       <div class="flex_center">
         <address>
