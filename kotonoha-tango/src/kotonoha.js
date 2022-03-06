@@ -1,5 +1,5 @@
-const a_csv_version = "4.0.0";
-const q_csv_version = "4.0.1";
+const a_csv_version = "4.0.1";
+const q_csv_version = "4.0.0";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+q_csv_version;
 const KEYBORD_LIST = [["ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア"],
@@ -453,7 +453,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   var check = false
   // 値の改変やバグチェック
   if(!flag.wakeup){
-    alert("バグ、もしくは不正な操作です。リロードします。\n Error1: Not wake up")
+    alert("バグ、もしくは不正な操作です。リロードします。\n Error1: Not wake up wakeupnum:"+String(wakeup_number));
     check = true;
     location.reload();
     return;
@@ -835,9 +835,30 @@ const End = ()=>{
   }else{
     api_num = game_data.now_solve.row;
   }
-  console.log({"pass_day":daily_data.pass_day,"ans":api_num,"k":tango.kanzi,"y":tango.yomi})
+  // エラー吐いたときに影響がないように最下部に
+  if(!win_b_tf){
+    data_post(daily_data.pass_day,api_num);
+  }
 }
 // === game終了処理 ここまで ===
+
+// === API データポスト ===
+const data_post = (day,result)=>{
+  p_t = {"pass_day":String(day),"ans":String(result)}
+  p_j = JSON.stringify(p_t);
+  xhr = new XMLHttpRequest;
+  xhr.onload = function(){
+    var res = xhr.responseText;
+    console.log(res);
+  };
+  xhr.onerror = function(){
+    alertShow("バグです。動作に一部影響が出ています。\n Error6: API communication failed",2000);
+  }
+  xhr.open('POST', "https://8n0i52f399.execute-api.ap-northeast-1.amazonaws.com/default/WriteKotonohaHistory", true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(p_j);
+}
+// === API データポスト ここまで ===
 
 // === UI作製 ===
 const CreateKeybord = ()=>{
@@ -1501,6 +1522,8 @@ const SET_TEXT_EN = `
 <br>
 <h2>Register new words</h2>
 <p>If you want to register a new word, please submit it <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">Google Form</a>. It may take some time for the new word to be added to the dictionary, but it will be added under certain conditions.</p>
+<h2>Bug Reports</h2>
+<p>If you encounter any bugs and want to share them, please post them <a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">Issues on GitHub</a>.</p>
 <h2>License</h2>
 <div style="font-size: 0.9em;">
 <p>This work is licensed under the BSD License.<br>This work is also licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
@@ -1508,8 +1531,14 @@ const SET_TEXT_EN = `
 "UniDic-cwj_3.1.0" is licensed under the BSD License and Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
 <p>This work also uses software from the following author: 国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0) is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) License.</p>
 </div>
-<h2>Bug Reports</h2>
-<p>If you encounter any bugs and want to share them, please post them <a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">Issues on GitHub</a>.</p>
+<h2>Privacy Policy</h2>
+<p>This website uses Google Analytics, a service provided by Google, Inc. This service collects, records, and analyzes the user's visit history. The data collected does not contain any personally identifiable information. The data collected is managed by Google.</p>
+<ul>
+<li>Google Analytics Terms of Use<br><a href="http://www.google.com/analytics/terms/jp.html" target="_blank">http://www.google.com/analytics/terms/jp.html</a></li>
+<li>Google Privacy Policy<br><a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a></li>
+</ul>
+<p>Data is collected, recorded, and analyzed on this website using an API created by this website to obtain users' response scores. The data collected is only the number of successful or unsuccessful attempts and the date of the game when the results are determined, and does not contain any personally identifiable information. The collected, recorded, and analyzed data may be made public.</p>
+<p>By using this site, you grant us permission to use and collect response data via Google Analytics, cookies, and APIs.</p>
 <h2>Other</h2>
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
@@ -1546,6 +1575,11 @@ const SET_TEXT_JP = `
 <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
 <h2>バグ報告</h2>
 <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
+<h2>その他</h2>
+<p>コードに関しては以下のGitHubに掲載されています。</p>
+<p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
+<h2>その他報告</h2>
+<p>もし感想を送る場合やバグ報告の際は<a href="https://twitter.com/plum_chloride" target="_blank">こちらのTwitter</a>より連絡して下さい</p>
 <h2>ライセンス</h2>
 <div style="font-size: 0.9em;">
 <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
@@ -1553,11 +1587,14 @@ const SET_TEXT_JP = `
 「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
 <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
 </div>
-<h2>その他</h2>
-<p>コードに関しては以下のGitHubに掲載されています。</p>
-<p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-<h2>その他報告</h2>
-<p>もし感想を送る場合やバグ報告の際は<a href="https://twitter.com/plum_chloride" target="_blank">こちらのTwitter</a>より連絡して下さい</p>
+<h2>プライバシーポリシー</h2>
+<p>　本ウェブサイトにおいて、利用ユーザの訪問状況を把握するためにGoogle社のサービスであるGoogle Analyticsを利用しています。このサービスによりユーザの訪問履歴を収集、記録、分析を行っています。収集されたデータに関しては個人を特定する情報は含まれません。また収集されたデータはGoogle社により管理されています。</p>
+<ul>
+<li>Google Analytics利用規約<br><a href="http://www.google.com/analytics/terms/jp.html" target="_blank">http://www.google.com/analytics/terms/jp.html</a></li>
+<li>Google プライバシーポリシー<br><a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a></li>
+</ul>
+<p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
+<p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
 <div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
 <br>
 <div class="flex_center">

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 4.0.0 -->
+  <!-- 4.1.0 -->
   <head>
   <meta charset="utf-8">
   <title>ことのはたんご | 単語推理ゲーム</title>
@@ -8,9 +8,8 @@
   <link rel="icon" type="image/png" href="./public/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
-  <script src="./src/kotonoha.min.js?ver=4.0.1" defer></script>
-  <link rel="stylesheet" href="./public/style.css?ver=4.0.0"></link>
-
+  <script src="./src/kotonoha.min.js?ver=4.1.0" defer></script>
+  <link rel="stylesheet" href="./public/style.css?ver=4.0.1"></link>
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
 
@@ -164,19 +163,19 @@
         </div>
         <h2 id="history_h2">戦歴</h2>
         <div id="history">
-          <div class="row">
+          <div class="row_his">
             <div class="h-text" id="his_1">プレイ<br>回数</div>
             <div class="h-number" id = "try_count"> </div>
           </div>
-          <div class="row">
-            <div class="h-text" id="his_2" style="padding-top: 1.5ex; height: 3.5ex;">勝率</div>
+          <div class="row_his">
+            <div class="h-text" id="his_2">勝率</div>
             <div class="h-number" id = "win_rate"> </div>
           </div>
-          <div class="row">
+          <div class="row_his">
             <div class="h-text" id="his_3">現在の<br>連勝数</div>
             <div class="h-number" id = "current_streak"> </div>
           </div>
-          <div class="row">
+          <div class="row_his">
             <div class="h-text" id="his_4">最大<br>連勝数</div>
             <div class="h-number" id = "max_streak"> </div>
           </div>
@@ -219,10 +218,18 @@
           「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
         <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
       </div>
+      <h2>プライバシーポリシー</h2>
+      <p>　本ウェブサイトにおいて、利用ユーザの訪問状況を把握するためにGoogle社のサービスであるGoogle Analyticsを利用しています。このサービスによりユーザの訪問履歴を収集、記録、分析を行っています。収集されたデータに関しては個人を特定する情報は含まれません。また収集されたデータはGoogle社により管理されています。</p>
+      <ul>
+        <li>Google Analytics利用規約<br><a href="http://www.google.com/analytics/terms/jp.html" target="_blank">http://www.google.com/analytics/terms/jp.html</a></li>
+        <li>Google プライバシーポリシー<br><a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a></li>
+      </ul>
+      <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
+      <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して許可を与えたものとみなします。</p>
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 4.0.1</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 4.1.0</small></div>
       <br>
       <div class="flex_center">
         <address>
@@ -239,7 +246,6 @@
       <div class="display_num right_display word_none" id="dis-10-3"> </div>
       <div class="display_num right_display word_none" id="dis-10-4"> </div>
     </div>
-
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>
 </html>
