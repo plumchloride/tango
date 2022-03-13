@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <!-- 5.0.0 -->
+  <head>
+  <meta charset="utf-8">
+  <title>ことのはたんご | 分析画面</title>
+  <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム。分析画面">
+  <link rel="icon" type="image/png" href="./public/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- chart js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
+  <!-- <script src="./src/dev_kotonoha.js?ver=5.0.0" defer></script> -->
+  <script src="./src/dev_kotonoha.min.js?ver=5.0.0" defer></script>
+  <link rel="stylesheet" href="./public/dev_style.css?ver=5.0.0"></link>
+  <link rel="stylesheet" href="https://unpkg.com/sanitize.css"/>
+  <meta name="robots" content="noindex">
+
+  <!-- twitter test -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@plum_chloride">
+  <meta name="twitter:creator" content="@plum_chloride">
+  <meta name="twitter:image" content="https://plum-chloride.jp/kotonoha-tango/public/img/card.png">
+  <meta property="og:title" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <meta name="twitter:description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <meta property="og:image" content="https://plum-chloride.jp/kotonoha-tango/public/img/card.png">
+  <meta property="og:url" content="https://plum-chloride.jp/kotonoha-tango/index.html" />
+  <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
+  <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:locale" content="ja_JP" />
+  </head>
+  <body>
+    <div id="left_nav" class="mobile_no">
+      <h1>ことのはたんご<br>分析画面</h1>
+      <nav>
+        <ul>
+          <li id="today_li" onclick="change_mode('today')">プレイ結果</li>
+          <li id="history_li" onclick="change_mode('history')">過去データ</li>
+          <li id="kotonoha_li" onclick="change_mode('kotonoha')">ことのは辞書</li>
+          <li id="tango_li" onclick="change_mode('tango')">たんご辞書</li>
+          <li id="serch_li" onclick="change_mode('serch')">単語検索</li>
+          <li id="version_li" onclick="change_mode('version')">バージョン</li>
+          <li id="kiya_li" onclick="change_mode('kiya')">その他規約</li>
+        </ul>
+      </nav>
+      <br>
+      <a href="./index.html" >ことのはたんごに戻る</a>
+    </div>
+
+    <div id="right_body">
+
+      <div id="mode_today" class="non_visi">
+        <div id="pass_day_div">
+          <h2><span id="pass_day">第〇回</span></h2>
+        </div>
+        <div id="not_yet" class="non_visi">
+          <div class="block"><h2>本日の「ことのはたんご」が未完了です。</h2><br><a href="./index.html">ことのはたんごに戻る</a></div>
+        </div>
+        <div id="yet" class="non_visi">
+          <div class="flex">
+            <div class="block half">
+              <h3 id="tango">〇〇：〇〇</h3>
+              <p>プレイヤー：<span id="play_num">==</span>人</p>
+              <p>データ更新時間：<span id="get_time">==</span>　<small>(データは概ね10分間隔で更新されます)</small></p>
+              <p>正答率：<span id="okper">==</span>%</p>
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="block half">
+              <h3>プレイ結果</h3>
+              <h4 id="sikou_num">試行回数：〇回</h4>
+              <div id="ans_dis">
+                <div id="ad_l"></div>
+                <div id="ad_r"></div>
+              </div>
+            </div>
+          </div>
+          <div id="nokori_tango" class="block">
+            <h3>残り単語候補</h3>
+            <p>あくまで入力出来る単語すべてを記載しているのみであり、記載されている単語がすべて出題される訳ではありません。そのため、「人名」「意味のない単語」等が含まれています。</p>
+            <div id="nokori_div"></div>
+          </div>
+          <div class="block half pc_none">
+            <div>
+              <h3>過去データ（ベータ）</h3>
+              <p>制作段階のため、利便性が低いです。44回までのデータはTwitterより取得しています。</p>
+              <select name="dai" id="dai"></select>
+              <p>正答率：<span id="okper2">==</span>%</p>
+              <p><span id="tango2">〇〇：〇〇</span></p>
+              <canvas id="myChart2"></canvas>
+            </div>
+          </div>
+          <div class="block half pc_none">
+            <a href="./index.html">ことのはたんごに戻る</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="mode_history" class="non_visi">
+        <div class="block"><div>
+          <h3>過去データ（ベータ）</h3>
+          <p>制作段階のため、利便性が低いです。44回までのデータはTwitterより取得しています。</p>
+          <select name="pdai" id="pdai"></select>
+          <p>正答率：<span id="pokper3">==</span>%</p>
+          <p><span id="tango3">〇〇：〇〇</span></p>
+          <canvas id="myChart3"></canvas>
+        </div></div>
+      </div>
+
+      <div id="mode_kotonoha" class="non_visi">
+        <div class="flex">
+          <div id="kotonoha_intro" class="block">
+            <h2>ことのは辞書</h2>
+            <p>　ことのは辞書は本アプリケーションにおいて入力出来る単語の辞書です。フォームより新規追加が可能な辞書となっており、一定の基準のもと単語が追加されます。</p>
+            <p>　新規追加フォーム：<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">Google Form</a></p>
+            <p>　ことのは辞書は分類語彙表、UniDic、新規追加単語の3種類の辞書で構成されています。それぞれの並び順に関して、分類語彙表は順不同，UniDicはあいうえお順，新規追加単語は申請順に記載されています。</p>
+          </div>
+          <div id="kotonoha_now" class="block">
+            <h2>現状</h2>
+            <div class="flex">
+              <dl>
+                <dt>分類語彙表単語数</dt>
+                <dd id="kotonoha_sum_bun">〇〇</dd>
+                <dt>UniDic単語数</dt>
+                <dd id="kotonoha_sum_uni">〇〇</dd>
+                <dt>新規追加単語単語数</dt>
+                <dd id="kotonoha_sum_user">〇〇</dd>
+              </dl>
+              <dl>
+                <dt>合計単語数</dt>
+                <dd id="kotonoha_sum_len">〇〇</dd>
+                <br><br>
+                <dt>最終アップデート</dt>
+                <dd>2022/03/09</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="flex">
+          <div id="k_bun" class="block k_list">
+            <h2>分類語彙表</h2>
+            <ul id="bun_data">
+            </ul>
+            <br>
+            <div class="flex-r">
+              <div class="on-click" onclick="change_page(-1,'bun')">前へ</div>
+              <div id="bun_num">1/20</div>
+              <div class="on-click" onclick="change_page(1,'bun')">後ろへ</div>
+            </div>
+          </div>
+          <div class="block k_list">
+            <h2>UniDic</h2>
+            <ul id="uni_data">
+            </ul>
+            <br>
+            <div class="flex-r">
+              <div class="on-click" onclick="change_page(-1,'uni')">前へ</div>
+              <div id="uni_num">1/20</div>
+              <div class="on-click" onclick="change_page(1,'uni')">後ろへ</div>
+            </div>
+          </div>
+          <div class="block k_list">
+            <h2>新規追加単語</h2>
+            <ul id="user_data">
+            </ul>
+            <br>
+            <div class="flex-r">
+              <div class="on-click" onclick="change_page(-1,'user')">前へ</div>
+              <div id="user_num">1/20</div>
+              <div class="on-click" onclick="change_page(1,'user')">後ろへ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="mode_tango" class="non_visi">
+        <div class="not_make"><div class="block">制作途中です。</div></div>
+      </div>
+      <div id="mode_serch" class="non_visi">
+        <div class="not_make"><div class="block">制作途中です。</div></div>
+      </div>
+      <div id="mode_version" class="non_visi over-flow">
+        <div class="block">
+          <h2>Ver 1.0.0　(2022/01/23)</h2>
+          <p>ことのはたんご基本機能作製</p>
+          <h3>1.1.0</h3>
+          <p>ヤユヨをアイウ行からアウオ行に移動</p>
+          <h3>1.2.0</h3>
+          <p>説明文調整</p>
+          <h3>1.3.0</h3>
+          <p>出題単語調整（1回目）</p>
+          <h3>1.4.0</h3>
+          <p>英語モード追加</p>
+          <h3>1.5.0</h3>
+          <p>同じ文字を含む単語の処理を追加</p>
+          <h3>1.6.0</h3>
+          <p>twitterAPIを利用した戦歴取得機能を実装</p>
+          <h3>1.7.0</h3>
+          <p>スマホでUIキーボードを利用した際に拡大される問題を修正</p>
+          <h2>Ver 2.0.0　(2022/02/15)</h2>
+          <p>残り候補数表示機能追加<br>キーボードを分割可能に<br>色覚補正機能追加</p>
+          <h2>Ver 3.0.0　(2022/02/22)</h2>
+          <p>残り候補数のツイート方法を修正<br>前日の単語表示機能<br>ディスプレイをクリックすることで入力位置の変更を可能に</p>
+          <h3>3.1.0</h3>
+          <p>正解・誤答が確定した際に確定演出を表示</p>
+          <h3>3.2.0</h3>
+          <p>残り候補数表示機能において同じ文字を含む単語の処理が正常に行われていない問題を修正</p>
+          <h2>Ver 4.0.0　(2022/03/04)</h2>
+          <p>内部のファイル構造を大幅改良<br>ファイルデータを圧縮<br>出題単語調整（2回目）</p>
+          <h3>4.1.0</h3>
+          <p>APIを作製しプレイヤーの戦歴取得機能を実装</p>
+          <h2>Ver 5.0.0　(2022/03/14)</h2>
+          <p>上記の取得した戦歴や、その他データを閲覧できる分析画面のベータ版を公開</p>
+        </div>
+      </div>
+      <div id="mode_kiya" class="non_visi">
+        <div class="flex">
+          <div class="block half">
+            <h2>ライセンス</h2>
+            <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
+            <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：The UniDic Consortium「UniDic-cwj_3.1.0」 [<a  href = "https://ccd.ninjal.ac.jp/unidic/"target="_blank">https://ccd.ninjal.ac.jp/unidic/</a>]<br>
+              「UniDic-cwj_3.1.0」はBSDライセンスおよびクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
+            <p>また本アプリケーションは次の著作者によるソフトウェアを使用しています：国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)<br>国立国語研究所(2004)『分類語彙表増補改訂版データベース』(ver.1.0)はクリエイティブ・コモンズ 表示-非営利-継承4.0 非移植(CC BY-NC-SA 4.0)のもと提供されています。</p>
+          </div>
+          <div class="block half">
+            <h2>プライバシーポリシー</h2>
+            <p>　本ウェブサイトにおいて、利用ユーザの訪問状況を把握するためにGoogle社のサービスであるGoogle Analyticsを利用しています。このサービスによりユーザの訪問履歴を収集、記録、分析を行っています。収集されたデータに関しては個人を特定する情報は含まれません。また収集されたデータはGoogle社により管理されています。</p>
+            <ul>
+              <li>Google Analytics利用規約<br><a href="http://www.google.com/analytics/terms/jp.html" target="_blank">http://www.google.com/analytics/terms/jp.html</a></li>
+              <li>Google プライバシーポリシー<br><a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a></li>
+            </ul>
+            <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
+            <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して許可を与えたものとみなします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

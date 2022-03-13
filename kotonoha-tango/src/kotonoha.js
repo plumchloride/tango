@@ -1,4 +1,4 @@
-const a_csv_version = "4.0.1";
+const a_csv_version = "5.0.0";
 const q_csv_version = "4.0.0";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+q_csv_version;
@@ -379,42 +379,12 @@ const BeforeDataCheck = ()=>{
 const TodayDataCheck = ()=>{
   // 今日のデータがある場合
   if(localStorage.getItem("pass_day")==daily_data.pass_day){
-    var _now_solve = JSON.parse(localStorage.getItem("now_solve"));
-
-    // アプデ後日付変更で更新
-    // game_data.now_solve = JSON.parse(localStorage.getItem("now_solve"));
-    if(_now_solve.index == undefined){
-      game_data.now_solve.index = _now_solve.text;
-      game_data.now_solve.row = _now_solve.row;
-      console.log("error")
-    }else{
-      game_data.now_solve = _now_solve;
-    }
-
+    game_data.now_solve = JSON.parse(localStorage.getItem("now_solve"));
     history.hb_text = JSON.parse(localStorage.getItem("history_of_hb_text"));
     history.hb = JSON.parse(localStorage.getItem("history_of_hb"));
     history.anser = JSON.parse(localStorage.getItem("history_of_anser"));
 
-    // こちらもバージョンアップ後数日で変更
-    if(JSON.parse(localStorage.getItem("flag")) == null){
-      var fin = JSON.parse(localStorage.getItem("fin"));
-      if(["正解です","You're correct","正解しました"].includes(fin.text)){
-        flag.game_end = true;
-        flag.game_win = true;
-      }else  if(["不正解です","You're Incorrect"].includes(fin.text)){
-        flag.game_end = true;
-        flag.game_win = false;
-      }else{
-        flag.game_end = false;
-        flag.game_win = false;
-      }
-    }else{
-      localStorage.removeItem("fin");
-      var _flag = JSON.parse(localStorage.getItem("flag"));
-      flag.game_end = _flag.game_end;
-      flag.game_win = _flag.game_win;
-      flag.remain_show = _flag.remain_show;
-    }
+    flag = JSON.parse(localStorage.getItem("flag"));
 
     // たんご検出
     if(JSON.parse(localStorage.getItem("tango")) != null){
@@ -788,12 +758,7 @@ const End = ()=>{
   localStorage.setItem("experience", true);
 
   // 今日初めての終了の場合データの更新を行う
-  // アプデ後修正
-  if(JSON.parse(localStorage.getItem("flag")) == null){
-    var win_b_tf = JSON.parse(localStorage.getItem("fin")).tf;
-  }else{
-    var win_b_tf = JSON.parse(localStorage.getItem("flag")).game_end;
-  }
+  var win_b_tf = JSON.parse(localStorage.getItem("flag")).game_end;
 
   if(!win_b_tf){
     history.game.try_count += 1;
@@ -826,17 +791,17 @@ const End = ()=>{
 
   // api用
   var api_num = 0
-  if (game_data.now_solve.row == 11){
+  if (game_data.now_solve.row == 10){
     if(flag.game_win){
-      api_num = 10
+      api_num = 10;
     }else{
-      api_num = 11
+      api_num = 11;
     }
   }else{
     api_num = game_data.now_solve.row;
   }
-  // エラー吐いたときに影響がないように最下部に
-  if(!win_b_tf){
+  // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
+  if(!win_b_tf & history.game.try_count > 1){
     data_post(daily_data.pass_day,api_num);
   }
 }
@@ -1353,8 +1318,8 @@ const HATENA_TEXT_EN = `
 </div>
 <div style="font-size: 0.9em;">
 <p>The letter <strong class="hit_ex">「キ・ウ」</strong> is <strong class="hit_ex">in word and in the correct spot</strong>.</p>
-<p>The letter <strong class="blow_ex">「シ」</strong> is <strong class="blow_ex">in word but in the wrong spot</strong>。</p>
-<p>The letter <strong>「ョ・ツ」</strong> is not in the word.</p>
+<p>The letter <strong class="blow_ex">「ツ」</strong> is <strong class="blow_ex">in word but in the wrong spot</strong>。</p>
+<p>The letter <strong>「ョ・シ」</strong> is not in the word.</p>
 <p>In this case, the correct tango is 「急追：キュウツイ」.</p>
 </div>
 <h2>In the beginning</h2>
