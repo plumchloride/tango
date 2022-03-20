@@ -1,7 +1,8 @@
-const a_csv_version = "5.0.0";
-const q_csv_version = "4.0.0";
+const a_csv_version = "5.0.2";
+const q_csv_version = "5.0.2";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
-const a_csv_path = './public/data/A_data_new.csv?ver='+q_csv_version;
+const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
+const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
 const KEYBORD_LIST = [["ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア"],
                       ["ヲ","リ","　","ミ","ヒ","ニ","チ","シ","キ","イ"],
                       ["ン","ル","ユ","ム","フ","ヌ","ツ","ス","ク","ウ"],
@@ -67,6 +68,10 @@ const Progress = ()=>{
       GetYesterdayTango();
       break;
     case 8:
+      let nowtime = new Date();
+      WakeUpRequest(h_csv_path+String(nowtime.getHours())+String(nowtime.getMinutes()),"H");
+      break;
+    case 9:
       setInterval(DisplayTime, 1000);
       flag.wakeup = true;
       break;
@@ -104,6 +109,21 @@ const LoadData = (mode,data)=>{
         _array["pronunciation"].push(_row[1])
       });
       SaveArray(_array,mode);
+      break;
+    case "H":
+      var $h_out = document.getElementById("h_csv");
+      var sum = (accumulator, curr) => Number(accumulator) + Number(curr);
+      _array_sp_n = data.split(/\r\n|\n/);
+      _array_sp_n.forEach(element => {
+        var _row = element.split(",");
+        if(_row[0] != '' & _row != ''){
+          if(_row[0] == String(daily_data.pass_day)){
+            $h_out.innerText = `全ユーザーの正答率：${Math.floor((1 - Number(_row[11])/_row.slice(1,12).reduce(sum))*10000)/100}%`
+          }
+        }
+      });
+      wakeup_number += 1;
+      Progress();
       break;
     default:
       alert("ERROR1:\n csvmode is invalid");
@@ -171,39 +191,9 @@ const GetTodayWord = ()=>{
   let [random_num,passday] = GetRandom(csv_data.q_data);
   let title = csv_data.q_data["title"][random_num];
   let pronunciation  = csv_data.q_data["pronunciation"][random_num];
-  if(passday == 40){
-    title = "十干"
-    pronunciation = "ジュッカン"
-  }else if(passday == 41){
-    title = "プロポーズ"
-    pronunciation = "プロポーズ"
-  }else if(passday == 42){
-    title = "新秋"
-    pronunciation = "シンシュウ"
-  }else if(passday == 43){
-    title = "保育園"
-    pronunciation = "ホイクエン"
-  }else if(passday == 44){
-    title = "参照"
-    pronunciation = "サンショウ"
-  }else if(passday == 45){
-    title = "スキー板"
-    pronunciation = "スキーイタ"
-  }else if(passday == 46){
-    title = "突き当たり"
-    pronunciation = "ツキアタリ"
-  }else if(passday == 47){
-    title = "ガムテープ"
-    pronunciation = "ガムテープ"
-  }else if(passday == 48){
-    title="爪楊枝"
-    pronunciation = "ツマヨウジ"
-  }else if(passday == 49){
-    title="沼沢"
-    pronunciation = "ショウタク"
-  }
   tango.kanzi = title;
   tango.yomi = pronunciation;
+  // console.log(tango)
   daily_data.pass_day = passday;
   wakeup_number += 1;
   Progress();
@@ -226,42 +216,17 @@ const GetYesterdayTango = ()=>{
   let random_num = GetRandom_before();
   let b_title = csv_data.q_data["title"][random_num];
   let b_pronunciation  = csv_data.q_data["pronunciation"][random_num];
-  if(daily_data.pass_day == 41){
-    b_title = "十干"
-    b_pronunciation = "ジュッカン"
-  }else if(daily_data.pass_day == 42){
-    b_title = "プロポーズ"
-    b_pronunciation = "プロポーズ"
-  }else if(daily_data.pass_day == 43){
-    b_title = "新秋"
-    b_pronunciation = "シンシュウ"
-  }else if(daily_data.pass_day == 44){
-    b_title = "保育園"
-    b_pronunciation = "ホイクエン"
-  }else if(daily_data.pass_day == 45){
-    b_title = "参照"
-    b_pronunciation = "サンショウ"
-  }else if(daily_data.pass_day == 46){
-    b_title = "スキー板"
-    b_pronunciation = "スキーイタ"
-  }else if(daily_data.pass_day == 47){
-    b_title = "突き当たり"
-    b_pronunciation = "ツキアタリ"
-  }else if(daily_data.pass_day == 48){
-    b_title = "ガムテープ"
-    b_pronunciation = "ガムテープ"
-  }else if(daily_data.pass_day == 49){
-    b_title="爪楊枝"
-    b_pronunciation = "ツマヨウジ"
-  }else if(daily_data.pass_day == 50){
-    b_title="沼沢"
-    b_pronunciation = "ショウタク"
-  }
   document.getElementById("before_tango").innerText = `「${b_title}」（${b_pronunciation}）`
   wakeup_number += 1;
   Progress();
 }
 // === 昨日の単語取得 ここまで ===
+
+// === 詳細取得 ===
+const GetHistoryData = ()=>{
+
+}
+// === 詳細取得 ここまで ===
 
 // === 残り候補数表示機能 ===
 const CheckRemaining_all = (progress_re = false) =>{
@@ -776,16 +741,14 @@ const End = ()=>{
     }
     localStorage.setItem("history_of_game", JSON.stringify(history.game));
   }
-
-  // 戦歴表示
-  ShowHistory(history.game);
-
   // 終了したことをwebstorageに伝える
   localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}))
   // 文字変更
   document.getElementById("result").innerText = win_tx
   document.getElementById("result_answer").innerText = `たんご：「${tango.kanzi}」（${tango.yomi}）`
   document.getElementById("result_answer").classList.remove("non_visi");
+  // 戦歴表示
+  ShowHistory(history.game);
   // グラフ画面起動
   mode_change("bar");
 

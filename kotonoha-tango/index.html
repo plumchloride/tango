@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.0.0 -->
+  <!-- 5.0.2 -->
   <head>
   <meta charset="utf-8">
   <title>ことのはたんご | 単語推理ゲーム</title>
@@ -10,7 +10,7 @@
   <!-- chart js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
   <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
-  <script src="./src/kotonoha.min.js?ver=5.0.0" defer></script>
+  <script src="./src/kotonoha.min.js?ver=5.0.2" defer></script>
   <link rel="stylesheet" href="./public/style.css?ver=4.0.1"></link>
 
   <!-- twitter test -->
@@ -26,6 +26,15 @@
   <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
   <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
   <meta property="og:locale" content="ja_JP" />
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HZCPVJSXFG"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HZCPVJSXFG');
+  </script>
   </head>
   <body>
     <div id="header">
@@ -153,7 +162,7 @@
         <h2 id ="result">今日は正解していません</h2>
         <div id="remain_toggle"><label><input type="checkbox" id="remain_toggle_input" checked onclick="RemainToggleChange();"><span id="remain_span">　残り候補数推移</span></label></div>
         <p id="result_answer" class="non_visi"></p>
-        <p><a href="./dev.html" style="color:black;">詳細な結果を表示（ベータ）</a></p>
+        <p><span id="h_csv">全ユーザーの正答率：〇〇%</span><br><a href="./dev.html" style="color:black;">詳細な結果を表示（ベータ）</a></p>
         <div class="flex_center"><p id="emoji_place"></p></div>
         <div id="graph_bt">
           <div id="graph_copy" class="graph_bt_c">コピー</div>
@@ -214,6 +223,9 @@
       <p><a href="https://twitter.com/i/communities/1498893000176328705" target="_blank">こちらのコミュニティ</a>に参加するとTLを邪魔せず、Twitterのcomunity宛てに投稿できるようになります。もしよろしければ参加してみてください。</p>
       <h2>分析画面ベータ版</h2>
       <p>今日の単語の正解率の表示やその他辞書データに関するデータを記述してあります。現在はベータ版のため、一部機能が制限されていたりスマートフォン等のUIに不具合が生じています。今後改善予定のため、気長にお待ちください。<a href="./dev.html">サイトリンク</a></p>
+      <!-- <h2>作者Twitter</h2>
+      <div style="display: flex;justify-content: center;"><a class="twitter-timeline" data-chrome="noheader nofooter" data-lang="ja" data-width="400" data-height="200" href="https://twitter.com/plum_chloride?ref_src=twsrc%5Etfw">Tweets by plum_chloride</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+      -->
       <h2>ライセンス</h2>
       <div style="font-size: 0.9em;">
         <p>本アプリケーションは <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>の下に提供されています。<br>本アプリケーションはくわえて、BSDライセンスの下に提供されています。</p>
@@ -232,7 +244,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 5.0.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 5.0.2</small></div>
       <br>
       <div class="flex_center">
         <address>

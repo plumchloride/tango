@@ -139,6 +139,9 @@ const change_mode = (mode_to,first_flag = false) =>{
   mode_body[mode_to].classList.remove("non_visi");
   mode_li[mode_to].classList.add("current_li");
   wakeup(mode_to,first_flag);
+  if(first_flag){
+    GetBefore(document.getElementById("pdai"),document.getElementById("myChart3"),document.getElementById("pokper3"),document.getElementById("tango3"),"pc");
+  }
 }
 
 const wakeup = (mode,first_flag = false)=>{
@@ -164,7 +167,6 @@ const wakeup = (mode,first_flag = false)=>{
       }
       break;
     case "history":
-      GetBefore(document.getElementById("pdai"),document.getElementById("myChart3"),document.getElementById("pokper3"),document.getElementById("tango3"),"pc");
       break;
     case "kotonoha":
       document.getElementById("kotonoha_sum_bun").innerText = `${a_data_sep.bun.length.toLocaleString()} 単語`;
@@ -297,13 +299,23 @@ const CheckRemaining_all = (history_of_hb,history_of_anser) =>{
     }else if(e == "HIT"){
       history_of_hb_text.hit.push(history_of_anser[index]);
     }else{
-      history_of_hb_text.all.push(history_of_anser[index]);
+      if(!history_of_hb_text["all"].includes(history_of_anser[index])){
+        history_of_hb_text.all.push(history_of_anser[index]);
+      }
     }
   });
   // blow hit 重複削除
   history_of_hb_text["hit"].forEach((element) => {
     if(history_of_hb_text["blow"].length != 0 & history_of_hb_text["blow"].includes(element)){
       history_of_hb_text["blow"].splice(history_of_hb_text["blow"].indexOf(element),1);
+    };
+    if(history_of_hb_text["all"].length != 0 & history_of_hb_text["all"].includes(element)){
+      history_of_hb_text["all"].splice(history_of_hb_text["all"].indexOf(element),1);
+    };
+  });
+  history_of_hb_text["blow"].forEach((element) => {
+    if(history_of_hb_text["all"].length != 0 & history_of_hb_text["all"].includes(element)){
+      history_of_hb_text["all"].splice(history_of_hb_text["all"].indexOf(element),1);
     };
   });
 
