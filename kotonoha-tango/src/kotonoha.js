@@ -1,5 +1,5 @@
-const a_csv_version = "5.0.2";
-const q_csv_version = "5.0.2";
+const a_csv_version = "5.0.4";
+const q_csv_version = "5.0.4";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
 const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
@@ -751,6 +751,13 @@ const End = ()=>{
   ShowHistory(history.game);
   // グラフ画面起動
   mode_change("bar");
+  if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
+    localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+    alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
+    setTimeout(function(){
+      again_set_flag();
+    },3000)
+  }
 
   // api用
   var api_num = 0
@@ -766,6 +773,12 @@ const End = ()=>{
   // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
   if(!win_b_tf & history.game.try_count > 1){
     data_post(daily_data.pass_day,api_num);
+  }
+}
+const again_set_flag = ()=>{
+  if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
+    localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+    alertShow("バグです。動作に一部影響が出ています。\n Error8: Again flag is not set",2000);
   }
 }
 // === game終了処理 ここまで ===
