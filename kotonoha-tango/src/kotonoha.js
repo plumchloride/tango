@@ -365,7 +365,7 @@ const TodayDataCheck = ()=>{
     }
 
     for(let i = 0;i < game_data.now_solve.row;i++){
-      EvaluateUpdate(i);
+      EvaluateUpdate(i,0,false,false);
     }
     ValueUpdate();
     DisplayUpdate();
@@ -511,7 +511,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
 // === 回答評価機能 ここまで ===
 
 // === 評価画面反映・重複処理 ===
-const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false) =>{
+const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false,dup_flag = true) =>{
   RemoveSolveHighlight(row);
   var _row_hb = Array.from(history.hb[row]);
   var row_text = history.anser[row];
@@ -521,7 +521,7 @@ const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false) =>{
   var pr_array = tango.yomi.split("");
   var pr_set = new Set(pr_array);
 
-  if(row_text_set.size != row_text_array.length){
+  if(row_text_set.size != row_text_array.length && dup_flag){
     // 回答に重複あり
     if(pr_set.size != pr_array.length){
       // 答えに重複あり
@@ -861,14 +861,19 @@ const CreateDisplay = ()=>{
     element_array[i].setAttribute("class","row");
     element_array[i].setAttribute("id","dis-row-"+String(i));
     for(let z = 0;z<10;z++){
+      if(z == 5){
+        element_array[i].appendChild(document.createElement("div"));
+        element_array[i].childNodes[z].setAttribute("class","dis-pa");
+      }
       if(z<5){
         element_array[i].appendChild(document.createElement("div"));
-        element_array[i].childNodes[z].setAttribute("class","display_num");
+        element_array[i].childNodes[z].setAttribute("class","display_num left_display");
         element_array[i].childNodes[z].setAttribute("id","dis-"+String(i)+"-"+String(z));
       }else{
-        element_array[i].appendChild(document.createElement("div"));
-        element_array[i].childNodes[z].setAttribute("class","display_num right_display");
-        element_array[i].childNodes[z].setAttribute("id","dis-"+String(i+5)+"-"+String(z-5));
+        lef_el = document.createElement("div");
+        lef_el.setAttribute("class","display_num right_display");
+        lef_el.setAttribute("id","dis-"+String(i+5)+"-"+String(z-5));
+        element_array[i].appendChild(lef_el);
       }
     }
   }
@@ -1203,7 +1208,7 @@ const DisplayTime = ()=>{
   if(flag.lang_en){
     document.getElementById("time_left").innerHTML = "<strong>No."+String(daily_data.pass_day)+"</strong>　Next Tango："+time_left;
   }else{
-    document.getElementById("time_left").innerHTML = "<strong>第"+String(daily_data.pass_day)+"回</strong>　今日の単語 残り："+time_left;
+    document.getElementById("time_left").innerHTML = "<strong>第"+String(daily_data.pass_day)+"回</strong> 残り時間："+time_left;
   }
 }
 // === 画面表示操作 ===

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.0.4 -->
+  <!-- 5.0.5 -->
   <head>
     <meta charset="utf-8">
     <title>ことのはたんご | 単語推理ゲーム</title>
@@ -10,8 +10,8 @@
     <!-- chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
     <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=5.0.4" defer></script>
-    <link rel="stylesheet" href="./public/style.css?ver=4.0.1"></link>
+    <script src="./src/kotonoha.min.js?ver=5.0.5" defer></script>
+    <link rel="stylesheet" href="./public/style.css?ver=5.0.5"></link>
 
     <!-- twitter test -->
     <meta name="twitter:card" content="summary_large_image">
@@ -121,8 +121,10 @@
       <img alt="クリエイティブ・コモンズ・ライセンス" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
     </div>
     <div id="body" class="non_visi">
-      <div id ="time_left">今日の単語 残り時間：--:--:--</div>
-      <div><span id="remain_num">残り候補数：---</span><span id="remain_unvisi" onclick="toggle_remain_show();">（非表示）</span></div>
+      <div id="top_info">
+        <div id ="time_left">今日の単語 残り時間：--:--:--</div>
+        <div><span id="remain_num">残り候補数：---</span><span id="remain_unvisi" onclick="toggle_remain_show();">（非表示）</span></div>
+      </div>
 
       <div id="eval_display"></div>
 
@@ -212,8 +214,6 @@
       <p>バグ等が発生した場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
       <h2>Twitter comunity</h2>
       <p><a href="https://twitter.com/i/communities/1498893000176328705" target="_blank">こちらのコミュニティ</a>に参加するとTLを邪魔せず、Twitterのcomunity宛てに投稿できるようになります。もしよろしければ参加してみてください。</p>
-      <h2>分析画面ベータ版</h2>
-      <p>今日の単語の正解率の表示やその他辞書データに関するデータを記述してあります。現在はベータ版のため、一部機能が制限されていたりスマートフォン等のUIに不具合が生じています。今後改善予定のため、気長にお待ちください。<a href="./dev.html">サイトリンク</a></p>
       <!-- <h2>作者Twitter</h2>
       <div style="display: flex;justify-content: center;"><a class="twitter-timeline" data-chrome="noheader nofooter" data-lang="ja" data-width="400" data-height="200" href="https://twitter.com/plum_chloride?ref_src=twsrc%5Etfw">Tweets by plum_chloride</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></div>
       -->

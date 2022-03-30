@@ -1,6 +1,7 @@
 :root {
   --hit: rgb(167,210,141);
   --brow: rgb(252, 201, 72);
+  --bg:rgb(228, 237, 241);
 }
 html {
   touch-action: manipulation;
@@ -10,7 +11,7 @@ body{
   margin: 0px;
   padding: 0px;
   display: flex;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   flex-direction: column;
   align-items: center;
   overflow:hidden scroll;
@@ -18,19 +19,19 @@ body{
 #body {
   width: 30vw;
   display: inline-block;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   margin: 0 auto;
   overflow-wrap: break-word;
 }
 .explanation{
   width: 28vw;
   display: inline-block;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   margin: 1vw;
 }
 #header{
   width: 30vw;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   border-bottom: solid 1px rgb(167,210,141);
   display: flex;
   justify-content: space-between;
@@ -67,7 +68,7 @@ h2{
 }
 #graph #graph_body{
   border: solid 3px rgb(211,147,93) ;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   text-align: center;
   font-weight: bold;
   border-radius: 0.5em;
@@ -130,47 +131,56 @@ h2{
   margin: 0 10px;
 }
 
+#top_info{
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  padding: 2px 4px;
+  align-items: center;
+}
 #time_left{
-  padding-top: 2px;
-  padding-bottom: 2px;
   color: rgb(211,147,93);
   text-align: right;
-  padding-right: 0.5rem;
+  font-size: 90%;
 }
 
 /* ディスプレイ */
 #remain_num{
   color: rgb(211,147,93);
-  padding-left: 0.5rem;
+  font-size: 90%;
 }
 #remain_unvisi{
   cursor: pointer;
   padding-left: 0.5rem;
+  font-size: 90%;
 }
 #eval_display{
-  padding-bottom:  10px ;
+  padding-bottom:  5px;
 }
 #eval_display .row{
   display: flex;
   justify-content: space-around;
-  padding-top: 0.5ex;
-  padding-bottom: 0.5ex;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 #eval_display .display_num{
-  width: 8%;
-  height: auto;
+  width: 2.3vw;
+  height: 2.3vw;
   aspect-ratio: 1 / 1;
   font-size: 1.3em;
-  border-radius: 0;
+  border-radius: 15%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   border: solid 0.15em rgb(167,210,141);
   text-align: center;
   font-weight: bold;
   vertical-align:middle;
+}
+#eval_display .dis-pa{
+  width: 0.5vw;
 }
 #eval_display .row_now_solve{
   border: solid 0.15em rgb(211,147,93);
@@ -217,22 +227,16 @@ h2{
   height: auto;
   aspect-ratio: 1 / 1;
   font-size: 1.3em;
-  border-radius: 0;
+  border-radius: 15%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   border: solid 2px rgb(167,210,141);
   text-align: center;
   font-weight: bold;
   vertical-align:middle;
-}
-#hatena .row_now_solve{
-  border: solid 2px rgb(211,147,93);
-}
-#hatena .now_solve{
-  border: solid 2px rgb(128,197,222);
 }
 #hatena .right_display{
   border-radius: 50%!important;
@@ -265,47 +269,59 @@ h2{
 
 
 #input_text{
-  font-size: 1.5em;
+  font-size: 140%;
   width: 9em;
   text-align: center;
   border: solid rgb(167,210,141) 2px;
-  background-color: rgb(228,237,241);
+  background-color: var(--bg);
   border-radius: 1em;
-  padding: 5px;
+  padding: 3px;
   /* margin-bottom: 10px; */
-  margin: 3px;
+  margin: 2px;
   margin-right: 1em;
 }
 
 #Decision_button{
-  font-size: 2em;
+  font-size: 140%;
   margin:5px;
   border: solid #555 0px;
   background-color: rgb(211,147,93);
   color: black;
   margin-left: 1em;
 }
+#Decision_button:hover{
+  background-color: rgb(180, 124, 78);
+}
 
 /* キーボード */
 #keybord .row{
   display: flex;
   justify-content: space-around;
-  padding-top: 0.5ex;
-  padding-bottom: 0.5ex;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 #keybord button{
-  width: 9%;
-  height: 5ex;
+  width: 2.5vw;
+  height: 1.7vw;
+  border-radius: 15%;
   font-weight: bold;
   border: solid #555 0px;
   background-color: rgb(133,202,200);
   color: black;
 }
+#keybord button:hover{
+  background-color: rgb(114, 170, 168);
+  border:  solid #555 1px !important;
+}
 #keybord .space_bt{
-  background-color: rgb(228,237,241)!important;
-  border:  dotted #555 1px !important;
+  background-color: var(--bg)!important;
+  border:  dashed #555 1px !important;
 }
 #keybord .func_bt{
+  background-color: var(--bg)!important;
+  border:  dashed #555 1px !important;
+}
+#keybord .func_bt:hover{
   background-color: rgb(128,197,222)!important;
 }
 #keybord hr{
@@ -316,15 +332,23 @@ h2{
   background-color: var(--hit);
   border: solid 0px var(--hit);
 }
+#keybord .word_hit:hover{
+  background-color: var(--hit)!important;
+}
 #keybord .word_blow{
   background-color: var(--brow);
   border: solid 0px var(--brow);
-
+}
+#keybord .word_blow:hover{
+  background-color: var(--brow)!important;
 }
 #keybord .word_none{
   background-color: gray;
   border: solid 0px gray;
   color: white;
+}
+#keybord .word_none:hover{
+  background-color: gray!important;
 }
 
 #keybord_move{
@@ -350,10 +374,13 @@ h2{
   border-radius: 10px;
   color: black;
 }
+.key_type_bt:hover{
+  background-color: rgb(49, 170, 214);
+}
 .cuurent{
   background-color: rgb(49, 170, 214);
 }
-#kotonoha_rando_div{
+/* #kotonoha_rando_div{
   display: flex;
   justify-content: center;
 }
@@ -367,7 +394,7 @@ h2{
   border-radius: 10px;
   margin-bottom: 2vh;
   color: black;
-}
+} */
 /* キーボード */
 
 /* 戦歴 */
@@ -376,10 +403,15 @@ h2{
   align-items: center;
   justify-content: space-around;
 }
-#history .h-text{
-  height: 5ex;
+#history .row_his{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+#history .h-text{ /* lineheight は予期せぬ動作防止のため、1にしておくべき？*/
   text-align: center;
-  line-height:2ex;
+  line-height:1;
   vertical-align: middle;
 }
 #cahrt_canvas{
@@ -393,6 +425,9 @@ h2{
 #remain_text{
   max-width: 40ex;
   overflow-wrap: break-word;
+}
+#before_tango{
+  display: inline;
 }
 /* 戦歴 */
 
@@ -408,9 +443,13 @@ h2{
 }
 .colour_ex_box{
   width: 50%;
+  border-radius: 15%;
   aspect-ratio: 1;
 }
 /* 色切り替え */
+#setting{
+  word-break: break-all;
+}
 
 #alert{
   width: 100vw;
@@ -450,12 +489,26 @@ h2{
   #body{
     width: 40vw;
   }
+  #eval_display .display_num{
+    width: 3vw;
+    height: 3vw;
+  }
 
+  #time_left{
+    font-size: 80%;
+  }
+  #remain_num{
+    font-size: 80%;
+  }
+  #remain_unvisi{
+    font-size: 80%;
+  }
   #eval_display .row .display_num{
     width: 8%;
   }
-  #keybord .row button{
-    width: 9%;
+  #keybord button{
+    width: 3.5vw;
+    height: 3vw;
   }
   #alert div{
     width:40vw;
@@ -475,22 +528,55 @@ h2{
     margin-left: 0.3em;
   }
 }
-
 @media screen and (max-width: 1000px) { /*ウィンドウ幅が最大1000pxまでの場合に適用*/
+  #body{
+    width: 70vw;
+  }
+
+  #eval_display .row .display_num{
+    width: 5vw;
+    height: 5vw;
+    font-size: 1em;
+  }
+  #eval_display .dis-pa{
+    width: 1vw;
+  }
+  #keybord button{
+    width: 6vw;
+    height: 6vw;
+  }
+  #alert div{
+    width:70vw;
+  }
+  .explanation{
+    width: 94vw;
+  }
+  #header{
+    width: 98vw;
+  }
+  #graph{
+    width: 94vw;
+  }
+}
+@media screen and (max-width: 767px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/
   #body{
     width: 98vw;
   }
 
   #eval_display .row .display_num{
-    width: 8vw;
-    height: 8vw;
+    width: 7.5vw;
+    height: 7.5vw;
     font-size: 1em;
   }
-  #keybord .row button{
+  #eval_display .dis-pa{
+    width: 1vw;
+  }
+  #keybord button{
     width: 9vw;
+    height: 9vw;
   }
   #alert div{
-    width:96vw;
+    width:80vw;
   }
   .explanation{
     width: 94vw;
