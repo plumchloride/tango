@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.0.5 -->
+  <!-- 5.1.0 -->
   <head>
     <meta charset="utf-8">
     <title>ことのはたんご | 単語推理ゲーム</title>
@@ -9,9 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
-    <!-- <script src="./src/kotonoha.js?ver=4.0.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=5.0.5" defer></script>
-    <link rel="stylesheet" href="./public/style.css?ver=5.0.5"></link>
+    <!-- <script src="./src/kotonoha.js?ver=5.1.0" defer></script> -->
+    <script src="./src/kotonoha.min.js?ver=5.1.0" defer></script>
+    <link rel="stylesheet" href="./public/style.css?ver=5.1.0"></link>
 
     <!-- twitter test -->
     <meta name="twitter:card" content="summary_large_image">
@@ -31,11 +31,11 @@
     <div id="header">
       <div>
         <img id="img_hatena" class = "inline-img" onclick="mode_change('game');" src="./public/img/x.svg" width="30" height="30" alt="what is this app">
-        <div id="place_holder"></div>
+        <img id="img_write" class = "inline-img" onclick="change_keybord_inout_mode();" src="./public/img/write.svg" width="30" height="30" alt="change_keymode">
       </div>
       <h1 id="title" style="cursor: pointer;" onclick="mode_change('game');">ことのはたんご</h1>
       <div>
-        <img id="img_bar_graph" class = "inline-img-r" onclick="mode_change('bar');" src="./public/img/bar_graph.svg" width="30" height="30" alt="setting">
+        <img id="img_bar_graph" class = "inline-img-r" onclick="mode_change('bar');" src="./public/img/bar_graph.svg" width="30" height="30" alt="glaph">
         <img id="img_setting" class = "inline-img-r" onclick="mode_change('set');" src="./public/img/set.svg" width="30" height="30" alt="setting">
       </div>
     </div>
@@ -65,6 +65,10 @@
       <p>1日1回遊ぶことが出来る単語推理ゲームです。</p>
       <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
       <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
+      <div style="background-color: #ccc;">
+        <h2>Ver 5.1.0 メモ機能</h2>
+        <p>画面上部のナビゲーションにおける鉛筆をクリックすることでメモ機能をONにできます。<br>メモ機能中ではUIキーボードをクリックすることでそれぞれの文字に「マル・バツ」の目印を設置できます。</p>
+      </div>
       <h2>プレイ指南書・作製後感想</h2>
       <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
       <h2>単語更新・辞書データについて</h2>
@@ -83,7 +87,7 @@
       <div class="row">
         <div class="display_num word_none">シ</div>
         <div class="display_num word_none">シ</div>
-        <div class="display_num word_none">オ</div>
+        <div class="display_num word_blow">オ</div>
         <div class="display_num word_none">ド</div>
         <div class="display_num word_hit">シ</div>
       </div>
@@ -114,6 +118,7 @@
       <h2>注意</h2>
       <p>日本語は単語数が膨大なため、存在する単語でも<strong>ことのは</strong>に登録されていない可能性があります。ご了承下さい。</p>
       <p>出題単語に対するフィルタリングを明確には行っていません。本アプリにて出題される単語は「政治・宗教的・性差別・性的」な意図を含みません。</p>
+      <p>出題する単語及び入力する単語は概ね名詞に限られています。動詞や形容詞は入力出来ません。</p>
       <h2 id="hatena_close" style="cursor: pointer;" onclick="mode_change('game');"><u>説明を閉じる</u></h2>
       <hr>
       <div></div>
@@ -129,7 +134,7 @@
       <div id="eval_display"></div>
 
       <div class="inputs">
-        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用">
+        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用" autocomplete="off">
         <button id="Decision_button">決定</button>
       </div>
 
@@ -144,6 +149,10 @@
         <button id = "kt_normal" class="key_type_bt" onclick="KryTypeChange('normal');">50音</button>
         <button id = "kt_ga" class="key_type_bt" onclick="KryTypeChange('ga');">濁点等</button>
         <button id = "kt_none" class="key_type_bt" onclick="KryTypeChange('none');">非表示</button>
+      </div>
+      <div id="bt_afunc_div">
+        <button id = "bt_alldel" class="bt_afunc" onclick="alldel();">メモを削除</button>
+        <button id = "bt_ff" class="bt_afunc" onclick="gameff();">降参</button>
       </div>
       <!-- <div id="kotonoha_rando_div">
         <button id="kotonoha_rando" onclick="createRandomAnsower()">「ことのは」ランダム生成</button>
@@ -235,7 +244,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 5.0.4</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 5.1.0</small></div>
       <br>
       <div class="flex_center">
         <address>

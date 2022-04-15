@@ -351,6 +351,52 @@ h2{
   background-color: gray!important;
 }
 
+
+/* メモ機能 */
+.AssumptionHit{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.AssumptionHit::after{
+  box-sizing: border-box;
+  content: "";
+  display: block;
+  height: 70%;
+  aspect-ratio: 1;
+  background: rgba(128,128,128,0);
+  position: absolute;
+  border: gray 4px solid;
+  border-radius: 50%;
+}
+.AssumptionNone{
+  position: relative;
+}
+.AssumptionNone::before, .AssumptionNone::after { /* 共通設定 */
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px; /* 棒の幅（太さ） */
+  height: 80%; /* 棒の高さ */
+  background: rgba(128, 128, 128);
+  border-radius: 2px;
+  content: "";
+}
+.AssumptionNone::before {
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+.AssumptionNone::after {
+  transform: translate(-50%,-50%) rotate(-45deg);
+}
+.Assumption-btn{
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 2px black solid;
+}
+
 #keybord_move{
   margin-top: 1ex;
   margin-bottom: 2ex;
@@ -376,6 +422,22 @@ h2{
 }
 .key_type_bt:hover{
   background-color: rgb(49, 170, 214);
+}
+#bt_afunc_div{
+  margin-top: 1ex;
+  margin-bottom: 2ex;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.bt_afunc{
+  width: 30%;
+  background-color: rgb(128,197,222);
+  font-size: large;
+  border: none;
+  padding: 2px;
+  border-radius: 10px;
+  color: black;
 }
 .cuurent{
   background-color: rgb(49, 170, 214);
@@ -558,7 +620,16 @@ h2{
     width: 94vw;
   }
 }
-@media screen and (max-width: 767px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/
+@media screen and (max-width: 740px) { /*ウィンドウ幅が最大767pxまでの場合に適用*/
+  #time_left{
+    font-size: 70%;
+  }
+  #remain_num{
+    font-size: 70%;
+  }
+  #remain_unvisi{
+    font-size: 70%;
+  }
   #body{
     width: 98vw;
   }

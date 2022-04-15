@@ -38,6 +38,9 @@ let myChart = "A"; // チャート初期化用
 let curent_key_type = "all";
 let current_color = ["rgb(167,210,141)","rgb(252, 201, 72)"];
 let none_re_array = []; // remain動作軽量用
+let reload = false;
+let KeybordButton_Mode = "input"
+let Assumption_word = {"hit":[],"none":[]};
 
 // 関数内ではlet・varによる宣言を利用し、ローカルスコープにする
 
@@ -74,6 +77,9 @@ const Progress = ()=>{
     case 9:
       setInterval(DisplayTime, 1000);
       flag.wakeup = true;
+      if(daily_data.pass_day == 84 | daily_data.pass_day == 85 |daily_data.pass_day == 86 ){
+        alertShow("新機能を追加しました。詳細は左上ヘルプからご確認ください。\n New functionality has been added. For details, please refer to the Help menu in the upper left corner.",3000);
+      }
       break;
     default:
       alert("ERROR2:\n wakeup number is invalid");
@@ -176,7 +182,7 @@ class Random {
 const GetRandom = (Q_data)=>{
   let nowtime = new Date();
   let First_Day = new Date("2022/1/21");
-  let timestamp = nowtime - First_Day;
+  let timestamp = nowtime.getTime() - First_Day.getTime();
   let pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
   let year = parseInt(String(nowtime.getFullYear()));
   let month = parseInt(String(nowtime.getMonth()));
@@ -348,8 +354,10 @@ const TodayDataCheck = ()=>{
     history.hb_text = JSON.parse(localStorage.getItem("history_of_hb_text"));
     history.hb = JSON.parse(localStorage.getItem("history_of_hb"));
     history.anser = JSON.parse(localStorage.getItem("history_of_anser"));
-
-    flag = JSON.parse(localStorage.getItem("flag"));
+    var ls_flag = JSON.parse(localStorage.getItem("flag"))
+    flag.game_end = ls_flag.game_end;
+    flag.game_win = ls_flag.game_win;
+    flag.remain_show = ls_flag.remain_show;
 
     // たんご検出
     if(JSON.parse(localStorage.getItem("tango")) != null){
@@ -358,11 +366,44 @@ const TodayDataCheck = ()=>{
         alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error5: The saved word and the retrieved word are different.",2000);
       }
     }
+    //エラーハンドリング
+    if(history.hb.length != 0){
+      if(history.hb[history.hb.length - 1].length !=0 &history.hb[history.hb.length - 1].every((n) => n == "HIT") & !flag.game_end){
+        alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[true]",2000);
+        flag.game_end = true;
+        flag.game_win = true;
+        if(localStorage.getItem("bf_error8") == "false"){
+          localStorage.setItem("bf_error8", true);
+        }else{
+          localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+        }
+      }else if(history.hb.length ==10 & !flag.game_end){
+        alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[false]",2000);
+        flag.game_end = true;
+        flag.game_win = false;
+        if(localStorage.getItem("bf_error8") == "false"){
+          localStorage.setItem("bf_error8", true);
+        }else{
+          localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+        }
+      }
+    }
 
     // 残り候補数推移
     if(localStorage.getItem("remain") != null){
       history.remain = JSON.parse(localStorage.getItem("remain"));
     }
+    // メモ機能
+    if(localStorage.getItem("remain") != null){
+      Assumption_word = JSON.parse(localStorage.getItem("Assumption_word"));
+      Assumption_word.hit.forEach(element=>{
+        document.getElementById("btn_"+element).classList.add("AssumptionHit");
+      })
+      Assumption_word.none.forEach(element=>{
+        document.getElementById("btn_"+element).classList.add("AssumptionNone");
+      })
+    }
+
 
     for(let i = 0;i < game_data.now_solve.row;i++){
       EvaluateUpdate(i,0,false,false);
@@ -478,6 +519,7 @@ document.getElementById("Decision_button").addEventListener("click",(e)=>{
   localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
   localStorage.setItem("pass_day", daily_data.pass_day);
   localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+  localStorage.setItem("bf_error8", false);
   localStorage.setItem("tango",JSON.stringify(tango));
 
   // 画面更新 エラー確認
@@ -586,16 +628,23 @@ const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false,dup_flag = true)
   // キーボード反映
   Array.from(new Set(history.hb_text["all"])).forEach((element)=>{
     document.getElementById("btn_"+element).classList.add("word_none");
+    document.getElementById("btn_"+element).classList.remove("AssumptionNone","AssumptionHit");
+    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
+    Assumption_word.none = Assumption_word.none.filter(item => item != element);
   })
   Array.from(new Set(history.hb_text["blow"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none");
+    document.getElementById("btn_"+element).classList.remove("word_none","AssumptionNone","AssumptionHit");
+    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
+    Assumption_word.none = Assumption_word.none.filter(item => item != element);
     document.getElementById("btn_"+element).classList.add("word_blow");
   })
   Array.from(new Set(history.hb_text["hit"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none");
-    document.getElementById("btn_"+element).classList.remove("word_blow");
+    document.getElementById("btn_"+element).classList.remove("word_none","word_blow","AssumptionNone","AssumptionHit");
+    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
+    Assumption_word.none = Assumption_word.none.filter(item => item != element);
     document.getElementById("btn_"+element).classList.add("word_hit");
   })
+  localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
 
   if(!filter_array){
     alertShow("バグです。動作に一部影響が出ています。\n Error4: The number of remaining words is not defined",2000)
@@ -742,7 +791,8 @@ const End = ()=>{
     localStorage.setItem("history_of_game", JSON.stringify(history.game));
   }
   // 終了したことをwebstorageに伝える
-  localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}))
+  var LS_flag = {"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show};
+  localStorage.setItem("flag", JSON.stringify(LS_flag));
   // 文字変更
   document.getElementById("result").innerText = win_tx
   document.getElementById("result_answer").innerText = `たんご：「${tango.kanzi}」（${tango.yomi}）`
@@ -754,9 +804,6 @@ const End = ()=>{
   if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
     localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
     alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
-    setTimeout(function(){
-      again_set_flag();
-    },3000)
   }
 
   // api用
@@ -773,12 +820,6 @@ const End = ()=>{
   // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
   if(!win_b_tf & history.game.try_count > 1){
     data_post(daily_data.pass_day,api_num);
-  }
-}
-const again_set_flag = ()=>{
-  if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
-    localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
-    alertShow("バグです。動作に一部影響が出ています。\n Error8: Again flag is not set",2000);
   }
 }
 // === game終了処理 ここまで ===
@@ -932,12 +973,35 @@ const ShowHistory = (dir) =>{
 
 // === UIクリックイベント ===
 const KeybordButton = (character)=>{
-  game_data.anser[game_data.now_solve.index] = character;
-  if(game_data.now_solve.index <4){
-    game_data.now_solve.index += 1;
+  switch(KeybordButton_Mode){
+    case "input":
+      game_data.anser[game_data.now_solve.index] = character;
+      if(game_data.now_solve.index <4){
+        game_data.now_solve.index += 1;
+      }
+      DisplayUpdate();
+      ValueUpdate();
+      break;
+    case "Assumption":
+      var cr_key = document.getElementById("btn_"+character);
+      if(!cr_key.classList.contains("word_none") & !cr_key.classList.contains("word_blow") & !cr_key.classList.contains("word_hit")){
+        if(cr_key.classList.contains("AssumptionHit")){
+          cr_key.classList.add("AssumptionNone");
+          cr_key.classList.remove("AssumptionHit");
+          Assumption_word.none.push(character);
+          Assumption_word.hit = Assumption_word.hit.filter(item => item != character);
+        }else if(cr_key.classList.contains("AssumptionNone")){
+          cr_key.classList.remove("AssumptionNone");
+          Assumption_word.none = Assumption_word.none.filter(item => item != character);
+        }else{
+          cr_key.classList.add("AssumptionHit");
+          Assumption_word.hit.push(character);
+        }
+        localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
+      }
+      break;
   }
-    DisplayUpdate();
-    ValueUpdate();
+  
 }
 const FuncButton = (key)=>{
   var gni = game_data.now_solve.index;
@@ -1100,6 +1164,23 @@ const toggle_remain_show = ()=>{
   RemainShow();
   localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
 }
+//keybord入力モード変更
+const change_keybord_inout_mode = ()=>{
+  mode_change("game")
+  switch(KeybordButton_Mode){
+    case "input":
+      KeybordButton_Mode = "Assumption"
+      document.getElementById("img_write").classList.add("Assumption-btn");
+      document.getElementById("keybord").classList.add("Assumption-btn");
+      break;
+    case "Assumption":
+      KeybordButton_Mode = "input"
+      document.getElementById("img_write").classList.remove("Assumption-btn");
+      document.getElementById("keybord").classList.remove("Assumption-btn");
+      break;
+  }
+}
+
 // === UIクリックイベント ここまで ===
 
 // === 画面表示操作 ===
@@ -1211,6 +1292,16 @@ const DisplayTime = ()=>{
     document.getElementById("time_left").innerHTML = "<strong>第"+String(daily_data.pass_day)+"回</strong> 残り時間："+time_left;
   }
 }
+//メモ削除
+const alldel = ()=>{
+  Assumption_word.hit.forEach(element=>{
+    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
+  })
+  Assumption_word.none.forEach(element=>{
+    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
+  })
+  Assumption_word = {"hit":[],"none":[]};
+}
 // === 画面表示操作 ===
 
 // === 英語化 ===
@@ -1233,7 +1324,7 @@ const changeLang = () =>{
     }
 
     // グラフ画面変更
-    change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です","　残り候補数推移"])
+    change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です","　残り候補数推移","メモを削除","降参"])
   }else{
     flag.lang_en = true;
     document.getElementById("hatena").innerHTML = HATENA_TEXT_EN;
@@ -1252,7 +1343,7 @@ const changeLang = () =>{
     }
 
     // グラフ画面変更
-    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","　transition of remaining words"])
+    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","　transition of remaining words","Delete memo","surrender"])
   }
   // 現在の言語を保存
   localStorage.setItem("lang", flag.lang_en);
@@ -1282,6 +1373,8 @@ const change_graph_lang= (text)=>{
   document.getElementById("gr_title").innerText = text[9];
   document.getElementById("graph_close").innerHTML = text[10];
   document.getElementById("remain_span").innerHTML = text[13];
+  document.getElementById("bt_alldel").innerText = text[14];
+  document.getElementById("bt_ff").innerText = text[15];
 }
 const HATENA_TEXT_EN = `
 <h2 id="switch_lang" onclick="changeLang();"><small><u id="switch_lang_u">日本語に切り替え</u></small></h2>
@@ -1308,6 +1401,10 @@ const HATENA_TEXT_EN = `
 <p>This is a word guessing game that can be played once a day.</p>
 <p>The answer is the same for all users. Let's avoid spoilers.</p>
 <p>Due to the nature of the Japanese language, <strong>it is tremendously more difficult than Wordle</strong>.</p>
+<div style="background-color: #ccc;">
+<h2>Ver 5.1.0 Memo function</h2>
+<p>The memo function can be turned on by clicking the pencil icon in the navigation at the top of the screen.<br>During the memo function, you can place a "Maru/Batsu" marker by clicking on the UI keyboard.</p>
+</div>
 <h2>Assistance in playing and Post-production impressions<br>(Only Japanese)</h2>
 <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
 <h2>About word updates and dictionary data<br>(Only Japanese)</h2>
@@ -1326,7 +1423,7 @@ const HATENA_TEXT_EN = `
 <div class="row">
 <div class="display_num word_none">シ</div>
 <div class="display_num word_none">シ</div>
-<div class="display_num word_none">オ</div>
+<div class="display_num word_blow">オ</div>
 <div class="display_num word_none">ド</div>
 <div class="display_num word_hit">シ</div>
 </div>
@@ -1390,6 +1487,10 @@ const HATENA_TEXT_JP = `
 <p>1日1回遊ぶことが出来る単語推理ゲームです。</p>
 <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
 <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
+<div style="background-color: #ccc;">
+<h2>Ver 5.1.0 メモ機能</h2>
+<p>画面上部のナビゲーションにおける鉛筆をクリックすることでメモ機能をONにできます。<br>メモ機能中ではUIキーボードをクリックすることで「マル・バツ」の目印を設置できます。</p>
+</div>
 <h2>プレイ指南書・作製後感想</h2>
 <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
 <h2>単語更新・辞書データについて</h2>
@@ -1408,7 +1509,7 @@ const HATENA_TEXT_JP = `
 <div class="row">
 <div class="display_num word_none">シ</div>
 <div class="display_num word_none">シ</div>
-<div class="display_num word_none">オ</div>
+<div class="display_num word_blow">オ</div>
 <div class="display_num word_none">ド</div>
 <div class="display_num word_hit">シ</div>
 </div>
@@ -1630,6 +1731,24 @@ const alertShow = (text,time = 1000)=>{
   document.getElementById("alert_text").innerText = text
   setTimeout(()=>{document.getElementById("alert").classList.add("non_visi")},time);
 }
+// surrender
+const gameff = ()=>{
+  if(flag.game_end == false){
+    if(confirm("降参しますか？\nDo you want to surrender?")){
+      localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
+      localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
+      localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
+      localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
+      localStorage.setItem("pass_day", daily_data.pass_day);
+      localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+      localStorage.setItem("bf_error8", false);
+      localStorage.setItem("tango",JSON.stringify(tango));
+      flag.game_end = true;
+      flag.game_win = false;
+      setTimeout(End, 0);
+    }
+  }
+}
 // === その他 ここまで ===
 
 // === デバッグ用 ===
@@ -1649,8 +1768,20 @@ const AllConsole = ()=>{
   console.log("history")
   console.log(history)
 }
-// == デバッグ用 ここまで ===
-
+// === デバッグ用 ここまで ===
+// === webstorage 更新 ===
+window.addEventListener('storage', function(e) {
+  if(e.key == "history_of_hb"){
+    if(!reload){
+      reload = true;
+      alertShow("別のタブでことのはたんごが更新されました。リロードします。\n KotonohaTango has been updated in another tab. Reloading.",2000);
+      flag.wakeup = false;
+      setTimeout(()=>{location.reload();},2000);
+      return;
+    }
+    reload = true;
+  }
+});
 
 
 
