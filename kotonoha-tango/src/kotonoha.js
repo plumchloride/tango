@@ -1,4 +1,4 @@
-const a_csv_version = "5.0.4";
+const a_csv_version = "5.1.2";
 const q_csv_version = "5.0.4";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
@@ -394,7 +394,7 @@ const TodayDataCheck = ()=>{
       history.remain = JSON.parse(localStorage.getItem("remain"));
     }
     // メモ機能
-    if(localStorage.getItem("remain") != null){
+    if(localStorage.getItem("Assumption_word") != null){
       Assumption_word = JSON.parse(localStorage.getItem("Assumption_word"));
       Assumption_word.hit.forEach(element=>{
         document.getElementById("btn_"+element).classList.add("AssumptionHit");
@@ -633,13 +633,13 @@ const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false,dup_flag = true)
     Assumption_word.none = Assumption_word.none.filter(item => item != element);
   })
   Array.from(new Set(history.hb_text["blow"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none","AssumptionNone","AssumptionHit");
+    document.getElementById("btn_"+element).classList.remove("word_none");
     Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
     Assumption_word.none = Assumption_word.none.filter(item => item != element);
     document.getElementById("btn_"+element).classList.add("word_blow");
   })
   Array.from(new Set(history.hb_text["hit"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none","word_blow","AssumptionNone","AssumptionHit");
+    document.getElementById("btn_"+element).classList.remove("word_none","word_blow");
     Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
     Assumption_word.none = Assumption_word.none.filter(item => item != element);
     document.getElementById("btn_"+element).classList.add("word_hit");
@@ -984,7 +984,7 @@ const KeybordButton = (character)=>{
       break;
     case "Assumption":
       var cr_key = document.getElementById("btn_"+character);
-      if(!cr_key.classList.contains("word_none") & !cr_key.classList.contains("word_blow") & !cr_key.classList.contains("word_hit")){
+      if(!cr_key.classList.contains("word_none")){
         if(cr_key.classList.contains("AssumptionHit")){
           cr_key.classList.add("AssumptionNone");
           cr_key.classList.remove("AssumptionHit");
@@ -1021,11 +1021,9 @@ const FuncButton = (key)=>{
     case "del":
       if(game_data.anser[gni] == "　" & gni > 0){
         game_data.anser[gni -1] = "　";
+        game_data.now_solve.index -= 1;
       }else{
         game_data.anser[gni] = "　";
-      }
-      if(gni > 0){
-        game_data.now_solve.index -= 1;
       }
       DisplayUpdate();
       ValueUpdate();
@@ -1401,10 +1399,8 @@ const HATENA_TEXT_EN = `
 <p>This is a word guessing game that can be played once a day.</p>
 <p>The answer is the same for all users. Let's avoid spoilers.</p>
 <p>Due to the nature of the Japanese language, <strong>it is tremendously more difficult than Wordle</strong>.</p>
-<div style="background-color: #ccc;">
-<h2>Ver 5.1.0 Memo function</h2>
+<h2>Ver Memo function</h2>
 <p>The memo function can be turned on by clicking the pencil icon in the navigation at the top of the screen.<br>During the memo function, you can place a "Maru/Batsu" marker by clicking on the UI keyboard.</p>
-</div>
 <h2>Assistance in playing and Post-production impressions<br>(Only Japanese)</h2>
 <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
 <h2>About word updates and dictionary data<br>(Only Japanese)</h2>
@@ -1487,10 +1483,8 @@ const HATENA_TEXT_JP = `
 <p>1日1回遊ぶことが出来る単語推理ゲームです。</p>
 <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
 <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
-<div style="background-color: #ccc;">
-<h2>Ver 5.1.0 メモ機能</h2>
+<h2>メモ機能</h2>
 <p>画面上部のナビゲーションにおける鉛筆をクリックすることでメモ機能をONにできます。<br>メモ機能中ではUIキーボードをクリックすることで「マル・バツ」の目印を設置できます。</p>
-</div>
 <h2>プレイ指南書・作製後感想</h2>
 <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
 <h2>単語更新・辞書データについて</h2>
@@ -1590,7 +1584,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.1.3</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1642,7 +1636,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 3.2.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.1.3</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1748,6 +1742,42 @@ const gameff = ()=>{
       setTimeout(End, 0);
     }
   }
+}
+// 初期化
+const DelSet = ()=>{
+  if(confirm("設定削除を行います。よろしいでしょうか？")){
+    localStorage.removeItem("color");
+    localStorage.removeItem("lang");
+    alert("削除が完了しました。リロードします。")
+    location.reload();
+  }
+}
+const DelDay = ()=>{
+  if(confirm("データ削除を行います。\nプレイ中のデータは削除されます。よろしいでしょうか？")){
+    if(flag.game_end == true){
+      alert("ゲームがクリアされているため削除できません。")
+      return;
+    }
+    var key_len = ['pass_day', 'history_of_hb_text', 'now_solve', 'flag', 'pb_forms', 'color', 'lang', 'bf_error8', 'experience', 'remain', 'Assumption_word', 'history_of_hb', 'history_of_game', 'history_of_anser', 'tango']
+    var kl = key_len.length
+    alertShow("削除中です。少々お待ちください。",kl*500)
+    for( let i = 0; i < key_len.length; i++ ){
+      var some_key = key_len[i]
+      if(some_key != "history_of_game"){
+        setTimeout(lsri,i*500,some_key)
+      }
+      if(i == kl-1){
+        setTimeout(()=>{
+          alert("削除が完了しました。リロードします。")
+          location.reload();
+        },i*500)
+      }
+    }
+  }
+}
+const lsri = (key)=>{
+  console.log("del:"+key)
+  localStorage.removeItem(key)
 }
 // === その他 ここまで ===
 

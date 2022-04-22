@@ -364,6 +364,8 @@ h2{
   content: "";
   display: block;
   height: 70%;
+  min-width: 50%;
+  max-width: 90%;
   aspect-ratio: 1;
   background: rgba(128,128,128,0);
   position: absolute;
@@ -438,6 +440,9 @@ h2{
   padding: 2px;
   border-radius: 10px;
   color: black;
+}
+.bt_afunc:hover{
+  background-color: rgb(49, 170, 214);
 }
 .cuurent{
   background-color: rgb(49, 170, 214);
@@ -657,5 +662,9 @@ h2{
   }
   #graph{
     width: 94vw;
+  }
+  .AssumptionHit::after{
+    min-width: 65%;
+    max-width: 75%;
   }
 }

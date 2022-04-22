@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.1.0 -->
+  <!-- 5.1.2 -->
   <head>
     <meta charset="utf-8">
     <title>ことのはたんご | 単語推理ゲーム</title>
@@ -10,8 +10,8 @@
     <!-- chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
     <!-- <script src="./src/kotonoha.js?ver=5.1.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=5.1.0" defer></script>
-    <link rel="stylesheet" href="./public/style.css?ver=5.1.0"></link>
+    <script src="./src/kotonoha.min.js?ver=5.1.2" defer></script>
+    <link rel="stylesheet" href="./public/style.css?ver=5.1.2"></link>
 
     <!-- twitter test -->
     <meta name="twitter:card" content="summary_large_image">
@@ -65,10 +65,8 @@
       <p>1日1回遊ぶことが出来る単語推理ゲームです。</p>
       <p>答えは全ユーザーで共通です。ネタバレは避けましょう</p>
       <p><strong>日本語の特性上本家Wordleよりもだいぶ難易度が高いです</strong>。</p>
-      <div style="background-color: #ccc;">
-        <h2>Ver 5.1.0 メモ機能</h2>
-        <p>画面上部のナビゲーションにおける鉛筆をクリックすることでメモ機能をONにできます。<br>メモ機能中ではUIキーボードをクリックすることでそれぞれの文字に「マル・バツ」の目印を設置できます。</p>
-      </div>
+      <h2>メモ機能</h2>
+      <p>画面上部のナビゲーションにおける鉛筆をクリックすることでメモ機能をONにできます。<br>メモ機能中ではUIキーボードをクリックすることでそれぞれの文字に「マル・バツ」の目印を設置できます。</p>
       <h2>プレイ指南書・作製後感想</h2>
       <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
       <h2>単語更新・辞書データについて</h2>
@@ -219,6 +217,10 @@
       <br>
       <h2>新規単語登録</h2>
       <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
+      <h2>データ初期化</h2>
+      <p>バグ等で進行不能になった際に試しに利用してみてください。</p>
+      <p><span style="text-decoration: underline solid black;cursor: pointer;font-weight: bold;" onclick="DelSet()">設定削除</span>：色や言語の設定を削除します</p>
+      <p><span style="text-decoration: underline solid black;cursor: pointer;font-weight: bold;" onclick="DelDay()">データ削除</span>：戦歴以外のすべてのデータを削除します。当日のプレイデータは削除されますが、過去のデータは削除されません。</p>
       <h2>バグ報告</h2>
       <p>バグ等が発生した場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
       <h2>Twitter comunity</h2>
@@ -244,7 +246,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 5.1.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 5.1.2</small></div>
       <br>
       <div class="flex_center">
         <address>
