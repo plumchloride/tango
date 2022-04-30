@@ -1,5 +1,5 @@
 const a_csv_version = "5.1.2";
-const q_csv_version = "5.0.4";
+const q_csv_version = "5.1.3";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
 const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
@@ -77,9 +77,6 @@ const Progress = ()=>{
     case 9:
       setInterval(DisplayTime, 1000);
       flag.wakeup = true;
-      if(daily_data.pass_day == 84 | daily_data.pass_day == 85 |daily_data.pass_day == 86 ){
-        alertShow("新機能を追加しました。詳細は左上ヘルプからご確認ください。\n New functionality has been added. For details, please refer to the Help menu in the upper left corner.",3000);
-      }
       break;
     default:
       alert("ERROR2:\n wakeup number is invalid");

@@ -34,8 +34,6 @@ Josh Wardle([twitter](https://twitter.com/powerlanguish))さんが作製した�
 # ファイル
 時間があるときに更新する予定。
 GitHub/  
-　├ filtering/  
-　│　└ tango_filter.ipynb 単語辞書を作る際に利用したフィルター用コード  
 　├ kotonoha-tango/  
 　│　├ public/  
 　│　│　├ data/  
