@@ -148,9 +148,10 @@ const wakeup = (mode,first_flag = false)=>{
   switch(mode){
     case "today":
       let nowtime = new Date();
-      let First_Day = new Date("2022/1/21");
-      let timestamp = nowtime - First_Day;
-      pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
+      let fday = luxon.DateTime.fromSQL('2022-01-21');
+      let fday_diff = fday.diffNow('days');
+      let timestamp = fday_diff.days;
+      let pass_day =  Math.floor(timestamp*-1);
       document.getElementById("pass_day").innerText = `${nowtime.getFullYear()}/${nowtime.getMonth()+1}/${nowtime.getDate()}　第${pass_day}回`
       if(JSON.parse(localStorage.getItem("flag")) == null){
         document.getElementById("not_yet").classList.remove("non_visi");
@@ -362,23 +363,32 @@ const CheckRemaining_all = (history_of_hb,history_of_anser) =>{
 }
 
 const GetBefore = (sel,chart,per,tango,mode)=>{
+  var op = document.createElement("option");
+  op.setAttribute("value",0);
+  op.innerText = `第N回 正解率%「単語」（読み）`;
+  sel.appendChild(op);
   Object.keys(csv_data.h_data).forEach(e=>{
-    var op = document.createElement("option")
-    op.setAttribute("value",e);
-    if(csv_data.t_data[e] != undefined){
+    if(e < pass_day){
+      var op = document.createElement("option");
+      op.setAttribute("value",e);
       var per_op = Math.floor((1 - Number(csv_data.h_data[e][10])/csv_data.h_data[e].reduce(sum))*10000)/100;
-      op.innerText = `第${e}回 正答率${per_op}%「${csv_data.t_data[e][0]}」（${csv_data.t_data[e][1]}）`
-    }else{
-      var per_op = Math.floor((1 - Number(csv_data.h_data[e][10])/csv_data.h_data[e].reduce(sum))*10000)/100
-      op.innerText = `第${e}回 正答率${per_op}%「現在更新中です」`;
+      // ${(csv_data.h_data[e].reduce(sum)).toLocaleString()}人
+      if(csv_data.t_data[e] != undefined){
+        op.innerText = `第${e}回 ${per_op}% ${(csv_data.h_data[e].reduce(sum)).toLocaleString()}人「${csv_data.t_data[e][0]}」（${csv_data.t_data[e][1]}）`;
+      }else{
+        op.innerText = `第${e}回 ${per_op}% ${(csv_data.h_data[e].reduce(sum)).toLocaleString()}人「現在更新中です」`;
+      }
+
+      sel.appendChild(op);
     }
-    
-    sel.appendChild(op);
   });
 
   if(mode == "phone"){
     sel.addEventListener("change",(e)=>{
       var index =  e.target.value;
+      if(index == 0){
+        return;
+      }
       per.innerText = Math.floor((1 - Number(csv_data.h_data[index][10])/csv_data.h_data[index].reduce(sum))*10000)/100
       if(csv_data.t_data[index] != undefined){
         tango.innerText = `「${csv_data.t_data[index][0]}」（${csv_data.t_data[index][1]}）`;
@@ -428,6 +438,9 @@ const GetBefore = (sel,chart,per,tango,mode)=>{
   }else{
     sel.addEventListener("change",(e)=>{
       var index =  e.target.value;
+      if(index == 0){
+        return;
+      }
       console.log(Object.values(csv_data.h_data[index]))
       per.innerText = Math.floor((1 - Number(csv_data.h_data[index][10])/csv_data.h_data[index].reduce(sum))*10000)/100
       Chart.defaults.plugins.legend.display = false;

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <!-- 5.2.0 -->
+  <head>
+  <meta charset="utf-8">
+  <title>ことのはたんご | 共有画面</title>
+  <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム。共有画面">
+  <link rel="icon" type="image/png" href="./public/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- chart js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
+  <!-- moment.js -->
+  <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/sanitize.css"/>
+  <!-- <link rel="stylesheet" href="./public/share.css"></link> -->
+  <!-- <script src="./src/share_kotonoha.js" defer></script> -->
+  <meta name="robots" content="noindex">
+
+  <!-- twitter test -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@plum_chloride">
+  <meta name="twitter:creator" content="@plum_chloride">
+  <meta name="twitter:image" content="https://plum-chloride.jp/kotonoha-tango/public/img/icon.png">
+  <meta property="og:title" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:description" content="日本語版Wordle。1日1回単語推測パズルゲーム。結果確認機能付きリンクです。">
+  <meta name="twitter:description" content="日本語版Wordle。1日1回単語推測パズルゲーム。結果確認機能付きリンクです。">
+  <meta property="og:image" content="https://plum-chloride.jp/kotonoha-tango/public/img/icon.png">
+  <meta property="og:url" content="https://plum-chloride.jp/kotonoha-tango/index.html" />
+  <meta name="twitter:url" content="https://plum-chloride.jp/kotonoha-tango/index.html">
+  <meta property="og:site_name" content="ことのはたんご | 単語推理ゲーム">
+  <meta property="og:locale" content="ja_JP" />
+  <style>
+    :root{--hit:#557443;--brow:#AE8B31;--bg_1:#25221d;--bg_2:#332c22;--text_Em:white;--text:rgb(212,221,228)}a{color:var(--text)}.non_visi{display:none!important}.flex{display:flex;justify-content:space-around}.half{width:40vw}.on-click{cursor:pointer;user-select:none}.pc_none{display:none}.block{color:var(--text_Em);background-color:var(--bg_2);padding:20px;border-radius:10px}h1{text-align:center;color:#fff}body{background-color:var(--bg_1);display:flex;flex-direction:column;align-items:center}#right_body{background-color:var(--bg_1);width:85vw;min-height:100vh;padding:2vh 1vw;overflow:hidden}#pass_day_div h2{position:relative;padding:0 65px;text-align:center;color:var(--text_Em)}#pass_day_div h2:before{position:absolute;top:calc(50% - 1px);left:0;width:100%;height:2px;content:'';background:var(--text)}#pass_day_div h2 span{position:relative;padding:0 1em;background:var(--bg_1)}#mode_today #not_yet{display:flex;justify-content:center;align-items:center;text-align:center;height:85vh}#mode_today #not_yet a{color:var(--text)}#not_yet div{border-radius:10px}#ans_dis{display:flex;justify-content:space-around}#ad_l div{display:flex;justify-content:space-around}#ad_r div{display:flex;justify-content:space-around}.rect div{border-radius:10%}.circle div{border-radius:50%}.NO{color:#fff;background-color:#444}.HIT{color:whtie;background-color:#557443}.BLOW{color:#fff;background-color:#ae8b31}.dis_text{justify-content:center;align-items:center;text-align:center;margin:4px;padding:4px;width:3vw;height:3vw}#nokori_tango{width:81vw;margin:1vw}#nokori_tango p{padding-left:10px}#myChart2{margin-top:20px}@media screen and (max-width:1000px){#pass_day_div h2{font-size:120%}#right_body{width:98vw}.flex{flex-direction:column}.k_list ul{column-count:3;padding-left:0}.k_list{width:79vw;height:auto}.mobile_no{display:none}.half{width:95vw;margin-left:2vw}.pc_none{display:flex}.block{margin-top:10px}.dis_text{margin:8px;padding:4px;width:12vw;height:12vw}#ans_dis{display:flex;flex-direction:column}#nokori_tango{width:95vw;margin-left:2vw;margin-top:10px}}
+  </style>
+  </head>
+  <body>
+    <h1>ことのはたんご　共有機能</h1>
+
+    <div id="right_body">
+
+      <div id="mode_today">
+        <div id="pass_day_div">
+          <h2><span id="pass_day">第〇回</span></h2>
+        </div>
+        <div id="not_yet">
+          <div class="block">
+            <h2 id="Error_title">本日の「ことのはたんご」が未完了です。</h2><br><a href="./index.html" target="_blank">ことのはたんごプレイ画面に戻る</a>
+            <div id="can_show" class="non_visi">
+              <br>
+              <p style="text-align: left;">プレイ済みの方は端末に保存されているデータが異なります。<br>上記サイトより再度プレイしていただくか、下記テキストボックスに回答を入力することで結果の確認が可能です。</p>
+              <form id="tango_input"onsubmit="return false;">
+                <input id = "input_text" type="text" maxlength="5" placeholder="回答（かな・カナ５文字）" autocomplete="off">
+                <button type=”submit”>決定</button>
+              </form>
+              <p style="text-align: left;"><small>正しいたんごを入力していても異なると表示される場合、本結果のページの開催回数が異なる場合が多いです（第N回）。<br>画面上部に記載してある開催回数を確認ください。</small></p>
+            </div>
+          </div>
+        </div>
+        <div id="yet" class="non_visi">
+          <div class="flex">
+            <div class="block half">
+              <h3 id="tango">〇〇：〇〇</h3>
+              <p>プレイヤー：<span id="play_num">==</span>人</p>
+              <p>データ更新時間：<span id="get_time">==</span>　<small>(データは概ね10分間隔で更新されます)</small></p>
+              <p>正答率：<span id="okper">==</span>%</p>
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="block half">
+              <h3>共有プレイ結果</h3>
+              <h4 id="sikou_num">試行回数：〇回</h4>
+              <div id="ans_dis">
+                <div id="ad_l"></div>
+                <div id="ad_r"></div>
+              </div>
+            </div>
+          </div>
+          <div id="nokori_tango" class="block">
+            <h3>残り単語候補</h3>
+            <p>あくまで入力出来る単語すべてを記載しているのみであり、記載されている単語がすべて出題される訳ではありません。そのため、「人名」「意味のない単語」等が含まれています。</p>
+            <div id="nokori_div"></div>
+          </div>
+          <div class="flex">
+            <div class="block half">
+              <div class="flex" style="align-items: center;">
+                <p><a href="./dev.html"target="_blank">自分の分析画面に戻る</a></p>
+                <p><a href="./index.html"target="_blank">ことのはたんごに戻る</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script defer>
+    const a_csv_path="./public/data/A_data_new.csv",h_csv_path="./public/data/history.csv",t_csv_path="./public/data/tango_history.csv";test="https://plum-chloride.jp/kotonoha-tango/public/data/history.csv";let csv_data={a_data:[],h_data:{},t_data:{}},history={anser:[],hb:[]};filter_array=[];let pass_day=0,data_day=0,tango="",sum=(accumulator,curr)=>Number(accumulator)+Number(curr);const even_q=["m","t","A","-j","i","Q","q","1","2","g","L","-l","-q","z","-e","P","-f","V","-g","-h","W","C","e","-i","N","D","O","k","E","F","a","s","B","u","0","R","l","h","r","I","-b","c","-k","J","H","K","Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"],odd_q=["w","-a","g","r","Q","h","1","A","H","-f","-d","a","U","P","I","-o","V","-p","6","W","i","D","X","4","5","l","o","E","p","q","R","B","s","K","t","T","3","0","F","j","O","k","v","G","Y","e","S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-n","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","0","-n","d","M","y","z"],katakana=["ア","イ","ウ","エ","オ","カ","キ","ク","ケ","コ","サ","シ","ス","セ","ソ","タ","チ","ツ","テ","ト","ナ","ニ","ヌ","ネ","ノ","ハ","ヒ","フ","ヘ","ホ","マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ","ル","レ","ロ","ワ","ヲ","ン","ガ","ギ","グ","ゲ","ゴ","ザ","ジ","ズ","ゼ","ゾ","ダ","ヂ","ヅ","デ","ド","バ","ビ","ブ","ベ","ボ","パ","ピ","プ","ペ","ポ","ァ","ィ","ゥ","ェ","ォ","ッ","ャ","ュ","ョ","ー"],hiragana=["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ","ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん","が","ぎ","ぐ","げ","ご","ざ","じ","ず","ぜ","ぞ","だ","ぢ","づ","で","ど","ば","び","ぶ","べ","ぼ","ぱ","ぴ","ぷ","ぺ","ぽ","ぁ","ぃ","ぅ","ぇ","ぉ","っ","ゃ","ゅ","ょ","ー"],WakeUpRequest=(path,mode)=>{var _request=new XMLHttpRequest;_request.addEventListener("load",event=>{const response=event.target.responseText;if(LoadData(mode,response),"H"==mode){let date=new Date(event.target.getResponseHeader("Last-Modified"));document.getElementById("get_time").innerText=date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate()+" "+date.getHours()+":"+("0"+date.getMinutes()).slice(-2)}}),_request.open("GET",path,!0),_request.send()},QError=text=>{document.getElementById("Error_title").innerText=text},LoadData=(mode,data)=>{switch(mode){case"A":var _array_sp_n=[];_array_sp_n=data.split(/\r\n|\n/),SaveArray(_array_sp_n,mode);break;case"H":case"T":var _dic={},_array_sp_n=[];(_array_sp_n=data.split(/\r\n|\n/)).forEach(element=>{var _row=element.split(",");""!=_row[0]&""!=_row&&(_dic[_row[0]]=_row.slice(1))}),SaveArray(_dic,mode)}},SaveArray=(data,mode)=>{switch(mode){case"A":csv_data.a_data=Array.from(new Set(data)),filter_array=Array.from(new Set(csv_data.a_data)),WakeUpRequest(test+`?ver=${nowtime.getFullYear()}${nowtime.getMonth()+1}${nowtime.getDate()}${nowtime.getMinutes()}`,"H");break;case"H":csv_data.h_data=data,wakeup();break;case"T":csv_data.t_data=data}};(()=>{nowtime=new Date;var queryStr=window.location.search.slice(1),qh=[],qt=[];if(queryStr){queryStr.split("&").forEach((function(queryStr){var queryArr=queryStr.split("=");switch(queryArr[0]){case"d":data_day=Number(queryArr[1]);break;case"h":qh=queryArr[1].slice(0,queryArr[1].length-1);break;case"t":qt=queryArr[1];break;case"a":tango=queryArr[1]}})),history.hb=[],qh.split("_").forEach(i=>{var _hmem=[],_count=0;Array.from(i).forEach(z=>{switch(_count++,z){case"n":_hmem.push("NO");break;case"h":_hmem.push("HIT");break;case"h":_hmem.push("BLOW")}}),5==_count?history.hb.push(_hmem):QError("Error2 情報が破損しています\nこちらのURLは利用出来ません。")});var _ha="",_next="",_co=0;q=data_day%2==0?even_q:odd_q,Array.from(qt).forEach(i=>{"-"!=i?(_co++,_ha+=katakana[q.indexOf(_next+i)],_next=""):_next="-",5==_co&&(_co=0,_ha+=",")});var _tha="",_tnext="";Array.from(tango).forEach(i=>{"-"!=i?(_tha+=katakana[q.indexOf(_tnext+i)],_tnext=""):_tnext="-"}),tango=_tha,0==_co?(_ha=_ha.slice(0,_ha.length-1),history.anser=_ha.split(","),history.anser.length==history.hb.length?(WakeUpRequest(t_csv_path+`?ver=${nowtime.getFullYear()}${nowtime.getMonth()+1}${nowtime.getDate()}`,"T"),WakeUpRequest(a_csv_path+`?ver=${nowtime.getFullYear()}${nowtime.getMonth()+1}${nowtime.getDate()}`,"A")):QError("Error4 情報が破損しています\nこちらのURLは利用出来ません。")):QError("Error3 情報が破損しています\nこちらのURLは利用出来ません。")}else QError("Error1 情報が存在しません\nこちらのURLは利用出来ません。")})();const wakeup=()=>{let fday,fday_diff,timestamp=luxon.DateTime.fromSQL("2022-01-21").diffNow("days").days,pass_day=Math.floor(-1*timestamp);document.getElementById("pass_day").innerText=`第${data_day}回`,data_day<pass_day?(document.getElementById("yet").classList.remove("non_visi"),document.getElementById("not_yet").classList.add("non_visi"),today_wakeup(data_day)):null==JSON.parse(localStorage.getItem("flag"))?(document.getElementById("not_yet").classList.remove("non_visi"),document.getElementById("yet").classList.add("non_visi"),document.getElementById("can_show").classList.remove("non_visi"),QError("こちらは結果共有画面です\n「ことのはたんご」は下記リンクからプレイしてください。")):pass_day==data_day&pass_day==JSON.parse(localStorage.getItem("pass_day"))&JSON.parse(localStorage.getItem("flag")).game_end?(document.getElementById("yet").classList.remove("non_visi"),document.getElementById("not_yet").classList.add("non_visi"),today_wakeup(data_day)):data_day>pass_day?(document.getElementById("not_yet").classList.remove("non_visi"),document.getElementById("yet").classList.add("non_visi"),QError("未来の「ことのはたんご」です\nこちらのURLは現在では利用出来ません")):(document.getElementById("not_yet").classList.remove("non_visi"),document.getElementById("yet").classList.add("non_visi"),document.getElementById("can_show").classList.remove("non_visi"))},today_wakeup=day=>{var kan="";if(day in csv_data.t_data?(kan=csv_data.t_data[day][0],csv_data.t_data[day][1]!=tango&&(kan="Error：規定のたんごと異なる単語です。")):kan="現在更新中です",document.getElementById("tango").innerText=`「${kan}」（${tango}）`,day in csv_data.h_data){document.getElementById("play_num").innerText=csv_data.h_data[day].reduce(sum).toLocaleString(),document.getElementById("okper").innerText=Math.floor(1e4*(1-Number(csv_data.h_data[day][10])/csv_data.h_data[day].reduce(sum)))/100,Chart.defaults.plugins.legend.display=!1,labels=["1","2","3","4","5","6","7","8","9","10","X"];var color=Array(5),col2=Array(5);color.fill("#557443"),col2.fill("#AE8B31"),color.push(...col2),color.push("#B4534B"),data={labels:labels,datasets:[{backgroundColor:color,borderColor:"rgb(128,197,222)",data:csv_data.h_data[day],borderWidth:0}]},config={showTooltips:!1,type:"bar",data:data,options:{responsive:!1,scales:{y:{beginAtZero:!0}}}},myChart=new Chart(document.getElementById("myChart"),config)}else console.log("here",pass_day);document.getElementById("sikou_num").innerText=`試行回数：${history.anser.length}回`;var adl=document.getElementById("ad_l"),adr=document.getElementById("ad_r"),nokori_div=document.getElementById("nokori_div");for(let step=0;step<history.anser.length;step++){var _anser=Array.from(history.anser[step]),row=document.createElement("div");row.setAttribute("class",step<5?"rect":"circle");var nokoris=CheckRemaining_all(history.hb[step],history.anser[step]),_head=document.createElement("h4");_head.innerText=`${history.anser[step]}・残り候補数：${nokoris[0]}個`,nokori_div.appendChild(_head);var _text=document.createElement("p");nokoris[0]>20?_text.innerText=nokoris[1].slice(0,20)+"　など":_text.innerText=nokoris[1].slice(0,20),nokori_div.appendChild(_text);for(let index=0;index<5;index++){var div=document.createElement("div");div.innerText=_anser[index],div.setAttribute("class","dis_text "+history.hb[step][index]),row.appendChild(div)}step<5?adl.appendChild(row):adr.appendChild(row)}},CheckRemaining_all=(history_of_hb,history_of_anser)=>{var history_of_hb_text={hit:[],blow:[],all:[]};return history_of_hb.forEach((e,index)=>{"BLOW"==e?history_of_hb_text.blow.push(history_of_anser[index]):"HIT"==e?history_of_hb_text.hit.push(history_of_anser[index]):history_of_hb_text.all.includes(history_of_anser[index])||history_of_hb_text.all.push(history_of_anser[index])}),history_of_hb_text.hit.forEach(element=>{0!=history_of_hb_text.blow.length&history_of_hb_text.blow.includes(element)&&history_of_hb_text.blow.splice(history_of_hb_text.blow.indexOf(element),1),0!=history_of_hb_text.all.length&history_of_hb_text.all.includes(element)&&history_of_hb_text.all.splice(history_of_hb_text.all.indexOf(element),1)}),history_of_hb_text.blow.forEach(element=>{0!=history_of_hb_text.all.length&history_of_hb_text.all.includes(element)&&history_of_hb_text.all.splice(history_of_hb_text.all.indexOf(element),1)}),history_of_hb_text.all.forEach(e=>{filter_array=filter_array.filter(word=>!word.includes(e))}),history_of_hb_text.blow.forEach(e=>{filter_array=filter_array.filter(word=>word.includes(e))}),history_of_hb_text.hit.forEach(e=>{filter_array=filter_array.filter(word=>word.includes(e))}),hit_blow_list=[],history_of_hb.forEach((e,index2)=>{"BLOW"==e?(filter_array=filter_array.filter(word=>history_of_anser[index2]!=word[index2]),hit_blow_list.includes(history_of_anser[index2])&&(filter_array=filter_array.filter(word=>word.indexOf(history_of_anser[index2])!=word.lastIndexOf(history_of_anser[index2]))),hit_blow_list.push(history_of_anser[index2])):"NO"==e&history_of_hb_text.blow.includes(history_of_anser[index2])?filter_array=filter_array.filter(word=>history_of_anser[index2]!=word[index2]):"HIT"==e?(filter_array=filter_array.filter(word=>history_of_anser[index2]==word[index2]),hit_blow_list.includes(history_of_anser[index2])&&(filter_array=filter_array.filter(word=>word.indexOf(history_of_anser[index2])!=word.lastIndexOf(history_of_anser[index2]))),hit_blow_list.push(history_of_anser[index2])):"NO"==e&history_of_hb_text.hit.includes(history_of_anser[index2])&&(filter_array=filter_array.filter(word=>history_of_anser[index2]!=word[index2]))}),[filter_array.length,filter_array]};window.addEventListener("storage",(function(e){"flag"!=e.key||setTimeout(()=>{location.reload()},1e3)})),document.getElementById("tango_input").addEventListener("submit",e=>{var in_t=document.getElementById("input_text").value,flag_error=!1,in_ans="";Array.from(in_t).forEach(element=>{katakana.includes(element)?in_ans+=element:hiragana.includes(element)?in_ans+=katakana[hiragana.indexOf(element)]:flag_error=!0}),console.log(in_ans),flag_error?alert("注意\n入力した「たんご」はひらがな・カタカナの5文字のみです"):in_ans==tango?(document.getElementById("yet").classList.remove("non_visi"),document.getElementById("not_yet").classList.add("non_visi"),today_wakeup(data_day)):alert("注意\n入力した「たんご」が異なります。")});  
+  </script>
+</html>

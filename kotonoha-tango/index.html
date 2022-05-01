@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.1.3 -->
+  <!-- 5.2.0 -->
   <head>
     <meta charset="utf-8">
     <title>ことのはたんご | 単語推理ゲーム</title>
@@ -9,8 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- chart js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
+    <!-- moment.js -->
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
     <!-- <script src="./src/kotonoha.js?ver=5.1.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=5.1.3" defer></script>
+    <script src="./src/kotonoha.min.js?ver=5.2.0" defer></script>
     <link rel="stylesheet" href="./public/style.css?ver=5.1.2"></link>
 
     <!-- twitter test -->
@@ -132,8 +134,10 @@
       <div id="eval_display"></div>
 
       <div class="inputs">
-        <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用" autocomplete="off">
-        <button id="Decision_button">決定</button>
+        <form id="tango_input"onsubmit="return false;">
+          <input id = "input_text" type="text" maxlength="5" placeholder="キーボード入力用" autocomplete="off">
+          <button id="Decision_button" type=”submit”>決定</button>
+        </form>
       </div>
 
       <div id="keybord"></div>
@@ -171,6 +175,12 @@
         <div id="graph_bt2">
           <div id="graph_tw_url" class="graph_bt_url">URL付きでツイート</div>
         </div>
+        <h2 id="share_h2">結果共有URL付き</h2>
+        <p id="share_ab">回答に利用した単語が<br>共有されます</p>
+        <div id="graph_bt_u" style="display: flex;justify-content: space-evenly;align-items: center;">
+          <div id="graph_copy_u" style="background-color: rgb(252, 201, 72);"class="graph_bt_c">コピー</div>
+          <div id="graph_tw_u" style="background-color: rgb(128,197,222);" class="graph_bt_c">ツイート</div>
+        </div>
         <h2 id="history_h2">戦歴</h2>
         <div id="history">
           <div class="row_his">
@@ -189,7 +199,7 @@
             <div class="h-text" id="his_4">最大<br>連勝数</div>
             <div class="h-number" id = "max_streak"> </div>
           </div>
-        </div><br>
+        </div>
         <div id="gr_title">正解分布表示</div>
         <div id="cahrt_canvas"><canvas id="myChart"></canvas></div>
         <div id="graph_close"><u>閉じる</u></div>
@@ -219,8 +229,8 @@
       <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
       <h2>データ初期化</h2>
       <p>バグ等で進行不能になった際に試しに利用してみてください。</p>
-      <p><span style="text-decoration: underline solid black;cursor: pointer;font-weight: bold;" onclick="DelSet()">設定削除</span>：色や言語の設定を削除します</p>
-      <p><span style="text-decoration: underline solid black;cursor: pointer;font-weight: bold;" onclick="DelDay()">データ削除</span>：戦歴以外のすべてのデータを削除します。当日のプレイデータは削除されますが、過去のデータは削除されません。</p>
+      <p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelSet()">設定削除</span>：色や言語の設定を削除します</p>
+      <p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelDay()">データ削除</span>：戦歴以外のすべてのデータを削除します。当日のプレイデータは削除されますが、過去のデータは削除されません。</p>
       <h2>バグ報告</h2>
       <p>バグ等が発生した場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
       <h2>Twitter comunity</h2>
@@ -246,7 +256,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 5.1.3</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 5.2.0</small></div>
       <br>
       <div class="flex_center">
         <address>

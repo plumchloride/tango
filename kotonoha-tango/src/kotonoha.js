@@ -177,10 +177,11 @@ class Random {
   }
 }
 const GetRandom = (Q_data)=>{
+  let fday = luxon.DateTime.fromSQL('2022-01-21');
+  let fday_diff = fday.diffNow('days');
+  let timestamp = fday_diff.days;
   let nowtime = new Date();
-  let First_Day = new Date("2022/1/21");
-  let timestamp = nowtime.getTime() - First_Day.getTime();
-  let pass_day =  Math.floor(timestamp/(24 * 60 * 60 * 1000));
+  let pass_day =  Math.floor(timestamp*-1);
   let year = parseInt(String(nowtime.getFullYear()));
   let month = parseInt(String(nowtime.getMonth()));
   let day = parseInt(String(nowtime.getDate()));
@@ -421,7 +422,7 @@ const TodayDataCheck = ()=>{
 // === webstorage ここまで ===
 
 // === 回答評価機能 ===
-document.getElementById("Decision_button").addEventListener("click",(e)=>{
+document.getElementById("tango_input").addEventListener("submit",(e)=>{
   if(flag.game_end){return};
   var check = false
   // 値の改変やバグチェック
@@ -1046,15 +1047,26 @@ document.getElementById("graph_tw").addEventListener("click",(element)=>{
 document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
   tweet_btn(true);
 });
-const tweet_btn = (url_flag) => {
-  s = createEmoji(url_flag,HTML_element.remain_toggle.checked,true);
-  if (s != "") {
+const tweet_btn = (url_flag,share_flag) => {
+  s = createEmoji(url_flag,HTML_element.remain_toggle.checked,true,share_flag);
+  if (s != ""){
     s = encodeURIComponent(s);
     //投稿画面を開く
     url = "https://twitter.com/intent/tweet?text=" + s;
     window.open(url,"_blank");
     }
 }
+// 結果共有
+document.getElementById("graph_copy_u").addEventListener("click",(element)=>{
+  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false,true));
+  if(promise){
+    alertShow("クリップボードにコピー完了",500);
+  }
+});
+document.getElementById("graph_tw_u").addEventListener("click",(element)=>{
+  tweet_btn(false,true);
+});
+
 // 閉じるボタンでもgraphを閉じられるように
 document.getElementById("graph_close").addEventListener("click",(el)=>{
   mode_change("game");
@@ -1157,7 +1169,7 @@ const toggle_remain_show = ()=>{
   }
   flag.remain_show = !flag.remain_show
   RemainShow();
-  localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+  localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
 }
 //keybord入力モード変更
 const change_keybord_inout_mode = ()=>{
@@ -1319,7 +1331,7 @@ const changeLang = () =>{
     }
 
     // グラフ画面変更
-    change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です","　残り候補数推移","メモを削除","降参"])
+    change_graph_lang(["今日は正解していません","コピー","ツイート","URL付きでツイート","戦歴","プレイ<br>回数","勝率","現在の<br>連勝数","最大<br>連勝数","正解分布表示","<u>閉じる</u>","正解です","不正解です","　残り候補数推移","メモを削除","降参","結果共有URL付き","回答に利用した単語が<br>共有されます","コピー","ツイート"])
   }else{
     flag.lang_en = true;
     document.getElementById("hatena").innerHTML = HATENA_TEXT_EN;
@@ -1338,7 +1350,7 @@ const changeLang = () =>{
     }
 
     // グラフ画面変更
-    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","　transition of remaining words","Delete memo","surrender"])
+    change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","　transition of remaining words","Delete memo","surrender","Result with shareable URL","The words you used in<br>your answer will be shared","Copy","Tweet"])
   }
   // 現在の言語を保存
   localStorage.setItem("lang", flag.lang_en);
@@ -1370,6 +1382,10 @@ const change_graph_lang= (text)=>{
   document.getElementById("remain_span").innerHTML = text[13];
   document.getElementById("bt_alldel").innerText = text[14];
   document.getElementById("bt_ff").innerText = text[15];
+  document.getElementById("share_h2").innerText = text[16]
+  document.getElementById("share_ab").innerHTML = text[17]
+  document.getElementById("graph_copy_u").innerText = text[18]
+  document.getElementById("graph_tw_u").innerText = text[19]
 }
 const HATENA_TEXT_EN = `
 <h2 id="switch_lang" onclick="changeLang();"><small><u id="switch_lang_u">日本語に切り替え</u></small></h2>
@@ -1560,6 +1576,10 @@ const SET_TEXT_EN = `
 <br>
 <h2>Register new words</h2>
 <p>If you want to register a new word, please submit it <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">Google Form</a>. It may take some time for the new word to be added to the dictionary, but it will be added under certain conditions.</p>
+<h2>Data initialization</h2>
+<p>Please try it out when you are unable to progress due to a bug or other problem.</p>
+<p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelSet()">Deletion of settings</span>：Remove color and language settings.</p>
+<p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelDay()">Data Deletion</span>：All data will be deleted, except for the statistics. Play data of the day will be deleted, but past data will not be deleted.</p>
 <h2>Bug Reports</h2>
 <p>If you encounter any bugs and want to share them, please post them <a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">Issues on GitHub</a>.</p>
 <h2>License</h2>
@@ -1581,7 +1601,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 5.1.3</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.0</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1611,6 +1631,10 @@ const SET_TEXT_JP = `
 <br>
 <h2>新規単語登録</h2>
 <p>新規単語を登録したい場合は<a href="https://docs.google.com/forms/d/e/1FAIpQLSeqAiw5vTc2a2tA2S4614rF42P4Wi-VF9tyyH6GDrmzaaaanw/viewform?usp=sf_link" target="_blank">このフォーム</a>から投稿して下さい。反映まで時間をいただくと思いますが、一定の条件のもと辞書に追加いたします。</p>
+<h2>データ初期化</h2>
+<p>バグ等で進行不能になった際に試しに利用してみてください。</p>
+<p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelSet()">設定削除</span>：色や言語の設定を削除します</p>
+<p><span style="text-decoration: underline solid blue;cursor: pointer;font-weight: bold;color: blue;" onclick="DelDay()">データ削除</span>：戦歴以外のすべてのデータを削除します。当日のプレイデータは削除されますが、過去のデータは削除されません。</p>
 <h2>バグ報告</h2>
 <p>バグ等が発生し共有をしたい場合は<a href="https://github.com/plumchloride/tango/issues/new?assignees=&labels=bug&template=bug_report.md&title=" target="_blank">GitHub上のissues</a>もしくは作者の<a href="https://twitter.com/plum_chloride" target="_blank">Twitter</a>宛てにに投稿して下さい。</p>
 <h2>その他</h2>
@@ -1633,7 +1657,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 5.1.3</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.0</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1666,7 +1690,7 @@ $input.addEventListener('input',(e)=>{
   DisplayUpdate();
 })
 // 絵文字（戦歴コピー）作製
-const createEmoji = (url_flag,rem_flag,twitter_flag)=>{
+const createEmoji = (url_flag,rem_flag,twitter_flag,share_flag=false)=>{
   // エラー処理
   if(rem_flag){
     _remain = [...history.remain]
@@ -1677,26 +1701,31 @@ const createEmoji = (url_flag,rem_flag,twitter_flag)=>{
       _remain.unshift(...minn_array);
     }
   }
-  if(twitter_flag){
-    if(flag.game_win){
-      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
-    }else if(game_data.now_solve.row == 10){
-      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  X/10\r\n"
-    }else{
-      base_text = "#ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
-    }
+  var base_text = ""
+  if(twitter_flag)base_text+="#";
+
+  base_text += "ことのはたんご"
+
+  if(share_flag)base_text+="D";
+
+  base_text += " 第"+String(daily_data.pass_day)+"回  "
+
+
+  if(flag.game_win){
+    base_text += String(game_data.now_solve.row)+"/10\r\n"
+  }else if(game_data.now_solve.row == 10){
+    base_text += "X/10\r\n"
+  }else if(flag.game_end){
+    base_text += "X("+String(game_data.now_solve.row)+")/10\r\n"
   }else{
-    if(flag.game_win){
-      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
-    }else if(game_data.now_solve.row == 10){
-      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  X/10\r\n"
-    }else{
-      base_text = "ことのはたんご 第"+String(daily_data.pass_day)+"回  "+String(game_data.now_solve.row)+"/10\r\n"
-    }
+    base_text += String(game_data.now_solve.row)+"/10\r\n"
   }
 
   if(url_flag){
     base_text += "https://plum-chloride.jp/kotonoha-tango/index.html \r\n"
+  }
+  if(share_flag){
+    base_text += "https://plum-chloride.jp/kotonoha-tango/share.html"+toQuery(daily_data.pass_day,history.anser,history.hb,tango.yomi)+" \r\n"
   }
   graph_text = ""
   history.hb.forEach((Element,index)=>{
@@ -1809,6 +1838,52 @@ window.addEventListener('storage', function(e) {
     reload = true;
   }
 });
+// === プレイ共有 ===
+const even_q = ["m","t","A","-j","i","Q","q","1","2","g","L","-l","-q","z","-e","P","-f","V","-g","-h","W","C","e","-i","N","D","O","k","E","F",
+          "a","s","B","u","0","R","l","h","r","I","-b","c","-k","J","H","K",
+          "Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"];
+const odd_q = ["w","-a","g","r","Q","h","1","A","H","-f","-d","a","U","P","I","-o","V","-p","6","W","i","D","X","4","5","l","o","E","p","q",
+        "R","B","s","K","t","T","3","0","F","j","O","k","v","G","Y","e",
+        "S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-n","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","0","-n","d","M","y","z"];
+const toQuery = (k,Qan,Qhb,Qy) =>{
+  var qu = "?d="
+  qu += k + "&t="
+  var q = []
+  if(Number(k) % 2 == 0){
+    q = even_q
+  }else{
+    q = odd_q
+  }
+  Qan.forEach((i)=>{
+    Array.from(i).forEach((z)=>{
+      qu += q[katakana.indexOf(z)]
+    })
+  })
+  qu += "&a="
+  Array.from(Qy).forEach((i)=>{
+    qu += q[katakana.indexOf(i)]
+  })
+  qu += "&h="
+  Qhb.forEach((i)=>{
+    i.forEach((z)=>{
+      switch(z){
+        case "HIT":
+          qu += "h"
+          break;
+        case "BLOW":
+          qu += "b"
+          break;
+        case "NO":
+          qu += "n"
+          break;
+      }
+    })
+    qu +="_"
+  })
+  return qu
+}
+
+// toQuery(daily_data.pass_day,history.anser,history.hb,tango.yomi)
 
 
 
