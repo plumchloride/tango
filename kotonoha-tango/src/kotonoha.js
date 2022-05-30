@@ -1,5 +1,5 @@
-const a_csv_version = "5.1.2";
-const q_csv_version = "5.1.3";
+const a_csv_version = "5.2.2";
+const q_csv_version = "5.2.2";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
 const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
@@ -806,16 +806,12 @@ const End = ()=>{
 
   // api用
   var api_num = 0
-  if (game_data.now_solve.row == 10){
-    if(flag.game_win){
-      api_num = 10;
-    }else{
-      api_num = 11;
-    }
-  }else{
-    api_num = game_data.now_solve.row;
+  api_num = game_data.now_solve.row;
+  if(!flag.game_win){
+    api_num = 11;
   }
   // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
+  console.log(api_num)
   if(!win_b_tf & history.game.try_count > 1){
     data_post(daily_data.pass_day,api_num);
   }
@@ -1601,7 +1597,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 5.2.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.2</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1657,7 +1653,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 5.2.0</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.2</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1841,10 +1837,10 @@ window.addEventListener('storage', function(e) {
 // === プレイ共有 ===
 const even_q = ["m","t","A","-j","i","Q","q","1","2","g","L","-l","-q","z","-e","P","-f","V","-g","-h","W","C","e","-i","N","D","O","k","E","F",
           "a","s","B","u","0","R","l","h","r","I","-b","c","-k","J","H","K",
-          "Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"];
+          "Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","-0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"];
 const odd_q = ["w","-a","g","r","Q","h","1","A","H","-f","-d","a","U","P","I","-o","V","-p","6","W","i","D","X","4","5","l","o","E","p","q",
         "R","B","s","K","t","T","3","0","F","j","O","k","v","G","Y","e",
-        "S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-n","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","0","-n","d","M","y","z"];
+        "S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-r","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","-0","-n","d","M","y","z"];
 const toQuery = (k,Qan,Qhb,Qy) =>{
   var qu = "?d="
   qu += k + "&t="
