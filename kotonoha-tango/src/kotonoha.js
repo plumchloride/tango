@@ -1,5 +1,5 @@
 const a_csv_version = "5.2.2";
-const q_csv_version = "5.2.2";
+const q_csv_version = "5.2.3";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
 const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
@@ -1597,7 +1597,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 5.2.2</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.3</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1653,7 +1653,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 5.2.2</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.3</small></div>
 <br>
 <div class="flex_center">
 <address>
