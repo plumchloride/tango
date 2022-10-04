@@ -1,5 +1,5 @@
-const a_csv_version = "5.2.2";
-const q_csv_version = "5.2.3";
+const a_csv_version = "5.2.6";
+const q_csv_version = "5.2.6";
 const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
 const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
 const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
@@ -312,7 +312,7 @@ const BeforeDataCheck = ()=>{
   // ゲームの経験者かつ30日以内にプレイしている場合、画面遷移
   if(localStorage.getItem("experience")){
     if((daily_data.pass_day-localStorage.getItem("pass_day")) >30){
-      return;
+      ;
     }else{
       mode_change("game");
     };
@@ -811,7 +811,7 @@ const End = ()=>{
     api_num = 11;
   }
   // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
-  console.log(api_num)
+  // console.log(api_num)
   if(!win_b_tf & history.game.try_count > 1){
     data_post(daily_data.pass_day,api_num);
   }
@@ -1597,7 +1597,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 5.2.3</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.6</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1653,7 +1653,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 5.2.3</small></div>
+<div class="flex_center"><small>ことのはたんご ver 5.2.6</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1749,7 +1749,7 @@ const alertShow = (text,time = 1000)=>{
 }
 // surrender
 const gameff = ()=>{
-  if(flag.game_end == false){
+  if(!flag.game_end){
     if(confirm("降参しますか？\nDo you want to surrender?")){
       localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
       localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
@@ -1776,7 +1776,7 @@ const DelSet = ()=>{
 }
 const DelDay = ()=>{
   if(confirm("データ削除を行います。\nプレイ中のデータは削除されます。よろしいでしょうか？")){
-    if(flag.game_end == true){
+    if(flag.game_end){
       alert("ゲームがクリアされているため削除できません。")
       return;
     }
