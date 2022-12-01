@@ -1,18 +1,7 @@
-const a_csv_version = "5.2.6";
-const q_csv_version = "5.2.6";
-const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+q_csv_version;
-const a_csv_path = './public/data/A_data_new.csv?ver='+a_csv_version;
-const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
-const KEYBORD_LIST = [["ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア"],
-                      ["ヲ","リ","　","ミ","ヒ","ニ","チ","シ","キ","イ"],
-                      ["ン","ル","ユ","ム","フ","ヌ","ツ","ス","ク","ウ"],
-                      ["　","レ","　","メ","ヘ","ネ","テ","セ","ケ","エ"],
-                      ["　","ロ","ヨ","モ","ホ","ノ","ト","ソ","コ","オ"],
-                      ["ー","　","ャ","パ","バ","　","ダ","ザ","ガ","ァ"],
-                      ["　","　","　","ピ","ビ","　","ヂ","ジ","ギ","ィ"],
-                      ["　","　","ュ","プ","ブ","ッ","ヅ","ズ","グ","ゥ"],
-                      ["del","　","　","ペ","ベ","　","デ","ゼ","ゲ","ェ"],
-                      ["←","→","ョ","ポ","ボ","　","ド","ゾ","ゴ","ォ"]];
+
+
+const current_version = "6.0.0";
+
 const hiragana = ["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
                 "ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん",
                 "が","ぎ","ぐ","げ","ご","ざ","じ","ず","ぜ","ぞ","だ","ぢ","づ","で","ど","ば","び","ぶ","べ","ぼ","ぱ","ぴ","ぷ","ぺ","ぽ","ぁ","ぃ","ぅ","ぇ","ぉ","っ","ゃ","ゅ","ょ","ー"];
@@ -20,13 +9,10 @@ const katakana = ["ア","イ","ウ","エ","オ","カ","キ","ク","ケ","コ","�
                 "マ","ミ","ム","メ","モ","ヤ","ユ","ヨ","ラ","リ","ル","レ","ロ","ワ","ヲ","ン",
                 "ガ","ギ","グ","ゲ","ゴ","ザ","ジ","ズ","ゼ","ゾ","ダ","ヂ","ヅ","デ","ド","バ","ビ","ブ","ベ","ボ","パ","ピ","プ","ペ","ポ","ァ","ィ","ゥ","ェ","ォ","ッ","ャ","ュ","ョ","ー"];
 
-let csv_data = {"q_data":{},"a_data":[]};
 let filter_array = []
 let game_data = {"now_solve":{"index":0,"row":0},"anser":["　","　","　","　","　"]};
-let history ={"anser":[],"hb":[],"hb_text":{"hit":[],"blow":[],"all":[]},"remain":[],"game":{"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}};
 let tango = {"kanzi":"=====","yomi":"====="};
-let daily_data = {"pass_day":0};
-let wakeup_number = 0;
+let daily_data = {"pass_day":0,"uuid":undefined};
 let flag = {"wakeup":false,"game_end":false,"game_win":false,"remain_show":true,"lang_en":false};
 let icon_src = {"hatena":"./public/img/hatena.svg","bar":"./public/img/bar_graph.svg","set":"./public/img/set.svg","batu":"./public/img/x.svg"};
 let display_mode = "";
@@ -41,52 +27,96 @@ let none_re_array = []; // remain動作軽量用
 let reload = false;
 let KeybordButton_Mode = "input"
 let Assumption_word = {"hit":[],"none":[]};
+let max_use = {};
 
-// 関数内ではlet・varによる宣言を利用し、ローカルスコープにする
+// =================
+// Initalization
+// =================
+const q_csv_path = './public/data/Q_fil_ippan.csv?ver='+current_version;
+const a_csv_path = './public/data/A_data_new.csv?ver='+current_version;
+const h_csv_path = 'https://plum-chloride.jp/kotonoha-tango/public/data/history.csv?ver=';
+let wakeup_array = [false,false,false,false,false,false,false,false]
+// a,q,h,createkeybord,createDisplay,version_check
+const Initialization = () =>{
+  // 経過日の取得
+  let fday = luxon.DateTime.fromSQL('2022-01-21');
+  let fday_diff = fday.diffNow('days');
+  let timestamp = fday_diff.days;
+  let pass_day =  Math.floor(timestamp*-1);
+  daily_data.pass_day = pass_day;
+  console.log(`第${daily_data.pass_day}回`)
 
-// ゲーム起動用変数
-const Progress = ()=>{
-  switch(wakeup_number){
-    case 1:
-      WakeUpRequest(a_csv_path,"A");
-      break;
-    case 2:
-      filter_array = Array.from(new Set([...csv_data.a_data]));
-      csv_data.a_data = Array.from(new Set([...csv_data.a_data]));
-      GetTodayWord();
-      break;
-    case 3:
-      CreateKeybord();
-      break;
-    case 4:
-      CreateDisplay();
-      break;
-    case 5:
-      BeforeDataCheck();
-      break;
-    case 6:
-      TodayDataCheck();
-      break;
-    case 7:
-      GetYesterdayTango();
-      break;
-    case 8:
-      let nowtime = new Date();
-      WakeUpRequest(h_csv_path+String(nowtime.getHours())+String(nowtime.getMinutes()),"H");
-      break;
-    case 9:
-      setInterval(DisplayTime, 1000);
-      flag.wakeup = true;
-      break;
-    default:
-      alert("ERROR2:\n wakeup number is invalid");
-      location.reload();
+  Getcsv(a_csv_path,"A");
+  Getcsv(q_csv_path,"Q");
+  let nowtime = new Date();
+  Getcsv(h_csv_path+String(nowtime.getHours())+String(nowtime.getMinutes()),"H");
+  CreateKeybord();
+  CreateDisplay();
+  GetLocalStorage();
+
+  setInterval(DisplayTime, 1000);
+}
+const FinWakeupProcess = ()=>{
+  var sum = (accumulator, curr) => Number(accumulator) + Number(curr);
+  if(wakeup_array.reduce(sum) == wakeup_array.length){
+    if(daily_data.uuid == undefined){
+      daily_data.uuid = "some_id"
+    }
+    var version_url = "https://3vpuj2s6o5bscauba24p3ryegy0cpeud.lambda-url.ap-northeast-1.on.aws/"
+    p_t = {"uuid":daily_data.uuid,"day":daily_data.pass_day,"hist":history.game,"localstorage":enable_localstorage,"version":current_version,"now_time":GetNowTime()}
+    p_j = JSON.stringify(p_t);
+    xhr = new XMLHttpRequest;
+    xhr.onload = function(){
+      var res = xhr.responseText;
+      var respons = JSON.parse(res);
+      // console.log(respons)
+      if(respons.version != current_version){
+        alert("アップデートがあります。リロードでアップデートして下さい。\nThis app has an update. Do a reload.")
+        return;
+      }
+      if(respons.re_text != ""){
+        alertShow(respons.re_text,2000);
+      }
+      daily_data.uuid = respons.uuid
+      if(enable_localstorage){
+        localStorage.setItem("uuid",respons.uuid)
+      }
+      SetUi();
+    };
+    xhr.onerror = function(){
+      alertShow("バージョンの確認が出来ません。現在プレイ出来ません。\n Unable to confirm version. Unable to play now.",2000);
+    }
+    xhr.open('POST', version_url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(p_j);
   }
+
+  // 単語呼び出し
+  if(wakeup_array[1] & !wakeup_array[6] & !wakeup_array[7]){
+    wakeup_array[6] = true;
+    wakeup_array[7] = true;
+    GetYesterdayTango();
+    GetTodayWord();
+  }
+};
+const GetNowTime = ()=>{
+  var now = new Date();
+  var Year = now.getFullYear();
+  var Month = now.getMonth()+1;
+  var _Date = now.getDate();
+  var Hour = now.getHours();
+  var Min = now.getMinutes();
+  var Sec = now.getSeconds();
+  var now_time = Year + "-" + Month + "-" + _Date + " " + Hour + ":" + ("00"+Min).slice(-2) + ":" + ("00"+Sec).slice(-2);
+  return now_time
 }
 
 
-// === csv読み込み ===
-const WakeUpRequest = (path,mode)=>{
+// =================
+// csv読み込み
+// =================
+let csv_data = {"q_data":{},"a_data":[]};
+const Getcsv = (path,mode)=>{
   var _request = new XMLHttpRequest();
   _request.addEventListener('load', (event) => {
     const response = event.target.responseText;
@@ -125,8 +155,8 @@ const LoadData = (mode,data)=>{
           }
         }
       });
-      wakeup_number += 1;
-      Progress();
+      wakeup_array[2] = true;
+      FinWakeupProcess();
       break;
     default:
       alert("ERROR1:\n csvmode is invalid");
@@ -137,22 +167,224 @@ const SaveArray = (data,mode,env)=>{
   switch(mode){
     case "A":
       csv_data.a_data = data;
-      wakeup_number += 1;
-      Progress();
+      filter_array = Array.from(new Set([...csv_data.a_data]));
+      csv_data.a_data = Array.from(new Set([...csv_data.a_data]));
+      wakeup_array[0] = true;
+      FinWakeupProcess();
       break;
     case "Q":
       csv_data.q_data = data;
-      wakeup_number += 1;
-      Progress();
+      wakeup_array[1] = true;
+      FinWakeupProcess();
       break;
     default:
       alert("ERROR1:\n csvmode is invalid");
       location.reload();
   }
 }
-// === csv読み込み ここまで ===
 
-// === 今日の単語取得 ===
+// =================
+// UI作製
+// =================
+const KEYBORD_LIST = [["ワ","ラ","ヤ","マ","ハ","ナ","タ","サ","カ","ア"],
+                      ["ヲ","リ","　","ミ","ヒ","ニ","チ","シ","キ","イ"],
+                      ["ン","ル","ユ","ム","フ","ヌ","ツ","ス","ク","ウ"],
+                      ["　","レ","　","メ","ヘ","ネ","テ","セ","ケ","エ"],
+                      ["　","ロ","ヨ","モ","ホ","ノ","ト","ソ","コ","オ"],
+                      ["ー","　","ャ","パ","バ","　","ダ","ザ","ガ","ァ"],
+                      ["　","　","　","ピ","ビ","　","ヂ","ジ","ギ","ィ"],
+                      ["　","　","ュ","プ","ブ","ッ","ヅ","ズ","グ","ゥ"],
+                      ["del","　","　","ペ","ベ","　","デ","ゼ","ゲ","ェ"],
+                      ["←","→","ョ","ポ","ボ","　","ド","ゾ","ゴ","ォ"]];
+const CreateKeybord = ()=>{
+  let $keybord = document.getElementById("keybord");
+  let element_array = [];
+  [0,1,2,3,4,"_",5,6,7,8,9].forEach((e,index)=>{
+    if(e == "_"){
+      element_array.push(document.createElement("hr"));
+      element_array[5].setAttribute("id","keybord_hr");
+    }else{
+      element_array.push(document.createElement("div"));
+      if(e < 5)element_array[index].setAttribute("class","row bt_normal");
+      if(e >= 5)element_array[index].setAttribute("class","row bt_ga");
+      for(let z = 0;z<10;z++){
+        element_array[index].appendChild(document.createElement("button"));
+        element_array[index].childNodes[z].innerText = KEYBORD_LIST[e][z];
+        if(KEYBORD_LIST[e][z] == "　"){
+          element_array[index].childNodes[z].setAttribute("class","space_bt");
+          element_array[index].childNodes[z].setAttribute("disabled","True");
+        }else if(["←","→","del"].includes(KEYBORD_LIST[e][z])){
+          element_array[index].childNodes[z].setAttribute("class","func_bt");
+          element_array[index].childNodes[z].setAttribute("onclick","FuncButton('"+KEYBORD_LIST[e][z]+"');")
+        }else{
+          element_array[index].childNodes[z].setAttribute("class","key_bt");
+          element_array[index].childNodes[z].setAttribute("id","btn_"+KEYBORD_LIST[e][z]);
+          element_array[index].childNodes[z].setAttribute("onclick","KeybordButton('"+KEYBORD_LIST[e][z]+"');");
+        }
+      }
+    }
+  })
+  element_array.forEach((element)=>{
+    $keybord.appendChild(element);
+  })
+  wakeup_array[3] = true;
+  FinWakeupProcess();
+};
+const CreateDisplay = ()=>{
+  var $display = document.getElementById("eval_display");
+  var element_array = [];
+  for(let i = 0;i<5;i++){
+    element_array.push(document.createElement("div"));
+    element_array[i].setAttribute("class","row");
+    element_array[i].setAttribute("id","dis-row-"+String(i));
+    for(let z = 0;z<10;z++){
+      if(z == 5){
+        element_array[i].appendChild(document.createElement("div"));
+        element_array[i].childNodes[z].setAttribute("class","dis-pa");
+      }
+      if(z<5){
+        element_array[i].appendChild(document.createElement("div"));
+        element_array[i].childNodes[z].setAttribute("class","display_num left_display display_chara");
+        element_array[i].childNodes[z].setAttribute("id","dis-"+String(i)+"-"+String(z));
+      }else{
+        lef_el = document.createElement("div");
+        lef_el.setAttribute("class","display_num right_display display_chara");
+        lef_el.setAttribute("id","dis-"+String(i+5)+"-"+String(z-5));
+        element_array[i].appendChild(lef_el);
+      }
+    }
+  }
+  element_array.forEach((element)=>{
+    $display.appendChild(element);
+  })
+  wakeup_array[4] = true;
+  FinWakeupProcess();
+}
+// =================
+// localstorage読み込み
+// =================
+let enable_localstorage = false;
+let history ={"anser":[],"hb":[],"hb_text":{"hit":[],"blow":[],"all":[]},"remain":[],"game":{"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}};
+let change_wind = false
+const GetLocalStorage  = ()=>{
+  var test_local = "test_local"
+  try {
+    localStorage.setItem(test_local, test_local);
+    localStorage.removeItem(test_local);
+    enable_localstorage = true;
+  } catch (e) {
+    alert("このブラウザではlocalstorageが対応していません。プレイは可能ですが、プレイ履歴を保存する事が出来ません。\nThis browser does not support localstorage. It is possible to play, but it is not possible to save the play history.");
+  }
+
+  // ローカルストレージON
+  if(enable_localstorage){
+    try {
+      // ゲーム経験している場合
+      if(localStorage.getItem("experience")){
+        if((daily_data.pass_day-localStorage.getItem("pass_day")) <60){
+          change_wind = true
+        };
+        // history_of_game(ゲーム履歴)
+        if(localStorage.getItem("history_of_game") != null){
+          history.game = JSON.parse(localStorage.getItem("history_of_game"));
+        }
+
+        // 色調調整
+        if(localStorage.getItem("color") == null){
+          localStorage.setItem("color", JSON.stringify(current_color));
+          ChangeColor(...current_color);
+        }else{
+          current_color = JSON.parse(localStorage.getItem("color"));
+          ChangeColor(...current_color);
+        }
+        // ゲーム設定
+        // langage
+        if(localStorage.getItem("lang") == null){
+          localStorage.setItem("lang", flag.lang_en);
+        }else if(localStorage.getItem("lang")| localStorage.getItem("lang") == "true" ){
+          changeLang();// 英語
+        }else{
+          ;// 日本語
+        }
+        // 今日のデータがある場合
+        if(localStorage.getItem("pass_day")==daily_data.pass_day){
+          game_data.now_solve = JSON.parse(localStorage.getItem("now_solve"));
+          history.hb_text = JSON.parse(localStorage.getItem("history_of_hb_text"));
+          history.hb = JSON.parse(localStorage.getItem("history_of_hb"));
+          history.anser = JSON.parse(localStorage.getItem("history_of_anser"));
+          var ls_flag = JSON.parse(localStorage.getItem("flag"))
+          flag.game_end = ls_flag.game_end;
+          flag.game_win = ls_flag.game_win;
+          flag.remain_show = ls_flag.remain_show;
+
+          // エラーハンドリング ゲーム完了が保存できていないパターン
+          if(history.hb.length != 0){
+            if(history.hb[history.hb.length - 1].length !=0 &history.hb[history.hb.length - 1].every((n) => n == "HIT") & !flag.game_end){
+              alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[true]",2000);
+              flag.game_end = true;
+              flag.game_win = true;
+              if(localStorage.getItem("bf_error8") == "false"){
+                localStorage.setItem("bf_error8", true);
+              }else{
+                localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+              }
+            }else if(history.hb.length ==10 & !flag.game_end){
+              alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[false]",2000);
+              flag.game_end = true;
+              flag.game_win = false;
+              if(localStorage.getItem("bf_error8") == "false"){
+                localStorage.setItem("bf_error8", true);
+              }else{
+                localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+              }
+            }
+          }
+
+          // 残り候補数推移
+          if(localStorage.getItem("remain") != null){
+            history.remain = JSON.parse(localStorage.getItem("remain"));
+          }
+          // メモ機能
+          if(localStorage.getItem("Assumption_word") != null){
+            Assumption_word = JSON.parse(localStorage.getItem("Assumption_word"));
+            Assumption_word.hit.forEach(element=>{
+              document.getElementById("btn_"+element).classList.add("AssumptionHit");
+            })
+            Assumption_word.none.forEach(element=>{
+              document.getElementById("btn_"+element).classList.add("AssumptionNone");
+            })
+          }
+          // 文字最大使用回数
+          if(localStorage.getItem("max_use") != null){
+            max_use = JSON.parse(localStorage.getItem("max_use"));
+          }
+          // 今日のUUID
+          if(localStorage.getItem("uuid") != null){
+            daily_data.uuid = localStorage.getItem("uuid");
+          }
+        }else{
+          // 今日のデータが無い場合
+        }
+      }else{
+      // ゲーム経験していない場合
+      }
+
+      wakeup_array[5] = true;
+      FinWakeupProcess();
+    } catch (e) {
+      console.log(e)
+      alert("ゲーム履歴取得においてエラーがあります。設定画面より、データの初期化をお願いします。\nThere is an error in acquiring game history. Please initialize the data from the setting screen.");
+    }
+  }else{
+    // localstorage off
+    wakeup_array[5] = true;
+    FinWakeupProcess();
+  };
+}
+
+// =================
+// 単語読み込み
+// =================
 // シード値付きの乱数
 // https://sbfl.net/blog/2017/06/01/javascript-reproducible-random/
 class Random {
@@ -176,12 +408,9 @@ class Random {
     return min + (r % (max + 1 - min));
   }
 }
-const GetRandom = (Q_data)=>{
-  let fday = luxon.DateTime.fromSQL('2022-01-21');
-  let fday_diff = fday.diffNow('days');
-  let timestamp = fday_diff.days;
+const GetRandom = (Q_data,Yesterday = false)=>{
   let nowtime = new Date();
-  let pass_day =  Math.floor(timestamp*-1);
+  if(Yesterday)nowtime = new Date(nowtime.setDate(nowtime.getDate() - 1));
   let year = parseInt(String(nowtime.getFullYear()));
   let month = parseInt(String(nowtime.getMonth()));
   let day = parseInt(String(nowtime.getDate()));
@@ -189,736 +418,145 @@ const GetRandom = (Q_data)=>{
   let seed = year+month*801+day*13;
   let rand = new Random(seed,day*2001);
   let random_num = rand.nextInt(0,Q_data["title"].length);
-  return [random_num,pass_day];
+  return random_num;
 }
 const GetTodayWord = ()=>{
-  let [random_num,passday] = GetRandom(csv_data.q_data);
+  let random_num = GetRandom(csv_data.q_data);
   let title = csv_data.q_data["title"][random_num];
   let pronunciation  = csv_data.q_data["pronunciation"][random_num];
   tango.kanzi = title;
   tango.yomi = pronunciation;
-  // console.log(tango)
-  daily_data.pass_day = passday;
-  wakeup_number += 1;
-  Progress();
+  // console.log(`${tango.kanzi},${tango.yomi},${random_num+1}`)
+  FinWakeupProcess();
 }
-// === 今日の単語取得 ここまで ===
-// === 昨日の単語取得 ===
-const GetRandom_before = ()=>{
-  let b_nowtime = new Date();
-  let b_yes_time = new Date(b_nowtime.setDate(b_nowtime.getDate() - 1));
-  let b_year = parseInt(String(b_yes_time.getFullYear()));
-  let b_month = parseInt(String(b_yes_time.getMonth()));
-  let b_day = parseInt(String(b_yes_time.getDate()));
-  let b_seed = b_year+b_month*801+b_day*13;
-  let b_rand = new Random(b_seed,b_day*2001);
-  let b_random_num = b_rand.nextInt(0,csv_data.q_data["title"].length);
-  return b_random_num;
-}
-// 昨日の単語
 const GetYesterdayTango = ()=>{
-  let random_num = GetRandom_before();
+  let random_num = GetRandom(csv_data.q_data,true);
   let b_title = csv_data.q_data["title"][random_num];
   let b_pronunciation  = csv_data.q_data["pronunciation"][random_num];
   document.getElementById("before_tango").innerText = `「${b_title}」（${b_pronunciation}）`
-  wakeup_number += 1;
-  Progress();
 }
-// === 昨日の単語取得 ここまで ===
 
-// === 詳細取得 ===
-const GetHistoryData = ()=>{
-
-}
-// === 詳細取得 ここまで ===
-
-// === 残り候補数表示機能 ===
-const CheckRemaining_all = (progress_re = false) =>{
-  if(!filter_array | filter_array.length == 0){
-    alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000);
-    return;
+// =================
+// UIタイマー
+// =================
+const DisplayTime = ()=>{
+  var nowtime = new Date();
+  if((23-parseInt(nowtime.getHours())) == 0 & (59-parseInt(nowtime.getMinutes())) == 0 & (59-parseInt(nowtime.getSeconds())) == 0){
+    alert("日付が変わりました。単語が変わるためリロードします\nThe date has changed. Reload for word change.")
+    location.reload();
   }
-  var history_of_hb_text = history.hb_text;
-  var history_of_hb = history.hb;
-  var history_of_anser = history.anser;
-  // blow hit 重複削除
-  history_of_hb_text["hit"].forEach((element) => {
-    if(history_of_hb_text["blow"].length != 0 & history_of_hb_text["blow"].includes(element)){
-      history_of_hb_text["blow"].splice(history_of_hb_text["blow"].indexOf(element),1);
-    };
-  });
-
-  // none 含んでいない
-  var _none_array_before = [];
-  history_of_hb_text["all"].forEach((e) =>{
-    if(!none_re_array.includes(e)){
-      _none_array_before.push(e);
-    }
-  });
-  _none_array_before.forEach((e)=>{
-    filter_array = filter_array.filter((word)=>!word.includes(e));
-  })
-  none_re_array.push(..._none_array_before);
-
-  // blow 含んでいる事
-  history_of_hb_text["blow"].forEach((e) =>{
-    filter_array = filter_array.filter((word)=>word.includes(e));
-  })
-  // hit 含んでいること
-  history_of_hb_text["hit"].forEach((e) =>{
-    filter_array = filter_array.filter((word)=>word.includes(e));
-  })
-
-  // hbリストを参照
-  history_of_hb.forEach((element,index)=>{
-    // 各試行
-    hit_blow_list = []
-    element.forEach((e,index2)=>{
-      // 各文字の評価(HIT BLOW)
-      if(e == "BLOW"){
-        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
-        if(hit_blow_list.includes(history_of_anser[index][index2])){
-          // HIT or BLOWが同じ試行で同じたんごに対して、2個出た場合
-          filter_array = filter_array.filter((word) => word.indexOf(history_of_anser[index][index2]) != word.lastIndexOf(history_of_anser[index][index2]));
-        }
-        hit_blow_list.push(history_of_anser[index][index2]);
-      }else if(e == "NO" & history_of_hb_text["blow"].includes(history_of_anser[index][index2])){
-        // 二重処理の場合,NOの箇所に含んでいない
-        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
-      }else if(e == "HIT"){
-        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] == word[index2]);
-        if(hit_blow_list.includes(history_of_anser[index][index2])){
-          // HIT or BLOWが同じ試行で同じたんごに対して、2個出た場合
-          filter_array = filter_array.filter((word) => word.indexOf(history_of_anser[index][index2]) != word.lastIndexOf(history_of_anser[index][index2]));
-        }
-        hit_blow_list.push(history_of_anser[index][index2]);
-      }else if(e == "NO" & history_of_hb_text["hit"].includes(history_of_anser[index][index2])){
-        // 二重処理の場合,NOの箇所に含んでいない
-        filter_array = filter_array.filter((word)=>history_of_anser[index][index2] != word[index2]);
-      }
-    })
-  });
-
-  RemainShow(filter_array.length);
-  if(progress_re){
-    history.remain.push(filter_array.length);
-    localStorage.setItem("remain", JSON.stringify(history.remain));
-  };
-}
-// === 残り候補数表示機能 ここまで ===
-
-// === webstorage ===
-const BeforeDataCheck = ()=>{
-  // ゲームの経験者かつ30日以内にプレイしている場合、画面遷移
-  if(localStorage.getItem("experience")){
-    if((daily_data.pass_day-localStorage.getItem("pass_day")) >30){
-      ;
-    }else{
-      mode_change("game");
-    };
-  }
-
-  // ゲームのプレイ履歴がない場合はデータを作成し、ある場合は取得する
-  if(localStorage.getItem("history_of_game") != null){
-    history.game = JSON.parse(localStorage.getItem("history_of_game"));
-  }
-  ShowHistory(history.game);
-
-  // 言語の取得
-  if(localStorage.getItem("lang") == null){
-    localStorage.setItem("lang", flag.lang_en);
-  }else if(localStorage.getItem("lang")| localStorage.getItem("lang") == "true" ){
-    changeLang();// 英語
+  var time_left = ("0"+String(23-parseInt(nowtime.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getSeconds()))).slice(-2);
+  if(flag.lang_en){
+    document.getElementById("time_left").innerHTML = "<strong>No."+String(daily_data.pass_day)+"</strong>　Next Tango："+time_left;
   }else{
-    ;// 日本語
+    document.getElementById("time_left").innerHTML = "<strong>第"+String(daily_data.pass_day)+"回</strong> 残り時間："+time_left;
   }
-
-  // 色調調整
-  if(localStorage.getItem("color") == null){
-    localStorage.setItem("color", JSON.stringify(current_color));
-    ChangeColor(...current_color);
-  }else{
-    current_color = JSON.parse(localStorage.getItem("color"));
-    ChangeColor(...current_color);
-  }
-
-  wakeup_number += 1;
-  Progress();
 }
-const TodayDataCheck = ()=>{
-  // 今日のデータがある場合
-  if(localStorage.getItem("pass_day")==daily_data.pass_day){
-    game_data.now_solve = JSON.parse(localStorage.getItem("now_solve"));
-    history.hb_text = JSON.parse(localStorage.getItem("history_of_hb_text"));
-    history.hb = JSON.parse(localStorage.getItem("history_of_hb"));
-    history.anser = JSON.parse(localStorage.getItem("history_of_anser"));
-    var ls_flag = JSON.parse(localStorage.getItem("flag"))
-    flag.game_end = ls_flag.game_end;
-    flag.game_win = ls_flag.game_win;
-    flag.remain_show = ls_flag.remain_show;
 
-    // たんご検出
-    if(JSON.parse(localStorage.getItem("tango")) != null){
+// =================
+// UI更新
+// =================
+const SetUi = () =>{
+  // たんご検出
+  if(enable_localstorage){
+    if(JSON.parse(localStorage.getItem("tango")) != null & localStorage.getItem("pass_day")==daily_data.pass_day){
       if(JSON.parse(localStorage.getItem("tango")).yomi != tango.yomi){
         tango = JSON.parse(localStorage.getItem("tango"));
-        alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error5: The saved word and the retrieved word are different.",2000);
-      }
-    }
-    //エラーハンドリング
-    if(history.hb.length != 0){
-      if(history.hb[history.hb.length - 1].length !=0 &history.hb[history.hb.length - 1].every((n) => n == "HIT") & !flag.game_end){
-        alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[true]",2000);
-        flag.game_end = true;
-        flag.game_win = true;
-        if(localStorage.getItem("bf_error8") == "false"){
-          localStorage.setItem("bf_error8", true);
-        }else{
-          localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
-        }
-      }else if(history.hb.length ==10 & !flag.game_end){
-        alertShow("バグですが動作に問題はありません。\n 戦歴が増加している可能性があります。 \n Error8: flag is not set.[false]",2000);
-        flag.game_end = true;
-        flag.game_win = false;
-        if(localStorage.getItem("bf_error8") == "false"){
-          localStorage.setItem("bf_error8", true);
-        }else{
-          localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
-        }
-      }
-    }
-
-    // 残り候補数推移
-    if(localStorage.getItem("remain") != null){
-      history.remain = JSON.parse(localStorage.getItem("remain"));
-    }
-    // メモ機能
-    if(localStorage.getItem("Assumption_word") != null){
-      Assumption_word = JSON.parse(localStorage.getItem("Assumption_word"));
-      Assumption_word.hit.forEach(element=>{
-        document.getElementById("btn_"+element).classList.add("AssumptionHit");
-      })
-      Assumption_word.none.forEach(element=>{
-        document.getElementById("btn_"+element).classList.add("AssumptionNone");
-      })
-    }
-
-
-    for(let i = 0;i < game_data.now_solve.row;i++){
-      EvaluateUpdate(i,0,false,false);
-    }
-    ValueUpdate();
-    DisplayUpdate();
-    if(flag.game_end){
-      End();
-    }
-  }else{
-    RemainShow(filter_array.length);
-    DisplayUpdate();
-  }
-
-  wakeup_number += 1;
-  Progress();
-}
-// === webstorage ここまで ===
-
-// === 回答評価機能 ===
-document.getElementById("tango_input").addEventListener("submit",(e)=>{
-  if(flag.game_end){return};
-  var check = false
-  // 値の改変やバグチェック
-  if(!flag.wakeup){
-    alert("バグ、もしくは不正な操作です。リロードします。\n Error1: Not wake up wakeupnum:"+String(wakeup_number));
-    check = true;
-    location.reload();
-    return;
-  }else if(!(game_data.anser.length == 5)){
-    alert("バグ、もしくは不正な操作です。リロードします。\n Error2: The length of the entered character is incorrect")
-    check = true;
-    location.reload();
-    return;
-  }
-  // 異なる文字が入力されていないかチェック。
-  game_data.anser.forEach((element)=>{
-    if(hiragana.includes(element) | katakana.includes(element)){
-      ;
-    }else{
-      if(flag.lang_en){
-        alertShow('Attention\nNot enough letter or use only (hiragana or katakana)',2000);
-      }else{
-        alertShow("注意\n入力した「たんご」はひらがな・カタカナの5文字のみです",2000);
-      };
-      check = true;
-      return;
-    }
-  });
-
-  // 入力単語が実在しているかのチェック
-  var kotonoha = game_data.anser.toString().replace(/,/g, "")
-  if(check){
-    // 前項でエラー処理済み
-    return;
-  }else if(csv_data.a_data.includes(kotonoha)){
-    ;
-  }else{
-    if(flag.lang_en){
-      alertShow('Attention\nNot in the dictionary of this app)',2000);
-    }else{
-      alertShow("注意\nことのは（本アプリの辞書内の単語）を記入して下さい",2000)
-    };
-    check = true;
-    return;
-  }
-  // 前項でエラー処理済み
-  if(check){
-    return
-  }
-
-  // ヒットアンドブロー処理
-  var hb_yomi = tango.yomi.split("");
-  var h_word = [];
-  var b_word = [];
-  var not_word = [];
-  var hb_list = ["NO","NO","NO","NO","NO"];
-  var hit_count = 0;
-  game_data.anser.forEach((element,index)=>{
-    if(element == hb_yomi[index]){
-      // hit
-      h_word.push(element);
-      hb_list[index] = "HIT";
-      hit_count += 1;
-    }else if(hb_yomi.includes(element)){
-      // blow
-      b_word.push(element);
-      hb_list[index] = "BLOW";
-    }else{
-      not_word.push(element);
-    }
-  });
-
-  // 文字情報取得
-  history.hb_text.hit = Array.from(new Set(history.hb_text.hit.concat(h_word)));
-  history.hb_text.blow = Array.from(new Set(history.hb_text.blow.concat(b_word)));
-  history.hb_text.all = Array.from(new Set(history.hb_text.all.concat(not_word)));
-
-  // 画面表示系計算
-  history.hb.push(hb_list);
-  history.anser.push(game_data.anser.toString().replace(/,/g, ""));
-  game_data.anser = ["　","　","　","　","　"];
-
-
-  // 回答したことを伝える
-  game_data.now_solve.row += 1;
-  game_data.now_solve.index = 0;
-
-  // ローカルストレージに保存
-  localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
-  localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
-  localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
-  localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
-  localStorage.setItem("pass_day", daily_data.pass_day);
-  localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
-  localStorage.setItem("bf_error8", false);
-  localStorage.setItem("tango",JSON.stringify(tango));
-
-  // 画面更新 エラー確認
-  // remaing_check
-  var remaing_check_tf = false;
-  if(!filter_array){
-    alertShow("バグです。動作に一部影響が出ています。\n Error4: The number of remaining words is not defined",2000)
-  }else{
-    remaing_check_tf = true;
-  }
-  sleep_time = 0;
-  if(hit_count == 5 | game_data.now_solve.row == 10){
-    sleep_time = 500;
-    window.scroll({top: 0, behavior: 'smooth'});
-  }
-  EvaluateUpdate(game_data.now_solve.row -1,sleep_time,remaing_check_tf);
-  ValueUpdate();
-  DisplayUpdate();
-
-
-  if(hit_count == 5){
-    flag.game_end = true;
-    flag.game_win = true;
-    setTimeout(End, 3000);
-  }else if(game_data.now_solve.row == 10){
-    flag.game_end = true;
-    flag.game_win = false;
-    setTimeout(End, 3000);
-  };
-});
-// === 回答評価機能 ここまで ===
-
-// === 評価画面反映・重複処理 ===
-const EvaluateUpdate = (row,sleep_time = 0,remain_tf_up = false,dup_flag = true) =>{
-  RemoveSolveHighlight(row);
-  var _row_hb = Array.from(history.hb[row]);
-  var row_text = history.anser[row];
-  // 重複判別用set
-  var row_text_array = row_text.split("");
-  var row_text_set = new Set(row_text_array);
-  var pr_array = tango.yomi.split("");
-  var pr_set = new Set(pr_array);
-
-  if(row_text_set.size != row_text_array.length && dup_flag){
-    // 回答に重複あり
-    if(pr_set.size != pr_array.length){
-      // 答えに重複あり
-      var ans_dupli = serchDupli(pr_array);
-      switch (row_text_array.length-row_text_set.size){
-        case 1:
-          _row_hb = Dupli_1(ans_dupli,_row_hb,row_text_array,pr_array);
-          break;
-        case 2:
-          if(serchDupli(row_text_array).length == 2){
-            serchDupli(row_text_array).forEach((element)=>{
-              _row_hb = Dupli_1(ans_dupli,_row_hb,row_text_array,pr_array,true,element);
-            })
-          }else{
-            _row_hb = Dupli_2(ans_dupli,_row_hb,row_text_array,pr_array);
-          }
-          break;
-        default:
-          console.log("ddNone");
-      }
-    }else{
-      // 答えに重複ナシ
-      switch (row_text_array.length-row_text_set.size){
-        case 1:
-          _row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array);
-          break;
-        case 2:
-          if(serchDupli(row_text_array).length == 2){
-            serchDupli(row_text_array).forEach((element)=>{
-              _row_hb = Dupli_1([" "],_row_hb,row_text_array,pr_array,true,element);
-            })
-          }else{
-            _row_hb = Dupli_2([" "],_row_hb,row_text_array,pr_array);
-          }
-          break;
-        default:
-          console.log("ndNone");
+        alertShow("バグです。答えの単語が他のユーザと異なる可能性があります。\n Error5: The saved word and the retrieved word are different.",2000);
       }
     }
   }
-  //上記仕組みをストレージに反映
-  history.hb[row] = _row_hb;
-  localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
 
-
-  // ディスプレイ反映
-  if(sleep_time == 0){
-    for(let i = 0;i<5;i++){
-      document.getElementById("dis-"+String(row)+"-"+String(i)).innerText = row_text[i];
-      if(_row_hb[i] == "HIT"){
-        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_hit");
-      }else if(_row_hb[i] == "BLOW"){
-        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_blow");
-      }else{
-        document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("word_none");
-      }
-    }
-  }else{
-    setTimeout(answer_production,sleep_time,_row_hb,row,0,sleep_time,row_text);
-  }
-
-  // キーボード反映
-  Array.from(new Set(history.hb_text["all"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.add("word_none");
-    document.getElementById("btn_"+element).classList.remove("AssumptionNone","AssumptionHit");
-    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
-    Assumption_word.none = Assumption_word.none.filter(item => item != element);
-  })
-  Array.from(new Set(history.hb_text["blow"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none");
-    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
-    Assumption_word.none = Assumption_word.none.filter(item => item != element);
-    document.getElementById("btn_"+element).classList.add("word_blow");
-  })
-  Array.from(new Set(history.hb_text["hit"])).forEach((element)=>{
-    document.getElementById("btn_"+element).classList.remove("word_none","word_blow");
-    Assumption_word.hit = Assumption_word.hit.filter(item => item != element);
-    Assumption_word.none = Assumption_word.none.filter(item => item != element);
-    document.getElementById("btn_"+element).classList.add("word_hit");
-  })
-  localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
-
-  if(!filter_array){
-    alertShow("バグです。動作に一部影響が出ています。\n Error4: The number of remaining words is not defined",2000)
-  }else{
-    CheckRemaining_all(remain_tf_up);
-  }
-}
-
-const answer_production = (hb,row,index,time,row_text)=>{
-  document.getElementById("dis-"+String(row)+"-"+String(index)).innerText = row_text[index];
-  if(hb[index] == "HIT"){
-    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_hit");
-  }else if(hb[index] == "BLOW"){
-    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_blow");
-  }else{
-    document.getElementById("dis-"+String(row)+"-"+String(index)).classList.add("word_none");
-  }
-  if(index < 4){
-    setTimeout(answer_production,time,hb,row,index+1,time,row_text);
-  }
-}
-// 重複をリストで変換
-const serchDupli = (ar)=>{
-  return ar.filter(function (val, idx, arr){
-    return arr.indexOf(val) === idx && idx !== arr.lastIndexOf(val);
-})};
-// 重複管理
-const Dupli_1 = (pr_du_array,HB_array,Ans_array,pre_array,du=false,word=undefined)=>{
-  var Du = ""
-  if(du){
-    Du = word;
-  }else{
-    Du = serchDupli(Ans_array);
-  };
-  if(!pre_array.includes(String(Du))){
-    // そもそも重複した箇所が回答と関係ない
-    return HB_array;
-  }else if(pr_du_array.includes(String(Du))){
-    // 回答が重複していて、文字も重複している場合はそのまま出力
-    return HB_array;
-  }else if(pre_array.includes(String(Du))){
-    if(HB_array[Ans_array.lastIndexOf(String(Du))] == "HIT"){
-      // 後ろがHIT => 前を消す
-      index = Ans_array.indexOf(String(Du));
-      HB_array[index] = "NO";
-      return HB_array;
-    }else if(HB_array[Ans_array.indexOf(String(Du))] == "HIT"){
-      // 前がHIT => 後ろを消す
-      index = Ans_array.lastIndexOf(String(Du));
-      HB_array[index] = "NO";
-      return HB_array;
-    }else{
-      // 両方BLOW => 後ろを消す
-      index = Ans_array.lastIndexOf(String(Du));
-      HB_array[index] = "NO";
-      return HB_array;
-    }
-  }else{
-    console.log("想定外")
-  }
-}
-const Dupli_2 = (pr_du_array,HB_array,Ans_array,pre_array)=>{
-  var Du = serchDupli(Ans_array);
-  if(!pre_array.includes(String(Du))){
-    // そもそも重複した箇所が回答と関係ない
-    return HB_array;
-  }else if(pr_du_array.includes(String(Du))){
-    // 回答が重複していて、文字も重複している場合
-    if(serchDupli(pr_du_array).length == 2){
-      // 文字の欠損が2+2文字の場合
-      f_index = Ans_array.indexOf(String(Du));
-      m_index = Ans_array.indexOf(String(Du),f_index+1);
-      l_index = Ans_array.lastIndexOf(String(Du));
-      index_list = [f_index,m_index,l_index];
-      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
-      HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
-      return HB_array;
-
-    }else if(pre_array.length - new Set(pre_array).size == 2){
-      // 文字の欠損が３文字の場合そのまま出力
-      return HB_array;
-    }else{
-      // 文字の欠損が２文字の場合
-      f_index = Ans_array.indexOf(String(Du));
-      m_index = Ans_array.indexOf(String(Du),f_index+1);
-      l_index = Ans_array.lastIndexOf(String(Du));
-      index_list = [f_index,m_index,l_index];
-      hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
-      HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
-      return HB_array;
-    }
-  }else if(pre_array.includes(String(Du))){
-    // 答えに３文字の単語が１個のみ用いられている場合
-    f_index = Ans_array.indexOf(String(Du));
-    m_index = Ans_array.indexOf(String(Du),f_index+1);
-    l_index = Ans_array.lastIndexOf(String(Du));
-    index_list = [f_index,m_index,l_index];
-    hb_3_list = [HB_array[index_list[0]],HB_array[index_list[1]],HB_array[index_list[2]]];
-    HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
-    hb_3_list[hb_3_list.lastIndexOf("BLOW")] = "NO";
-    HB_array[index_list[hb_3_list.lastIndexOf("BLOW")]] = "NO";
-    return HB_array
-  }else{
-    console.log("想定外")
-  }
-}
-// === 評価画面反映・重複処理 ここまで ===
-
-// === game終了処理 ===
-const End = ()=>{
-  if(flag.game_win){
-    if(flag.lang_en){
-      var win_tx = "You're correct";
-    }else{
-      var win_tx = "正解です"
-    }
-  }else{
-    if(flag.lang_en){
-      var win_tx = "You're Incorrect";
-    }else{
-      var win_tx = "不正解です"
-    }
-  }
-  // このゲームの経験者であることを伝える
-  localStorage.setItem("experience", true);
-
-  // 今日初めての終了の場合データの更新を行う
-  var win_b_tf = JSON.parse(localStorage.getItem("flag")).game_end;
-
-  if(!win_b_tf){
-    history.game.try_count += 1;
-    if(flag.game_win){
-      // 勝利の場合
-      history.game.win_count += 1;
-      history.game.current_streak += 1;
-      if(history.game.current_streak>history.game.max_streak){
-        history.game.max_streak = history.game.current_streak;
-      }
-      history.game.history[game_data.now_solve.row -1] += 1;
-    }else{
-      // 敗北の場合
-      history.game.current_streak = 0;
-    }
-    localStorage.setItem("history_of_game", JSON.stringify(history.game));
-  }
-  // 終了したことをwebstorageに伝える
-  var LS_flag = {"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show};
-  localStorage.setItem("flag", JSON.stringify(LS_flag));
-  // 文字変更
-  document.getElementById("result").innerText = win_tx
-  document.getElementById("result_answer").innerText = `たんご：「${tango.kanzi}」（${tango.yomi}）`
-  document.getElementById("result_answer").classList.remove("non_visi");
-  // 戦歴表示
   ShowHistory(history.game);
-  // グラフ画面起動
-  mode_change("bar");
-  if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
-    localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
-    alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
-  }
 
-  // api用
-  var api_num = 0
-  api_num = game_data.now_solve.row;
-  if(!flag.game_win){
-    api_num = 11;
+  RemoveSolveHighlight();
+  DisplayWordUpdate();
+  SolvHighlight();
+  KeybordHB();
+  CheckRemaining_all(false);
+  // getRemain();
+  if(change_wind)mode_change("game");
+  if(flag.game_end){
+    End();
+  }else{
+    flag.wakeup = true;
   }
-  // エラー吐いたときに影響がないように最下部に 過去にプレイ履歴がある場合のみデータ送信
-  // console.log(api_num)
-  if(!win_b_tf & history.game.try_count > 1){
-    data_post(daily_data.pass_day,api_num);
-  }
-}
-// === game終了処理 ここまで ===
-
-// === API データポスト ===
-const data_post = (day,result)=>{
-  p_t = {"pass_day":String(day),"ans":String(result)}
-  p_j = JSON.stringify(p_t);
-  xhr = new XMLHttpRequest;
-  xhr.onload = function(){
-    var res = xhr.responseText;
-    console.log(res);
-  };
-  xhr.onerror = function(){
-    alertShow("バグです。動作に一部影響が出ています。\n Error6: API communication failed",2000);
-  }
-  xhr.open('POST', "https://8n0i52f399.execute-api.ap-northeast-1.amazonaws.com/default/WriteKotonohaHistory", true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.send(p_j);
-}
-// === API データポスト ここまで ===
-
-// === UI作製 ===
-const CreateKeybord = ()=>{
-  let $keybord = document.getElementById("keybord");
-  let element_array = [];
-  for(let i = 0;i<10;i++){
-    // <hr>を入れた後
-    if(i >= 5){
-      if(i == 5){
-        element_array.push(document.createElement("hr"))
-        element_array[5].setAttribute("id","keybord_hr")
-      };
-      element_array.push(document.createElement("div"));
-      element_array[i+1].setAttribute("class","row bt_ga");
-      for(let z = 0;z<10;z++){
-        element_array[i+1].appendChild(document.createElement("button"));
-        element_array[i+1].childNodes[z].innerText = KEYBORD_LIST[i][z];
-        if(KEYBORD_LIST[i][z] == "　"){
-          element_array[i+1].childNodes[z].setAttribute("class","space_bt");
-          element_array[i+1].childNodes[z].setAttribute("disabled","True");
-        }else if(["←","→","del"].includes(KEYBORD_LIST[i][z])){
-          element_array[i+1].childNodes[z].setAttribute("class","func_bt");
-          element_array[i+1].childNodes[z].setAttribute("onclick","FuncButton('"+KEYBORD_LIST[i][z]+"');")
-        }else{
-          element_array[i+1].childNodes[z].setAttribute("class","key_bt");
-          element_array[i+1].childNodes[z].setAttribute("id","btn_"+KEYBORD_LIST[i][z]);
-          element_array[i+1].childNodes[z].setAttribute("onclick","KeybordButton('"+KEYBORD_LIST[i][z]+"');");
-        }
-      };
-      // 入れる前
-    }else{
-      element_array.push(document.createElement("div"));
-      element_array[i].setAttribute("class","row bt_normal");
-      for(let z = 0;z<10;z++){
-        element_array[i].appendChild(document.createElement("button"));
-        element_array[i].childNodes[z].innerText = KEYBORD_LIST[i][z];
-        if(KEYBORD_LIST[i][z] == "　"){
-          element_array[i].childNodes[z].setAttribute("class","space_bt");
-          element_array[i].childNodes[z].setAttribute("disabled","True");
-        }else{
-          element_array[i].childNodes[z].setAttribute("class","key_bt");
-          element_array[i].childNodes[z].setAttribute("id","btn_"+KEYBORD_LIST[i][z]);
-          element_array[i].childNodes[z].setAttribute("onclick","KeybordButton('"+KEYBORD_LIST[i][z]+"');");
-        }
-      };
-    }
-  };
-  element_array.forEach((element)=>{
-    $keybord.appendChild(element);
-  })
-  wakeup_number += 1;
-  Progress();
 };
-const CreateDisplay = ()=>{
-  var $display = document.getElementById("eval_display");
-  var element_array = [];
-  for(let i = 0;i<5;i++){
-    element_array.push(document.createElement("div"));
-    element_array[i].setAttribute("class","row");
-    element_array[i].setAttribute("id","dis-row-"+String(i));
-    for(let z = 0;z<10;z++){
-      if(z == 5){
-        element_array[i].appendChild(document.createElement("div"));
-        element_array[i].childNodes[z].setAttribute("class","dis-pa");
-      }
-      if(z<5){
-        element_array[i].appendChild(document.createElement("div"));
-        element_array[i].childNodes[z].setAttribute("class","display_num left_display");
-        element_array[i].childNodes[z].setAttribute("id","dis-"+String(i)+"-"+String(z));
-      }else{
-        lef_el = document.createElement("div");
-        lef_el.setAttribute("class","display_num right_display");
-        lef_el.setAttribute("id","dis-"+String(i+5)+"-"+String(z-5));
-        element_array[i].appendChild(lef_el);
-      }
+// 選択ハイライト削除
+const RemoveSolveHighlight = ()=>{
+  var $display_class = document.getElementsByClassName("display_chara");
+  Array.from($display_class).forEach(e=>{
+    e.classList.remove("row_now_solve");
+    e.classList.remove("now_solve");
+    e.removeEventListener("click",displayClick);
+  })
+  }
+// 文字反映
+let done_word = [false,false,false,false,false,false,false,false,false,false]
+const DisplayWordUpdate = (wo = history.anser,hb = history.hb) =>{
+  // 最後の場合はこれを呼ばない
+  [0,1,2,3,4,5,6,7,8,9].forEach(row_ind=>{
+    if(row_ind < wo.length){
+      if(!done_word[row_ind]){
+        var chara_arr = wo[row_ind].split("");
+        [0,1,2,3,4].forEach(cha_ind=>{
+          $dis_cha = document.getElementById(`dis-${row_ind}-${cha_ind}`)
+          $dis_cha.innerText = chara_arr[cha_ind]
+          $dis_cha.classList.add(`word_${hb[row_ind][cha_ind].toLowerCase()}`)
+        })
+        done_word[row_ind] = true
+      };
+    };
+  });
+};
+// 選択ハイライト反映
+const SolvHighlight = (row = game_data.now_solve.row)=>{
+  if(flag.game_end){return};
+  for(let i = 0;i < 5;i++){
+    if(i == game_data.now_solve.index){
+      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("now_solve");
+      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
+    }else{
+      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("row_now_solve");
+      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
     }
   }
-  element_array.forEach((element)=>{
-    $display.appendChild(element);
-  })
-  wakeup_number += 1;
-  Progress();
 }
-// 戦歴表示機能
+// キーボード反映
+const KeybordHB = (HB_arr = history.hb_text)=>{
+  // キーボード反映
+  Array.from(new Set(HB_arr["all"])).forEach((e)=>{
+    document.getElementById("btn_"+e).classList.add("word_none");
+    document.getElementById("btn_"+e).classList.remove("AssumptionNone","AssumptionHit");
+    Assumption_word.hit = Assumption_word.hit.filter(item => item != e);
+    Assumption_word.none = Assumption_word.none.filter(item => item != e);
+  })
+  Array.from(new Set(HB_arr["blow"])).forEach((e)=>{
+    document.getElementById("btn_"+e).classList.remove("word_none");
+    document.getElementById("btn_"+e).classList.add("word_blow");
+  })
+  Array.from(new Set(HB_arr["hit"])).forEach((e)=>{
+    document.getElementById("btn_"+e).classList.remove("word_none","word_blow");
+    document.getElementById("btn_"+e).classList.add("word_hit");
+  })
+  if(enable_localstorage){
+    localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
+  }
+}
+const EndWordUpdate = (time,cha_ind = 0,wo = history.anser,hb = history.hb,row_ind = game_data.now_solve.row-1)=>{
+  // 最後の場合
+  if(cha_ind > 4)return;
+  var chara_arr = wo[row_ind].split("");
+  $dis_cha = document.getElementById(`dis-${row_ind}-${cha_ind}`)
+  $dis_cha.innerText = chara_arr[cha_ind]
+  $dis_cha.classList.add(`word_${hb[row_ind][cha_ind].toLowerCase()}`)
+  setTimeout(EndWordUpdate, time,time,cha_ind+1);
+};
+
+
+// =================
+// UI更新
+// =================
 const ShowHistory = (dir) =>{
   document.getElementById("try_count").innerText = dir.try_count;
   win_rate = String(Math.floor((dir.win_count/dir.try_count)*100))+"%";
@@ -963,9 +601,86 @@ const ShowHistory = (dir) =>{
     config
   );
 }
-// === UI作製 ここまで ===
+const createEmoji = (url_flag,rem_flag,twitter_flag,share_flag=false)=>{
+  // エラー処理
+  if(rem_flag){
+    _remain = [...history.remain]
+    if(history.hb.length != _remain.length){
+      missnum = history.hb.length - _remain.length
+      minn_array = Array(missnum);
+      minn_array.fill(NaN);
+      _remain.unshift(...minn_array);
+    }
+  }
+  var base_text = ""
+  if(twitter_flag)base_text+="#";
+  base_text += "ことのはたんご";
+  if(share_flag)base_text+="D";
+  base_text += " 第"+String(daily_data.pass_day)+"回  ";
 
-// === UIクリックイベント ===
+  if(flag.game_win){
+    base_text += String(game_data.now_solve.row)+"/10\r\n"
+  }else if(game_data.now_solve.row == 10){
+    base_text += "X/10\r\n"
+  }else if(flag.game_end){
+    base_text += "X("+String(game_data.now_solve.row)+")/10\r\n"
+  }else{
+    base_text += String(game_data.now_solve.row)+"/10\r\n"
+  }
+
+  if(url_flag){
+    base_text += "https://plum-chloride.jp/kotonoha-tango/index.html \r\n"
+  }
+  if(share_flag){
+    base_text += "https://plum-chloride.jp/kotonoha-tango/share.html"+toQuery(daily_data.pass_day,history.anser,history.hb,tango.yomi)+" \r\n"
+  }
+  graph_text = ""
+  history.hb.forEach((Element,index)=>{
+    if(index<5){
+      graph_text+=" \r\n"
+      Element.forEach((e)=>{
+        graph_text += e.replace("NO","⬜").replace("BLOW","🟨").replace("HIT","🟩")
+      })
+      if(rem_flag)graph_text+=" "+String(_remain[index]);
+    }else{
+      graph_text+=" \r\n"
+      Element.forEach((e)=>{
+        graph_text += e.replace("NO","⚪").replace("BLOW","🟡").replace("HIT","🟢")
+      })
+      if(rem_flag)graph_text+=" "+String(_remain[index]);
+    }
+  })
+  return(base_text+graph_text)
+}
+// =================
+// 単語入力・キーボード
+// =================
+// キーボード入力用入力欄に変化があった場合
+$input = document.getElementById("input_text");
+$input.addEventListener('input',(e)=>{
+  if(flag.game_end){return};
+  _anser = $input.value.split('');
+  before_anser = [];
+  _anser.forEach(element => {
+    if(hiragana.indexOf(element) == -1){
+      // カタカナや英語だった場合はそのまま（確定時にテキスト種別を取得する。）
+      before_anser.push(element);
+    }else{
+      // ひらがなをカタカナに
+      before_anser.push(katakana[hiragana.indexOf(element)]);
+    }
+  });
+  b_ans = before_anser.slice(0,5);
+  b_ans.push("　","　","　","　","　");
+  game_data.anser = b_ans.slice(0,5);
+  Word_input()
+})
+const Word_input = (word_arr = game_data.anser,row = game_data.now_solve.row) =>{
+  word_arr.forEach((cha,cha_ind)=>{
+    $dis_cha = document.getElementById(`dis-${row}-${cha_ind}`)
+    $dis_cha.innerText = cha.replace(/－/g,"　")
+  })
+}
 const KeybordButton = (character)=>{
   switch(KeybordButton_Mode){
     case "input":
@@ -973,8 +688,10 @@ const KeybordButton = (character)=>{
       if(game_data.now_solve.index <4){
         game_data.now_solve.index += 1;
       }
-      DisplayUpdate();
-      ValueUpdate();
+      RemoveSolveHighlight();
+      SolvHighlight();
+      Word_input();
+      $input.value = game_data.anser.join("").replace(/　/g,"－")
       break;
     case "Assumption":
       var cr_key = document.getElementById("btn_"+character);
@@ -991,11 +708,12 @@ const KeybordButton = (character)=>{
           cr_key.classList.add("AssumptionHit");
           Assumption_word.hit.push(character);
         }
-        localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
+        if(enable_localstorage){
+          localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
+        }
       }
       break;
   }
-  
 }
 const FuncButton = (key)=>{
   var gni = game_data.now_solve.index;
@@ -1003,13 +721,15 @@ const FuncButton = (key)=>{
     case "←":
       if(gni > 0){
         game_data.now_solve.index -= 1;
-        DisplayUpdate();
+        RemoveSolveHighlight();
+      SolvHighlight();
       }
       break;
     case "→":
       if(gni <4){
         game_data.now_solve.index += 1;
-        DisplayUpdate();
+        RemoveSolveHighlight();
+      SolvHighlight();
       }
       break;
     case "del":
@@ -1019,84 +739,43 @@ const FuncButton = (key)=>{
       }else{
         game_data.anser[gni] = "　";
       }
-      DisplayUpdate();
-      ValueUpdate();
+      RemoveSolveHighlight();
+      SolvHighlight();
+      Word_input();
+      $input.value = game_data.anser.join("").replace(/　/g,"－")
       break;
     default:
       alert("バグ、もしくは不正な操作です。リロードします。\nERROR3: keyname is invalid");
       location.reload();
   }
 }
-// graph コピー機能及びツイート機能
-// コピー クリップボードに送信
-document.getElementById("graph_copy").addEventListener("click",(element)=>{
-  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false));
-  if(promise){
-    alertShow("クリップボードにコピー完了",500);
-  }
-})
-// ツイート
-document.getElementById("graph_tw").addEventListener("click",(element)=>{
-	tweet_btn(false);
-	});
-// URL付き
-document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
-  tweet_btn(true);
-});
-const tweet_btn = (url_flag,share_flag) => {
-  s = createEmoji(url_flag,HTML_element.remain_toggle.checked,true,share_flag);
-  if (s != ""){
-    s = encodeURIComponent(s);
-    //投稿画面を開く
-    url = "https://twitter.com/intent/tweet?text=" + s;
-    window.open(url,"_blank");
-    }
-}
-// 結果共有
-document.getElementById("graph_copy_u").addEventListener("click",(element)=>{
-  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false,true));
-  if(promise){
-    alertShow("クリップボードにコピー完了",500);
-  }
-});
-document.getElementById("graph_tw_u").addEventListener("click",(element)=>{
-  tweet_btn(false,true);
-});
-
-// 閉じるボタンでもgraphを閉じられるように
-document.getElementById("graph_close").addEventListener("click",(el)=>{
-  mode_change("game");
-});
-// 残り単語数推移機能のオンオフ検知(チェックボタン)
-const RemainToggleChange = ()=>{
-  HTML_element.emoji_place.innerText = createEmoji(false,HTML_element.remain_toggle.checked);
-};
-// ディスプレイクリック
-const displayClick = (e)=>{
-  game_data.now_solve.index = parseInt(e.target.id.slice(-1));
-  RemoveSolveHighlight();
-  SolvHighlight();
-}
-// 色変更機能
-const ChangeColor = (color_hit = current_color[0] ,color_brow = current_color[1])=>{
-  document.documentElement.style.setProperty('--hit',color_hit);
-  document.documentElement.style.setProperty('--brow',color_brow);
-  current_color[0] = color_hit;
-  current_color[1] = color_brow;
-  switch(color_brow){
-    case "rgb(252, 201, 72)":
-      document.getElementById("colour_0").setAttribute("checked","");
+const change_keybord_inout_mode = ()=>{
+  mode_change("game")
+  switch(KeybordButton_Mode){
+    case "input":
+      KeybordButton_Mode = "Assumption"
+      document.getElementById("img_write").classList.add("Assumption-btn");
+      document.getElementById("keybord").classList.add("Assumption-btn");
       break;
-    case "#85C0F9":
-      document.getElementById("colour_1").setAttribute("checked","");
-      break;
-    case "rgb(188, 230, 163)":
-      document.getElementById("colour_2").setAttribute("checked","");
+    case "Assumption":
+      KeybordButton_Mode = "input"
+      document.getElementById("img_write").classList.remove("Assumption-btn");
+      document.getElementById("keybord").classList.remove("Assumption-btn");
       break;
   }
-  localStorage.setItem("color", JSON.stringify(current_color));
 }
-// キーボード変更
+const alldel = ()=>{
+  Assumption_word.hit.forEach(element=>{
+    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
+  })
+  Assumption_word.none.forEach(element=>{
+    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
+  })
+  Assumption_word = {"hit":[],"none":[]};
+  if(enable_localstorage){
+    localStorage.setItem("Assumption_word", JSON.stringify(Assumption_word));
+  }
+}
 const KryTypeChange = (type)=>{
   if(curent_key_type == type){
     return false;
@@ -1148,46 +827,349 @@ const KryTypeChange = (type)=>{
     }
   }
 }
-// 残り候補数非表示非表示切り替え
-const toggle_remain_show = ()=>{
-  if(flag.lang_en){
-    if(flag.remain_show){
-      HTML_element.remain_toggle_text.innerText="（Show）"
+// =================
+// 回答
+// =================
+document.getElementById("tango_input").addEventListener("submit",(e)=>{
+  if(flag.game_end){return};  
+  // 値の改変やバグチェック
+  if(!flag.wakeup){
+    alert("バグ、もしくは不正な操作です。リロードします。\n Error1: Not wake up");
+    location.reload();
+    return;
+  }else if(!(game_data.anser.length == 5)){
+    alert("バグ、もしくは不正な操作です。リロードします。\n Error2: The length of the entered character is incorrect")
+    location.reload();
+    return;
+  }
+  // 異なる文字が入力されていないかチェック。
+  var check = false
+  game_data.anser.forEach((element)=>{
+    if(hiragana.includes(element) | katakana.includes(element)){
+      ;
     }else{
-      HTML_element.remain_toggle_text.innerText="（Hide）"
+      if(check){
+        if(flag.lang_en){
+          alertShow('Attention\nNot enough letter or use only (hiragana or katakana)',2000);
+        }else{
+          alertShow("注意\n入力できる「たんご」はひらがな・カタカナの5文字のみです",2000);
+        };
+      }
+      check = true
+    }
+  });
+  if(check)return;
+  // 入力単語が実在しているかのチェック
+  var kotonoha = game_data.anser.join("");
+  if(csv_data.a_data.includes(kotonoha)){
+    ;
+  }else{
+    if(flag.lang_en){
+      alertShow('Attention\nNot in the dictionary of this app)',2000);
+    }else{
+      alertShow("注意\nことのは（本アプリの辞書内の単語）を記入して下さい",2000)
+    };
+    check = true;
+    return;
+  }
+
+  // ヒットアンドブロー処理
+  var today_tango_arr = tango.yomi.split("");
+  var h_word = [];
+  var b_word = [];
+  var not_word = [];
+  var hb_list = ["NO","NO","NO","NO","NO"];
+  var hit_count = 0;
+  var cha_count = {}
+  game_data.anser.forEach((element,index)=>{
+    if(element == today_tango_arr[index]){
+      // hit
+      h_word.push(element);
+      hb_list[index] = "HIT";
+      hit_count += 1;
+    }else if(today_tango_arr.includes(element)){
+      // blow
+      b_word.push(element);
+      hb_list[index] = "BLOW";
+    }else{
+      not_word.push(element);
+    }
+
+    if(Object.keys(cha_count).indexOf(element) != -1){
+      cha_count[element] += 1
+    }else{
+      cha_count[element] = 1
+    }
+  });
+
+  // 重複処理・HIT_BLOWだす文字のインデックスの重要度を判定する
+  let cha_hb_priority = {}
+  Object.keys(cha_count).forEach(e=>{
+    let h_priority = [];
+    let bn_priority = [];
+    if(today_tango_arr.includes(e)){
+      cha_hb_priority[e] = [];
+      // HIT色付け優先度検索
+      [0,1,2,3,4].forEach(cha_ind=>{
+        if(game_data.anser[cha_ind] == e){
+          if(today_tango_arr[cha_ind] == e){
+            h_priority.push(cha_ind)
+          }else{
+            bn_priority.push(cha_ind)
+          };
+        };
+      });
+      cha_hb_priority[e].push(...h_priority);
+      cha_hb_priority[e].push(...bn_priority);
+    }
+  });
+  // 答えの文字数以上にBLOW判定があった場合重要度順にそれをNONEにする
+  Object.keys(cha_hb_priority).forEach(e=>{
+    var ans_cha_count = today_tango_arr.filter(word => word==e).length
+    for(let i = 0; i<cha_hb_priority[e].length;i++){
+      var prio_index = cha_hb_priority[e][i]
+      if(i >= ans_cha_count){
+        if(hb_list[prio_index] == "BLOW"){
+          hb_list[prio_index] = "NO"
+        }else if(hb_list[prio_index] == "HIT"){
+          alert("重複判定処理でエラーが発生しました。\n An error occurred during duplication judgment processing.");
+        }
+      }
+    }
+  })
+  // 答えの最大文字数が分かった場合それを保存する
+  Object.keys(cha_hb_priority).forEach(e=>{
+    var ans_cha_count = today_tango_arr.filter(word => word==e).length
+    if(cha_hb_priority[e].length>ans_cha_count){
+      max_use[e] = ans_cha_count;
+    }
+  })
+
+  // 文字情報取得
+  history.hb_text.hit = Array.from(new Set(history.hb_text.hit.concat(h_word)));
+  history.hb_text.blow = Array.from(new Set(history.hb_text.blow.concat(b_word)));
+  history.hb_text.all = Array.from(new Set(history.hb_text.all.concat(not_word)));
+
+  // 画面表示系計算
+  history.hb.push(hb_list);
+  history.anser.push(game_data.anser.toString().replace(/,/g, ""));
+  game_data.anser = ["　","　","　","　","　"];
+
+
+
+  // 回答したことを伝える
+  game_data.now_solve.row += 1;
+  game_data.now_solve.index = 0;
+
+  // ローカルストレージに保存
+  if(enable_localstorage){
+    localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+    localStorage.setItem("experience", true);
+    localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
+    localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
+    localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
+    localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
+    localStorage.setItem("pass_day", daily_data.pass_day);
+    localStorage.setItem("bf_error8", false);
+    localStorage.setItem("tango",JSON.stringify(tango));
+    localStorage.setItem("max_use",JSON.stringify(max_use));
+  }
+  var _game_end = false;
+  if(hit_count == 5 | game_data.now_solve.row == 10)_game_end = true;
+
+  // 画面更新
+  if(!_game_end){
+    RemoveSolveHighlight();
+    DisplayWordUpdate();
+    SolvHighlight();
+    KeybordHB();
+    CheckRemaining_all(true);
+    $input.value = "";
+  }else{
+    $input.value = "";
+    window.scroll({top: 0, behavior: 'smooth'});
+    RemoveSolveHighlight();
+    KeybordHB();
+    sleep_time = 500;
+    setTimeout(EndWordUpdate, sleep_time,sleep_time);
+  }
+
+
+  if(hit_count == 5){
+    flag.game_end = true;
+    flag.game_win = true;
+    setTimeout(End, 3000);
+  }else if(game_data.now_solve.row == 10){
+    flag.game_end = true;
+    flag.game_win = false;
+    setTimeout(End, 3000);
+  };
+});
+// =================
+// 残り候補数表示
+// =================
+const CheckRemaining_all = (progress_re = false) =>{
+  if(!filter_array | filter_array.length == 0){
+    alertShow("バグです。プレイは可能ですが動作に一部影響が出ています。\n Error3: The number of remaining words is not defined",2000);
+    return;
+  }
+  var history_of_hb_text = history.hb_text;
+  var history_of_hb = history.hb;
+  var history_of_anser = history.anser;
+  // blow hit 重複削除
+  history_of_hb_text["hit"].forEach((element) => {
+    if(history_of_hb_text["blow"].length != 0 & history_of_hb_text["blow"].includes(element)){
+      history_of_hb_text["blow"].splice(history_of_hb_text["blow"].indexOf(element),1);
+    };
+  });
+
+  // none 含んでいない
+  // none_re_array -> 何度もnoneを回さなくていいように
+  var _none_array_before = [];
+  history_of_hb_text["all"].forEach((e) =>{
+    if(!none_re_array.includes(e)){
+      _none_array_before.push(e);
+    }
+  });
+  _none_array_before.forEach((e)=>{
+    filter_array = filter_array.filter((word)=>!word.includes(e));
+  })
+  none_re_array.push(..._none_array_before);
+
+  // blow 含んでいる事
+  history_of_hb_text["blow"].forEach((e) =>{
+    filter_array = filter_array.filter((word)=>word.includes(e));
+  })
+  // hit 含んでいること
+  history_of_hb_text["hit"].forEach((e) =>{
+    filter_array = filter_array.filter((word)=>word.includes(e));
+  })
+
+  // hbリストを参照
+  history_of_hb.forEach((element,row)=>{
+    // 各試行
+    element.forEach((e,cha_ind)=>{
+      // 各文字の評価(HIT BLOW)
+      // HITの場合は確定BLOWとNOの場合はその位置から除外
+      if(e == "BLOW" || e == "NO"){
+        filter_array = filter_array.filter((word)=>history_of_anser[row][cha_ind] != word[cha_ind]);
+      }else if(e == "HIT"){
+        filter_array = filter_array.filter((word)=>history_of_anser[row][cha_ind] == word[cha_ind]);
+      }
+    })
+  });
+
+  // 最大使用回数が分かる場合
+  Object.keys(max_use).forEach(e=>{
+    filter_array = filter_array.filter((word)=>(word.match( new RegExp( e, "g" ) ) || [] ).length == max_use[e])
+  })
+
+  RemainShow(filter_array.length);
+  if(progress_re){
+    history.remain.push(filter_array.length);
+    if(enable_localstorage){
+      localStorage.setItem("remain", JSON.stringify(history.remain));
+    }
+  };
+}
+// =================
+// ゲームエンド
+// =================
+// === game終了処理 ===
+const End = ()=>{
+  if(flag.game_win){
+    if(flag.lang_en){
+      var win_tx = "You're correct";
+    }else{
+      var win_tx = "正解です"
     }
   }else{
-    if(flag.remain_show){
-      HTML_element.remain_toggle_text.innerText="（表示）"
+    if(flag.lang_en){
+      var win_tx = "You're Incorrect";
     }else{
-      HTML_element.remain_toggle_text.innerText="（非表示）"
+      var win_tx = "不正解です"
     }
   }
-  flag.remain_show = !flag.remain_show
-  RemainShow();
-  localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
-}
-//keybord入力モード変更
-const change_keybord_inout_mode = ()=>{
-  mode_change("game")
-  switch(KeybordButton_Mode){
-    case "input":
-      KeybordButton_Mode = "Assumption"
-      document.getElementById("img_write").classList.add("Assumption-btn");
-      document.getElementById("keybord").classList.add("Assumption-btn");
-      break;
-    case "Assumption":
-      KeybordButton_Mode = "input"
-      document.getElementById("img_write").classList.remove("Assumption-btn");
-      document.getElementById("keybord").classList.remove("Assumption-btn");
-      break;
+
+  // 今日初めての終了の場合データの更新を行う
+  if(enable_localstorage){
+    var win_b_tf = JSON.parse(localStorage.getItem("flag")).game_end;
+  }else{
+    var win_b_tf = false;
+  }
+  if(!win_b_tf){
+    history.game.try_count += 1;
+    if(flag.game_win){
+      // 勝利の場合
+      history.game.win_count += 1;
+      history.game.current_streak += 1;
+      if(history.game.current_streak>history.game.max_streak){
+        history.game.max_streak = history.game.current_streak;
+      }
+      history.game.history[game_data.now_solve.row -1] += 1;
+    }else{
+      // 敗北の場合
+      history.game.current_streak = 0;
+    }
+    if(enable_localstorage){
+      localStorage.setItem("history_of_game", JSON.stringify(history.game));
+    }
+  }
+  // 終了したことをwebstorageに伝える
+  var LS_flag = {"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show};
+  if(enable_localstorage){
+    localStorage.setItem("flag", JSON.stringify(LS_flag));
+  }
+  // 文字変更
+  document.getElementById("result").innerText = win_tx
+  document.getElementById("result_answer").innerText = `たんご：「${tango.kanzi}」（${tango.yomi}）`
+  document.getElementById("result_answer").classList.remove("non_visi");
+  // 戦歴表示
+  ShowHistory(history.game);
+  // グラフ画面起動
+  mode_change("bar");
+  if(enable_localstorage){
+    if(flag.game_end != JSON.parse(localStorage.getItem("flag")).game_end){
+      localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
+      alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
+    }
+  };
+
+  // api用
+  var api_num = 0
+  api_num = game_data.now_solve.row;
+  if(!flag.game_win){
+    api_num = 11;
+  }
+  // エラー吐いたときに影響がないように最下部に
+  // console.log(api_num)
+  if(!win_b_tf){
+    data_post(daily_data.pass_day,api_num);
   }
 }
+// === API データポスト ===
+const data_post = (day,result)=>{
+  if(daily_data.uuid == undefined){
+    daily_data.uuid = "some_id"
+  }
+  p_t = {"pass_day":String(day),"ans":String(result),"time":GetNowTime(),"localstorage":enable_localstorage,"uuid":daily_data.uuid,"day":daily_data.pass_day,"words":history.anser,"win":flag.game_win,"game_ex":history.game.try_count}
+  p_j = JSON.stringify(p_t);
+  xhr = new XMLHttpRequest;
+  xhr.onload = function(){
+    var res = xhr.responseText;
+    console.log(res);
+  };
+  xhr.onerror = function(){
+    alertShow("バグです。動作に一部影響が出ています。\n Error6: API communication failed",2000);
+  }
+  xhr.open('POST', "https://hizz2zq2k4wt2t76n7uqon4peu0dpnsq.lambda-url.ap-northeast-1.on.aws/", true);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(p_j);
+}
 
-// === UIクリックイベント ここまで ===
-
-// === 画面表示操作 ===
-// 全画面非表示
+// =================
+// UIイベント
+// =================
 const allNonVisi = ()=>{
   Object.keys(HTML_element.display_mode).forEach((key) => {
     HTML_element.display_mode[key].classList.add("non_visi");
@@ -1220,50 +1202,89 @@ const SetMode = (mode)=>{
   HTML_element.icon_btn[mode].setAttribute("src",icon_src["batu"]);
   HTML_element.icon_btn[mode].setAttribute("onclick","mode_change('game');");
 }
-// 入力した値のアップデート
-const ValueUpdate = ()=>{
-  if(flag.game_end){return};
-  // すべて空白だった場合は入力欄を空に
-  var all_space=true;
-  game_data.anser.forEach((element)=>{
-    if(!(element == "　")){
-      all_space = false;
+// コピー クリップボードに送信
+document.getElementById("graph_copy").addEventListener("click",(element)=>{
+  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false));
+  if(promise){
+    alertShow("クリップボードにコピー完了",500);
+  }
+})
+// ツイート
+document.getElementById("graph_tw").addEventListener("click",(element)=>{
+	tweet_btn(false);
+	});
+// URL付き
+document.getElementById("graph_tw_url").addEventListener("click",(element)=>{
+  tweet_btn(true);
+});
+const tweet_btn = (url_flag,share_flag) => {
+  s = createEmoji(url_flag,HTML_element.remain_toggle.checked,true,share_flag);
+  if (s != ""){
+    s = encodeURIComponent(s);
+    //投稿画面を開く
+    url = "https://twitter.com/intent/tweet?text=" + s;
+    window.open(url,"_blank");
     }
-  });
-  if(all_space){
-    HTML_element.input_text.value = "";
-  }else{
-    // そうでない場合は全角スペースを残す
-    HTML_element.input_text.value = game_data.anser.slice(0,5).toString().replace(/,/g, "")
+}
+// 結果共有
+document.getElementById("graph_copy_u").addEventListener("click",(element)=>{
+  var promise = navigator.clipboard.writeText(createEmoji(false,HTML_element.remain_toggle.checked,false,true));
+  if(promise){
+    alertShow("クリップボードにコピー完了",500);
+  }
+});
+document.getElementById("graph_tw_u").addEventListener("click",(element)=>{
+  tweet_btn(false,true);
+});
+// 閉じるボタンでもgraphを閉じられるように
+document.getElementById("graph_close").addEventListener("click",(el)=>{
+  mode_change("game");
+});
+// 残り単語数推移機能のオンオフ検知(チェックボタン)
+const RemainToggleChange = ()=>{
+  HTML_element.emoji_place.innerText = createEmoji(false,HTML_element.remain_toggle.checked);
+};
+// 色変更機能
+const ChangeColor = (color_hit = current_color[0] ,color_brow = current_color[1])=>{
+  document.documentElement.style.setProperty('--hit',color_hit);
+  document.documentElement.style.setProperty('--brow',color_brow);
+  current_color[0] = color_hit;
+  current_color[1] = color_brow;
+  switch(color_brow){
+    case "rgb(252, 201, 72)":
+      document.getElementById("colour_0").setAttribute("checked","");
+      break;
+    case "#85C0F9":
+      document.getElementById("colour_1").setAttribute("checked","");
+      break;
+    case "rgb(188, 230, 163)":
+      document.getElementById("colour_2").setAttribute("checked","");
+      break;
+  }
+  if(enable_localstorage){
+    localStorage.setItem("color", JSON.stringify(current_color));
   }
 }
-// ディスプレイのアップデート
-const SolvHighlight = (row = game_data.now_solve.row)=>{
-  if(flag.game_end){return};
-  for(let i = 0;i < 5;i++){
-    if(i == game_data.now_solve.index){
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("now_solve");
-      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
+// 残り候補数非表示非表示切り替え
+const toggle_remain_show = ()=>{
+  if(flag.lang_en){
+    if(flag.remain_show){
+      HTML_element.remain_toggle_text.innerText="（Show）"
     }else{
-      document.getElementById("dis-"+String(row)+"-"+String(i)).classList.add("row_now_solve");
-      document.getElementById("dis-"+String(row)+"-"+String(i)).addEventListener("click",displayClick);
+      HTML_element.remain_toggle_text.innerText="（Hide）"
+    }
+  }else{
+    if(flag.remain_show){
+      HTML_element.remain_toggle_text.innerText="（表示）"
+    }else{
+      HTML_element.remain_toggle_text.innerText="（非表示）"
     }
   }
-}
-const RemoveSolveHighlight = (row = game_data.now_solve.row)=>{
-  for(let i = 0;i < 5;i++){
-    document.getElementById("dis-"+String(row)+"-"+String(i)).classList.remove("row_now_solve");
-    document.getElementById("dis-"+String(row)+"-"+String(i)).classList.remove("now_solve");
-    document.getElementById("dis-"+String(row)+"-"+String(i)).removeEventListener("click",displayClick);
-    }
+  flag.remain_show = !flag.remain_show
+  RemainShow();
+  if(enable_localstorage){
+    localStorage.setItem("flag", JSON.stringify({"game_end":flag.game_end,"game_win":flag.game_win,"remain_show":flag.remain_show}));
   }
-const DisplayUpdate = (row = game_data.now_solve.row)=>{
-  if(flag.game_end){return};
-  RemoveSolveHighlight();
-  SolvHighlight();
-  game_data.anser.forEach((element,index)=>{
-    document.getElementById("dis-"+String(row)+"-"+String(index)).innerText = element;
-  });
 }
 // 残り数反映
 const RemainShow = (remain_num = filter_array.length)=>{
@@ -1281,33 +1302,147 @@ const RemainShow = (remain_num = filter_array.length)=>{
     };
   }
 }
-// 今日の単語時間表示
-const DisplayTime = ()=>{
-  var nowtime = new Date();
-  if((23-parseInt(nowtime.getHours())) == 0 & (59-parseInt(nowtime.getMinutes())) == 0 & (59-parseInt(nowtime.getSeconds())) == 0){
-    alert("日付が変わりました。単語が変わるためリロードします\nThe date has changed. Reload for word change.")
+// ディスプレイクリック
+const displayClick = (e)=>{
+  game_data.now_solve.index = parseInt(e.target.id.slice(-1));
+  RemoveSolveHighlight();
+  SolvHighlight();
+}
+
+
+
+// アラート用
+const alertShow = (text,time = 2000)=>{
+  document.getElementById("alert").classList.remove("non_visi")
+  document.getElementById("alert_text").innerText = text
+  setTimeout(()=>{document.getElementById("alert").classList.add("non_visi")},time);
+}
+
+// =================
+// 複数タブ
+// =================
+window.addEventListener('storage', function(e) {
+  if(e.key == "history_of_hb"){
+    if(!reload){
+      reload = true;
+      alertShow("別のタブでことのはたんごが更新されました。リロードします。\n KotonohaTango has been updated in another tab. Reloading.",2000);
+      flag.wakeup = false;
+      setTimeout(()=>{location.reload();},2000);
+      return;
+    }
+    reload = true;
+  }
+});
+// =================
+// プレイ共有
+// =================
+const even_q = ["m","t","A","-j","i","Q","q","1","2","g","L","-l","-q","z","-e","P","-f","V","-g","-h","W","C","e","-i","N","D","O","k","E","F",
+          "a","s","B","u","0","R","l","h","r","I","-b","c","-k","J","H","K",
+          "Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","-0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"];
+const odd_q = ["w","-a","g","r","Q","h","1","A","H","-f","-d","a","U","P","I","-o","V","-p","6","W","i","D","X","4","5","l","o","E","p","q",
+        "R","B","s","K","t","T","3","0","F","j","O","k","v","G","Y","e",
+        "S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-r","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","-0","-n","d","M","y","z"];
+const toQuery = (k,Qan,Qhb,Qy) =>{
+  var qu = "?d="
+  qu += k + "&t="
+  var q = []
+  if(Number(k) % 2 == 0){
+    q = even_q
+  }else{
+    q = odd_q
+  }
+  Qan.forEach((i)=>{
+    Array.from(i).forEach((z)=>{
+      qu += q[katakana.indexOf(z)]
+    })
+  })
+  qu += "&a="
+  Array.from(Qy).forEach((i)=>{
+    qu += q[katakana.indexOf(i)]
+  })
+  qu += "&h="
+  Qhb.forEach((i)=>{
+    i.forEach((z)=>{
+      switch(z){
+        case "HIT":
+          qu += "h"
+          break;
+        case "BLOW":
+          qu += "b"
+          break;
+        case "NO":
+          qu += "n"
+          break;
+      }
+    })
+    qu +="_"
+  })
+  return qu
+}
+
+// =================
+// 降参
+// =================
+const gameff = ()=>{
+  if(!flag.game_end){
+    if(confirm("降参しますか？\nDo you want to surrender?")){
+      if(enable_localstorage){
+        localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
+        localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
+        localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
+        localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
+        localStorage.setItem("pass_day", daily_data.pass_day);
+        localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
+        localStorage.setItem("bf_error8", false);
+        localStorage.setItem("tango",JSON.stringify(tango));
+      }
+      flag.game_end = true;
+      flag.game_win = false;
+      setTimeout(End, 0);
+    }
+  }
+}
+// =================
+// localstorage削除
+// =================
+const DelSet = ()=>{
+  if(confirm("設定削除を行います。よろしいでしょうか？")){
+    localStorage.removeItem("color");
+    localStorage.removeItem("lang");
+    alert("削除が完了しました。リロードします。")
     location.reload();
   }
-  var time_left = ("0"+String(23-parseInt(nowtime.getHours()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getMinutes()))).slice(-2) + ":" + ("0"+String(59-parseInt(nowtime.getSeconds()))).slice(-2);
-  if(flag.lang_en){
-    document.getElementById("time_left").innerHTML = "<strong>No."+String(daily_data.pass_day)+"</strong>　Next Tango："+time_left;
-  }else{
-    document.getElementById("time_left").innerHTML = "<strong>第"+String(daily_data.pass_day)+"回</strong> 残り時間："+time_left;
+}
+const DelDay = ()=>{
+  if(confirm("データ削除を行います。\nプレイ中のデータは削除されます。よろしいでしょうか？")){
+    if(flag.game_end){
+      alert("ゲームがクリアされているため削除できません。")
+      return;
+    }
+    var key_len = ['pass_day', 'history_of_hb_text', 'now_solve', 'flag', 'pb_forms', 'color', 'lang', 'bf_error8', 'experience', 'remain', 'Assumption_word', 'history_of_hb', 'history_of_game', 'history_of_anser', 'tango',"max_use","uuid"]
+    var kl = key_len.length
+    alertShow("削除中です。少々お待ちください。",kl*500)
+    for( let i = 0; i < key_len.length; i++ ){
+      var some_key = key_len[i]
+      if(some_key != "history_of_game"){
+        setTimeout(lsri,i*500,some_key)
+      }
+      if(i == kl-1){
+        setTimeout(()=>{
+          alert("削除が完了しました。リロードします。")
+          location.reload();
+        },i*500)
+      }
+    }
   }
 }
-//メモ削除
-const alldel = ()=>{
-  Assumption_word.hit.forEach(element=>{
-    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
-  })
-  Assumption_word.none.forEach(element=>{
-    document.getElementById("btn_"+element).classList.remove("AssumptionHit","AssumptionNone");
-  })
-  Assumption_word = {"hit":[],"none":[]};
+const lsri = (key)=>{
+  console.log("del:"+key)
+  localStorage.removeItem(key)
 }
-// === 画面表示操作 ===
-
-// === 英語化 ===
+// =================
+// 英語化
+// =================
 const changeLang = () =>{
   if(flag.lang_en){
     flag.lang_en = false;
@@ -1349,7 +1484,9 @@ const changeLang = () =>{
     change_graph_lang(["Not yet correct today","Copy","Tweet","Tweet with URL","STATISTICS","Play<br>times","Win%","Current<br>Streak","Max<br>Streak","GUESS DISTRIBUTION","<u>close</u>","You're correct","You're Incorrect","　transition of remaining words","Delete memo","surrender","Result with shareable URL","The words you used in<br>your answer will be shared","Copy","Tweet"])
   }
   // 現在の言語を保存
-  localStorage.setItem("lang", flag.lang_en);
+  if(enable_localstorage){
+    localStorage.setItem("lang", flag.lang_en);
+  }
   // 色保存
   ChangeColor();
   // 残り候補数表示切り替え
@@ -1597,7 +1734,7 @@ const SET_TEXT_EN = `
 <p>The code can be found on GitHub below.</p>
 <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
 
-<div class="flex_center"><small>ことのはたんご ver 5.2.6</small></div>
+<div class="flex_center"><small>ことのはたんご ver ${current_version}</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1653,7 +1790,7 @@ const SET_TEXT_JP = `
 </ul>
 <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
 <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して使用及びに許可を与えたものとみなします。</p>
-<div class="flex_center"><small>ことのはたんご ver 5.2.6</small></div>
+<div class="flex_center"><small>ことのはたんご ver ${current_version}</small></div>
 <br>
 <div class="flex_center">
 <address>
@@ -1664,225 +1801,4 @@ const SET_TEXT_JP = `
 // === 英語化 ここまで===
 
 
-// === その他 ===
-// キーボード入力用入力欄に変化があった場合
-$input = document.getElementById("input_text");
-$input.addEventListener('input',(e)=>{
-  if(flag.game_end){return};
-  _anser = $input.value.split('');
-  before_anser = [];
-  _anser.forEach(element => {
-    if(hiragana.indexOf(element) == -1){
-      // カタカナや英語だった場合はそのまま（確定時にテキスト種別を取得する。）
-      before_anser.push(element);
-    }else{
-      // ひらがなをカタカナに
-      before_anser.push(katakana[hiragana.indexOf(element)]);
-    }
-  });
-  b_ans = before_anser.slice(0,5);
-  b_ans.push("　","　","　","　","　");
-  game_data.anser = b_ans.slice(0,5);
-  DisplayUpdate();
-})
-// 絵文字（戦歴コピー）作製
-const createEmoji = (url_flag,rem_flag,twitter_flag,share_flag=false)=>{
-  // エラー処理
-  if(rem_flag){
-    _remain = [...history.remain]
-    if(history.hb.length != _remain.length){
-      missnum = history.hb.length - _remain.length
-      minn_array = Array(missnum);
-      minn_array.fill(NaN);
-      _remain.unshift(...minn_array);
-    }
-  }
-  var base_text = ""
-  if(twitter_flag)base_text+="#";
-
-  base_text += "ことのはたんご"
-
-  if(share_flag)base_text+="D";
-
-  base_text += " 第"+String(daily_data.pass_day)+"回  "
-
-
-  if(flag.game_win){
-    base_text += String(game_data.now_solve.row)+"/10\r\n"
-  }else if(game_data.now_solve.row == 10){
-    base_text += "X/10\r\n"
-  }else if(flag.game_end){
-    base_text += "X("+String(game_data.now_solve.row)+")/10\r\n"
-  }else{
-    base_text += String(game_data.now_solve.row)+"/10\r\n"
-  }
-
-  if(url_flag){
-    base_text += "https://plum-chloride.jp/kotonoha-tango/index.html \r\n"
-  }
-  if(share_flag){
-    base_text += "https://plum-chloride.jp/kotonoha-tango/share.html"+toQuery(daily_data.pass_day,history.anser,history.hb,tango.yomi)+" \r\n"
-  }
-  graph_text = ""
-  history.hb.forEach((Element,index)=>{
-    if(index<5){
-      graph_text+=" \r\n"
-      Element.forEach((e)=>{
-        graph_text += e.replace("NO","⬜").replace("BLOW","🟨").replace("HIT","🟩")
-      })
-      if(rem_flag)graph_text+=" "+String(_remain[index]);
-    }else{
-      graph_text+=" \r\n"
-      Element.forEach((e)=>{
-        graph_text += e.replace("NO","⚪").replace("BLOW","🟡").replace("HIT","🟢")
-      })
-      if(rem_flag)graph_text+=" "+String(_remain[index]);
-    }
-  })
-  return(base_text+graph_text)
-}
-// アラート用
-const alertShow = (text,time = 1000)=>{
-  document.getElementById("alert").classList.remove("non_visi")
-  document.getElementById("alert_text").innerText = text
-  setTimeout(()=>{document.getElementById("alert").classList.add("non_visi")},time);
-}
-// surrender
-const gameff = ()=>{
-  if(!flag.game_end){
-    if(confirm("降参しますか？\nDo you want to surrender?")){
-      localStorage.setItem("now_solve", JSON.stringify(game_data.now_solve));
-      localStorage.setItem("history_of_hb_text", JSON.stringify(history.hb_text));
-      localStorage.setItem("history_of_hb", JSON.stringify(history.hb));
-      localStorage.setItem("history_of_anser", JSON.stringify(history.anser));
-      localStorage.setItem("pass_day", daily_data.pass_day);
-      localStorage.setItem("flag", JSON.stringify({"game_end":false,"game_win":false,"remain_show":flag.remain_show}));
-      localStorage.setItem("bf_error8", false);
-      localStorage.setItem("tango",JSON.stringify(tango));
-      flag.game_end = true;
-      flag.game_win = false;
-      setTimeout(End, 0);
-    }
-  }
-}
-// 初期化
-const DelSet = ()=>{
-  if(confirm("設定削除を行います。よろしいでしょうか？")){
-    localStorage.removeItem("color");
-    localStorage.removeItem("lang");
-    alert("削除が完了しました。リロードします。")
-    location.reload();
-  }
-}
-const DelDay = ()=>{
-  if(confirm("データ削除を行います。\nプレイ中のデータは削除されます。よろしいでしょうか？")){
-    if(flag.game_end){
-      alert("ゲームがクリアされているため削除できません。")
-      return;
-    }
-    var key_len = ['pass_day', 'history_of_hb_text', 'now_solve', 'flag', 'pb_forms', 'color', 'lang', 'bf_error8', 'experience', 'remain', 'Assumption_word', 'history_of_hb', 'history_of_game', 'history_of_anser', 'tango']
-    var kl = key_len.length
-    alertShow("削除中です。少々お待ちください。",kl*500)
-    for( let i = 0; i < key_len.length; i++ ){
-      var some_key = key_len[i]
-      if(some_key != "history_of_game"){
-        setTimeout(lsri,i*500,some_key)
-      }
-      if(i == kl-1){
-        setTimeout(()=>{
-          alert("削除が完了しました。リロードします。")
-          location.reload();
-        },i*500)
-      }
-    }
-  }
-}
-const lsri = (key)=>{
-  console.log("del:"+key)
-  localStorage.removeItem(key)
-}
-// === その他 ここまで ===
-
-// === デバッグ用 ===
-const AllConsole = ()=>{
-  console.log("csv_data");
-  console.log(csv_data);
-  console.log("tango");
-  console.log(tango);
-  console.log("daily_data");
-  console.log(daily_data);
-  console.log("wakeup_number");
-  console.log(wakeup_number);
-  console.log("flag");
-  console.log(flag);
-  console.log("game_data");
-  console.log(game_data);
-  console.log("history")
-  console.log(history)
-}
-// === デバッグ用 ここまで ===
-// === webstorage 更新 ===
-window.addEventListener('storage', function(e) {
-  if(e.key == "history_of_hb"){
-    if(!reload){
-      reload = true;
-      alertShow("別のタブでことのはたんごが更新されました。リロードします。\n KotonohaTango has been updated in another tab. Reloading.",2000);
-      flag.wakeup = false;
-      setTimeout(()=>{location.reload();},2000);
-      return;
-    }
-    reload = true;
-  }
-});
-// === プレイ共有 ===
-const even_q = ["m","t","A","-j","i","Q","q","1","2","g","L","-l","-q","z","-e","P","-f","V","-g","-h","W","C","e","-i","N","D","O","k","E","F",
-          "a","s","B","u","0","R","l","h","r","I","-b","c","-k","J","H","K",
-          "Z","y","b","Y","j","v","5","4","n","3","-a","-c","-d","-m","-n","G","U","-0","8","T","9","S","d","-o","p","-p","M","w","6","f","X","x","7","o","-r"];
-const odd_q = ["w","-a","g","r","Q","h","1","A","H","-f","-d","a","U","P","I","-o","V","-p","6","W","i","D","X","4","5","l","o","E","p","q",
-        "R","B","s","K","t","T","3","0","F","j","O","k","v","G","Y","e",
-        "S","x","C","u","f","-m","2","Z","-e","b","9","J","-l","8","-r","-c","-k","7","-b","-j","c","-i","n","-h","m","N","-q","L","-g","-0","-n","d","M","y","z"];
-const toQuery = (k,Qan,Qhb,Qy) =>{
-  var qu = "?d="
-  qu += k + "&t="
-  var q = []
-  if(Number(k) % 2 == 0){
-    q = even_q
-  }else{
-    q = odd_q
-  }
-  Qan.forEach((i)=>{
-    Array.from(i).forEach((z)=>{
-      qu += q[katakana.indexOf(z)]
-    })
-  })
-  qu += "&a="
-  Array.from(Qy).forEach((i)=>{
-    qu += q[katakana.indexOf(i)]
-  })
-  qu += "&h="
-  Qhb.forEach((i)=>{
-    i.forEach((z)=>{
-      switch(z){
-        case "HIT":
-          qu += "h"
-          break;
-        case "BLOW":
-          qu += "b"
-          break;
-        case "NO":
-          qu += "n"
-          break;
-      }
-    })
-    qu +="_"
-  })
-  return qu
-}
-
-// toQuery(daily_data.pass_day,history.anser,history.hb,tango.yomi)
-
-
-
-
-// ゲームスタート
-WakeUpRequest(q_csv_path,"Q");
+Initialization();

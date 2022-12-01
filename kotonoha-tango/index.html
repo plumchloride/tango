@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 5.2.6 -->
+  <!-- 6.0.0 -->
   <!-- https://plumchloride.github.io/tango/img/nav/PC/Frame1.png -->
   <head>
     <meta charset="utf-8">
@@ -12,8 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js" defer></script>
     <!-- moment.js -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
-    <!-- <script src="./src/kotonoha.js?ver=5.1.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=5.2.6" defer></script>
+    <!-- <script src="./src/kotonoha.js?ver=6.0.0" defer></script> -->
+    <script src="./src/kotonoha.min.js?ver=6.0.0" defer></script>
     <link rel="stylesheet" href="./public/style.css?ver=5.1.2"></link>
 
     <!-- twitter test -->
@@ -74,6 +74,8 @@
       <p>＞ <a href="https://note.com/plumchloride/n/n1fcddc29b00c" target="_blank">note記事</a></p>
       <h2>単語更新・辞書データについて</h2>
       <p>＞ <a href="https://note.com/plumchloride/n/n8d25cad96348" target="_blank">note記事</a></p>
+      <h2>バージョン履歴</h2>
+      <p>＞ <a href="https://plum-chloride.notion.site/ce85739625814b4ab1949125f24a3eb2" target="_blank">notion記事</a></p>
       <h2>重複表示について</h2>
       <p>同じ文字を２個、３個使う<strong>ことのは</strong>を入力した際には、答えに含まれる文字数分だけ左から評価の表示を行います。ただし緑ハイライトの場合はその限りではありません。</p>
       <p><strong>例：正解のたんごが「シュウカイ」の場合</strong></p>
@@ -252,12 +254,12 @@
         <li>Google Analytics利用規約<br><a href="http://www.google.com/analytics/terms/jp.html" target="_blank">http://www.google.com/analytics/terms/jp.html</a></li>
         <li>Google プライバシーポリシー<br><a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a></li>
       </ul>
-      <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータは結果が確定した際に、何回の試行で成功・失敗したのか及びゲームの出題日のみを取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
+      <p>　本ウェブサイトにおいて、ユーザの回答成績を取得するために本サイトが作成したAPIを用いてデータの収集、記録、分析を行います。収集するデータとして回答に利用した単語やゲームの成績を取得しており、個人を特定する情報は含まれておりません。収集、集計、分析されたデータは公開する場合があります。</p>
       <p>　ユーザは、本サイトを利用することでGoogle Analytics、cookie、APIによる回答データの収集に関して許可を与えたものとみなします。</p>
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 5.2.6</small></div>
+      <div class="flex_center"><small>ことのはたんご ver 6.0.0</small></div>
       <br>
       <div class="flex_center">
         <address>
@@ -276,4 +278,12 @@
     </div>
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>
+  <style>
+    /* cssのアプデがめんどくさいのでインライン */
+    #eval_display .word_no{
+      background-color: gray;
+      border: solid 0.15em gray;
+      color: white;
+    }
+  </style>
 </html>
