@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 6.0.0 -->
+  <!-- 6.0.4 -->
   <!-- https://plumchloride.github.io/tango/img/nav/PC/Frame1.png -->
   <head>
     <meta charset="utf-8">
@@ -13,7 +13,7 @@
     <!-- moment.js -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
     <!-- <script src="./src/kotonoha.js?ver=6.0.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=6.0.0" defer></script>
+    <script src="./src/kotonoha.min.js?ver=6.0.4" defer></script>
     <link rel="stylesheet" href="./public/style.css?ver=5.1.2"></link>
 
     <!-- twitter test -->
@@ -44,6 +44,9 @@
     </div>
     <div id="hatena" class="explanation">
       <h2 id="switch_lang"><small><u id="switch_lang_u" onclick="changeLang();">Switch to English</u></small></h2>
+      <!-- // 第339回エラー用 -->
+      <div id="e339" style="text-align: center;"></div>
+      <!-- // 第339回エラー用 -->
       <h2>遊び方</h2>
       <p>10回の試行で決められた5文字である1つの<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -259,7 +262,7 @@
       <h2>その他</h2>
       <p>コードに関しては以下のGitHubに掲載されています。</p>
       <p><a href="https://github.com/plumchloride/tango" target="_blank"><img id="github_img" src="https://gh-card.dev/repos/plumchloride/tango.svg"></a></p>
-      <div class="flex_center"><small>ことのはたんご ver 6.0.0</small></div>
+      <div class="flex_center"><small>ことのはたんご ver<span id="ver"></span></small></div>
       <br>
       <div class="flex_center">
         <address>

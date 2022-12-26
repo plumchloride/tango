@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+  <meta charset="utf-8">
+  <title>緊急修正用</title>
+  <meta name="description" content="日本語版Wordle。1日1回単語推測パズルゲーム">
+  <link rel="icon" type="image/png" href="./public/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <meta name="robots" content="noindex">
+  </head>
+  <body>
+    <h1>ことのはたんご第339回緊急修正ページ</h1>
+    <p>こちらは第339回に発生した正解の回答が入力出来ないバグに遭遇した際にそのまま降参や10回目まで回答を行ってしまった結果、連勝数が途切れてしまったユーザへの対応ページです。</p>
+    <p>ご迷惑をおかけして申し訳ございません。</p>
+    <p>こちらを利用すると、第339回目の単語を7回目の回答で正解したとして修正します。</p>
+    <p>修正後のデータは下記の様になります。問題無ければ下記「修正決定ボタン」を押してください</p>
+    <div id="result"><p id="pre_text">JavaScriptが起動できないため修正できません。<br>ご迷惑をおかけして申し訳ございません。</p>
+      <div id="change_result" class="non-visi">
+        <div id="history">
+          <div class="row_his">
+            <div class="h-text" id="his_1">プレイ<br>回数</div>
+            <div class="h-number" id = "try_count"> </div>
+          </div>
+          <div class="row_his">
+            <div class="h-text" id="his_2">勝率</div>
+            <div class="h-number" id = "win_rate"> </div>
+          </div>
+          <div class="row_his">
+            <div class="h-text" id="his_3">現在の<br>連勝数</div>
+            <div class="h-number" id = "current_streak"> </div>
+          </div>
+          <div class="row_his">
+            <div class="h-text" id="his_4">最大<br>連勝数</div>
+            <div class="h-number" id = "max_streak"> </div>
+          </div>
+        </div>
+        <div id="gr_title">正解分布表示</div>
+        <div id="cahrt_canvas"><canvas id="myChart"></canvas></div>
+      </div>
+      </div>
+    <div id="button_wrapper"><button id="ok_fix" type="button" class="non-visi">修正決定</button></div>
+  </body>
+  <script>
+    let myChart = "A"; // チャート初期化用
+    let history_of_game = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
+    const ShowHistory = (dir) =>{
+    document.getElementById("try_count").innerText = dir.try_count;
+    win_rate = String(Math.floor((dir.win_count/dir.try_count)*100))+"%";
+    if(!Math.floor((dir.win_count/dir.try_count)*100)){
+      win_rate = "0%";
+    }
+    document.getElementById("win_rate").innerText = win_rate;
+    document.getElementById("current_streak").innerText =dir.current_streak;
+    document.getElementById("max_streak").innerText =dir.max_streak;
+
+    // chart
+    Chart.defaults.plugins.legend.display = false;
+    labels = ["1","2","3","4","5","6","7","8","9","10"];
+    data = {
+      labels: labels,
+      datasets: [{
+        backgroundColor: 'rgb(128,197,222)',
+        borderColor: 'rgb(128,197,222)',
+        data: dir.history,
+        borderWidth: 0
+      }]
+    }
+    config = {
+      showTooltips: false,
+      type: 'bar',
+      data: data,
+      options: {
+        responsive: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+      }
+    };
+
+    if(myChart != "A"){
+      myChart.destroy();
+    }
+    myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
+  }
+    var test_local = "test_local"
+    try {
+      localStorage.setItem(test_local, test_local);
+      localStorage.removeItem(test_local);
+      enable_localstorage = true;
+    } catch (e) {
+      document.getElementById("result").innerText = "保存されたデータを読み込めないため修正出来ません。<br>ご迷惑をおかけして申し訳ございません。"
+    }
+    if(enable_localstorage){
+      if(localStorage.getItem("pass_day")!=339){
+        document.getElementById("result").innerHTML = "第339回のデータを読み込めないため修正出来ません。<br>ご迷惑をおかけして申し訳ございません。"
+      }else{
+        var flag = JSON.parse(localStorage.getItem("flag"))
+        if(!flag.game_end || flag.game_win || localStorage.getItem("end339")){
+          document.getElementById("result").innerHTML = `ゲーム終了：${flag.game_end}<br>ゲーム勝利：${flag.game_win}<br>正常に終了or修正完了:${localStorage.getItem("end339")}<br><br>プレイが完了していない、もしくは正常に終了してる、もしくは修正が完了しています。<br>修正の必要はありません。`
+        }else{
+          if(!localStorage.getItem("uuid")){
+            document.getElementById("result").innerHTML = "第339回のデータを読み込めないため修正出来ません。<br>ご迷惑をおかけして申し訳ございません。"
+          }else{
+            // データ送信部分
+            p_t = {"uuid":localStorage.getItem("uuid")}
+            p_j = JSON.stringify(p_t);
+            xhr = new XMLHttpRequest;
+            xhr.onload = function(){
+              if(xhr.status!= 200){
+                document.getElementById("result").innerHTML = "第339回のデータを正常に読み込めないため修正出来ません。<br>ご迷惑をおかけして申し訳ございません。"
+              }else{
+                var res = JSON.parse(xhr.responseText);
+                res["h_try"] += 1;
+                res["h_win"] += 1;
+                res["h_cstr"] += 1;
+                if(res["h_cstr"]>res["h_mstr"]){
+                  res["h_mstr"] = res["h_cstr"];
+                };
+                res["h_score"][6] += 1;
+                history_of_game = {"try_count":res["h_try"],"win_count":res["h_win"],"current_streak":res["h_cstr"],"max_streak":res["h_mstr"],"history":res["h_score"]}
+                document.getElementById("pre_text").classList.add("non-visi")
+                document.getElementById("change_result").classList.remove("non-visi")
+                ShowHistory(history_of_game)
+                document.getElementById("ok_fix").classList.remove("non-visi")
+              }
+            };
+            xhr.onerror = function(){
+              document.getElementById("result").innerHTML = "第339回のデータを正常に読み込めないため修正出来ません。<br>ご迷惑をおかけして申し訳ございません。"
+            }
+            xhr.open('POST', "https://3tb7fjgvfexmomusseeghcft540yyswn.lambda-url.ap-northeast-1.on.aws/", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(p_j);
+          }
+        }
+      }
+    }
+    document.getElementById("ok_fix").addEventListener("click",e=>{
+      win_rate = String(Math.floor((history_of_game.win_count/history_of_game.try_count)*100))+"%";
+      if(!Math.floor((history_of_game.win_count/history_of_game.try_count)*100)){
+        win_rate = "0%";
+      }
+      if(localStorage.getItem("history_of_game")){
+        var bh = JSON.parse(localStorage.getItem("history_of_game"))
+      }else{
+        var bh = {"try_count":0,"win_count":0,"current_streak":0,"max_streak":0,"history":[0,0,0,0,0,0,0,0,0,0]}
+      }
+      bh_win_rate = String(Math.floor((bh.win_count/bh.try_count)*100))+"%";
+      if(!Math.floor((bh.win_count/bh.try_count)*100)){
+        bh_win_rate = "0%";
+      }
+      if(confirm(`下記設定で修正してもよろしいでしょうか？\n=修正前=\nプレイ回数：${bh.try_count}\n勝率：${bh_win_rate}\n現在の連勝数：${bh.current_streak}\n最大連勝数：${bh.max_streak}\n=修正後=\nプレイ回数：${history_of_game.try_count}\n勝率：${win_rate}\n現在の連勝数：${history_of_game.current_streak}\n最大連勝数：${history_of_game.max_streak}`)){
+        localStorage.setItem("history_of_game", JSON.stringify(history_of_game));
+        localStorage.setItem("end339",true);
+        alert("修正いたしました。\nご迷惑をおかけして申し訳ございません。ことのはたんごに戻ります。")
+        window.location = "https://plum-chloride.jp/kotonoha-tango/index.html";
+      }
+    })
+  </script>
+  <style>
+    .non-visi{
+      display: none;
+    }
+    #result{
+      font-weight: bold;
+    }
+    #change_result{
+      max-width: 800px;
+    }
+    #history{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    }
+    #history .row_his{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+    }
+    #history .h-text{ /* lineheight は予期せぬ動作防止のため、1にしておくべき？*/
+      text-align: center;
+      line-height:1;
+      vertical-align: middle;
+    }
+    #cahrt_canvas{
+      display: flex;
+      justify-content: center;
+    }
+    #button_wrapper{
+      max-width: 800px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+    }
+  </style>
+</html>

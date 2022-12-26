@@ -1,6 +1,6 @@
 
 
-const current_version = "6.0.0";
+const current_version = "6.0.4";
 
 const hiragana = ["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
                 "ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん",
@@ -44,7 +44,7 @@ const Initialization = () =>{
   let timestamp = fday_diff.days;
   let pass_day =  Math.floor(timestamp*-1);
   daily_data.pass_day = pass_day;
-  console.log(`第${daily_data.pass_day}回`)
+  console.log(`第${daily_data.pass_day}回`);
 
   Getcsv(a_csv_path,"A");
   Getcsv(q_csv_path,"Q");
@@ -53,12 +53,43 @@ const Initialization = () =>{
   CreateKeybord();
   CreateDisplay();
   GetLocalStorage();
+  document.getElementById("ver").innerText = current_version;
 
   setInterval(DisplayTime, 1000);
 }
 const FinWakeupProcess = ()=>{
   var sum = (accumulator, curr) => Number(accumulator) + Number(curr);
+
   if(wakeup_array.reduce(sum) == wakeup_array.length){
+
+    // 第339回エラー用
+    if(daily_data.pass_day == 339 || daily_data.pass_day == 340){
+      if(localStorage.getItem("pass_day")){
+        if(localStorage.getItem("pass_day")<339){
+          localStorage.setItem("end339",true);
+        }else{
+          if(!localStorage.getItem("end339")){
+            var cf = confirm("第339回（12/26）における、正答の単語を入力出来ない不具合でご迷惑をおかけして申し訳ございません。\n朝5時において不具合修正が完了しています。そのため12/26 0時-5時にプレイしたユーザが対象となります。\n該当の不具合により連勝数が途切れた等の問題が発生した場合は「OK・はい」を選択する事で履歴をロールバックできます。\n修正の必要が無い、もしくは不具合の影響を受けていないユーザは「No・キャンセル」を選択してください。")
+            if(cf){
+              window.location = "https://plum-chloride.jp/kotonoha-tango/emergency339.html";
+              alert("「OK・はい」ボタンを押すとページが移動します。\nページが移動しない場合は第339回緊急修正用と記載されているリンクより移動してください")
+              document.getElementById("e339").innerHTML = "<a href='https://plum-chloride.jp/kotonoha-tango/emergency339.html'>第339回緊急修正用</a>"
+              return;
+            }else{
+              if(daily_data.pass_day == 339){
+                var cf = confirm("再度選択肢を表示しますか？\n「OK・はい」or「No・キャンセル」")
+                if(!cf){localStorage.setItem("end339",true);}
+              }else{
+                localStorage.setItem("end339",true)
+              }
+            }
+          }
+        }
+      }
+    }
+    // 第339回エラー用
+
+
     if(daily_data.uuid == undefined){
       daily_data.uuid = "some_id"
     }
@@ -167,6 +198,10 @@ const SaveArray = (data,mode,env)=>{
   switch(mode){
     case "A":
       csv_data.a_data = data;
+      if(csv_data.a_data != {} && csv_data.q_data != {}){
+        let add_tango = (Array.from(new Set(csv_data.a_data.concat(csv_data.q_data.pronunciation)))).filter(word=>word != undefined);
+        csv_data.a_data = add_tango;
+      }
       filter_array = Array.from(new Set([...csv_data.a_data]));
       csv_data.a_data = Array.from(new Set([...csv_data.a_data]));
       wakeup_array[0] = true;
@@ -174,6 +209,12 @@ const SaveArray = (data,mode,env)=>{
       break;
     case "Q":
       csv_data.q_data = data;
+      if(csv_data.a_data != {} && csv_data.q_data != {}){
+        let add_tango = (Array.from(new Set(csv_data.a_data.concat(csv_data.q_data.pronunciation)))).filter(word=>word != undefined);
+        csv_data.a_data = add_tango;
+        filter_array = Array.from(new Set([...csv_data.a_data]));
+        csv_data.a_data = Array.from(new Set([...csv_data.a_data]));
+      }
       wakeup_array[1] = true;
       FinWakeupProcess();
       break;
@@ -453,6 +494,7 @@ const DisplayTime = ()=>{
   }
 }
 
+
 // =================
 // UI更新
 // =================
@@ -474,7 +516,6 @@ const SetUi = () =>{
   SolvHighlight();
   KeybordHB();
   CheckRemaining_all(false);
-  // getRemain();
   if(change_wind)mode_change("game");
   if(flag.game_end){
     End();
@@ -990,6 +1031,7 @@ document.getElementById("tango_input").addEventListener("submit",(e)=>{
     window.scroll({top: 0, behavior: 'smooth'});
     RemoveSolveHighlight();
     KeybordHB();
+    CheckRemaining_all(true);
     sleep_time = 500;
     setTimeout(EndWordUpdate, sleep_time,sleep_time);
   }
@@ -1134,6 +1176,13 @@ const End = ()=>{
       alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
     }
   };
+
+  // 339用データ保存（後日削除）
+  if(!win_b_tf){
+    if(daily_data.pass_day == 339){localStorage.setItem("end339",true)};
+  };
+  // 339用データ保存（後日削除）== ここまで
+
 
   // api用
   var api_num = 0
