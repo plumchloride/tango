@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <!-- 6.0.4 -->
+  <!-- 6.1.4 -->
   <!-- https://plumchloride.github.io/tango/img/nav/PC/Frame1.png -->
   <head>
     <meta charset="utf-8">
@@ -13,8 +13,8 @@
     <!-- moment.js -->
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.3.2/build/global/luxon.min.js"></script>
     <!-- <script src="./src/kotonoha.js?ver=6.0.0" defer></script> -->
-    <script src="./src/kotonoha.min.js?ver=6.0.4" defer></script>
-    <link rel="stylesheet" href="./public/style.css?ver=5.1.2"></link>
+    <script src="./src/kotonoha.min.js?ver=6.1.4" defer></script>
+    <link rel="stylesheet" href="./public/style.css?ver=6.1.0"></link>
 
     <!-- twitter test -->
     <meta name="twitter:card" content="summary_large_image">
@@ -44,9 +44,6 @@
     </div>
     <div id="hatena" class="explanation">
       <h2 id="switch_lang"><small><u id="switch_lang_u" onclick="changeLang();">Switch to English</u></small></h2>
-      <!-- // 第339回エラー用 -->
-      <div id="e339" style="text-align: center;"></div>
-      <!-- // 第339回エラー用 -->
       <h2>遊び方</h2>
       <p>10回の試行で決められた5文字である1つの<strong>たんご</strong>を当てて下さい。</p>
       <p>それぞれの試行は本アプリの辞書で定められた5文字の<strong>ことのは</strong>であることが必要です。</p>
@@ -152,6 +149,7 @@
         <button class="key_type_bt" onclick="FuncButton('→');">→</button>
         <button class="key_type_bt" onclick="FuncButton('del');">del</button>
       </div>
+      <div id="cha_change_wrapp"><button id="cha_change" onclick="ChaChange('hira');">ひらがなに切り替え</button></div>
       <div id="keybord_type">
         <button id = "kt_all" class="key_type_bt cuurent" onclick="KryTypeChange('all');">全種</button>
         <button id = "kt_normal" class="key_type_bt" onclick="KryTypeChange('normal');">50音</button>
@@ -266,7 +264,7 @@
       <br>
       <div class="flex_center">
         <address>
-          &copy; 2022 Rikito Ohnishi
+          &copy; 2023 Rikito Ohnishi
         </address>
       </div>
 
@@ -282,11 +280,26 @@
     <div id="alert" class="non_visi"><div><p id="alert_text"></p></div></div>
   </body>
   <style>
-    /* cssのアプデがめんどくさいのでインライン */
-    #eval_display .word_no{
-      background-color: gray;
-      border: solid 0.15em gray;
-      color: white;
+    #eval_display{
+      user-select: none;
+    }
+    button{
+      user-select: none;
+    }
+    #top_info{
+      user-select: none;
+    }
+    #header{
+      user-select: none;
+    }
+    #body .inputs{
+      user-select: none;
+    }
+    #keybord{
+      user-select: none;
+    }
+    #change_colour{
+      user-select: none;
     }
   </style>
 </html>

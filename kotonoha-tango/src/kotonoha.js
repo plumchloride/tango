@@ -1,6 +1,6 @@
 
 
-const current_version = "6.0.4";
+const current_version = "6.1.4";
 
 const hiragana = ["あ","い","う","え","お","か","き","く","け","こ","さ","し","す","せ","そ","た","ち","つ","て","と","な","に","ぬ","ね","の","は","ひ","ふ","へ","ほ",
                 "ま","み","む","め","も","や","ゆ","よ","ら","り","る","れ","ろ","わ","を","ん",
@@ -27,7 +27,6 @@ let none_re_array = []; // remain動作軽量用
 let reload = false;
 let KeybordButton_Mode = "input"
 let Assumption_word = {"hit":[],"none":[]};
-let max_use = {};
 
 // =================
 // Initalization
@@ -61,35 +60,6 @@ const FinWakeupProcess = ()=>{
   var sum = (accumulator, curr) => Number(accumulator) + Number(curr);
 
   if(wakeup_array.reduce(sum) == wakeup_array.length){
-
-    // 第339回エラー用
-    if(daily_data.pass_day == 339 || daily_data.pass_day == 340){
-      if(localStorage.getItem("pass_day")){
-        if(localStorage.getItem("pass_day")<339){
-          localStorage.setItem("end339",true);
-        }else{
-          if(!localStorage.getItem("end339")){
-            var cf = confirm("第339回（12/26）における、正答の単語を入力出来ない不具合でご迷惑をおかけして申し訳ございません。\n朝5時において不具合修正が完了しています。そのため12/26 0時-5時にプレイしたユーザが対象となります。\n該当の不具合により連勝数が途切れた等の問題が発生した場合は「OK・はい」を選択する事で履歴をロールバックできます。\n修正の必要が無い、もしくは不具合の影響を受けていないユーザは「No・キャンセル」を選択してください。")
-            if(cf){
-              window.location = "https://plum-chloride.jp/kotonoha-tango/emergency339.html";
-              alert("「OK・はい」ボタンを押すとページが移動します。\nページが移動しない場合は第339回緊急修正用と記載されているリンクより移動してください")
-              document.getElementById("e339").innerHTML = "<a href='https://plum-chloride.jp/kotonoha-tango/emergency339.html'>第339回緊急修正用</a>"
-              return;
-            }else{
-              if(daily_data.pass_day == 339){
-                var cf = confirm("再度選択肢を表示しますか？\n「OK・はい」or「No・キャンセル」")
-                if(!cf){localStorage.setItem("end339",true);}
-              }else{
-                localStorage.setItem("end339",true)
-              }
-            }
-          }
-        }
-      }
-    }
-    // 第339回エラー用
-
-
     if(daily_data.uuid == undefined){
       daily_data.uuid = "some_id"
     }
@@ -320,15 +290,15 @@ const GetLocalStorage  = ()=>{
   // ローカルストレージON
   if(enable_localstorage){
     try {
+      // history_of_game(ゲーム履歴)
+      if(localStorage.getItem("history_of_game") != null){
+        history.game = JSON.parse(localStorage.getItem("history_of_game"));
+      }
       // ゲーム経験している場合
       if(localStorage.getItem("experience")){
         if((daily_data.pass_day-localStorage.getItem("pass_day")) <60){
           change_wind = true
         };
-        // history_of_game(ゲーム履歴)
-        if(localStorage.getItem("history_of_game") != null){
-          history.game = JSON.parse(localStorage.getItem("history_of_game"));
-        }
 
         // 色調調整
         if(localStorage.getItem("color") == null){
@@ -394,10 +364,6 @@ const GetLocalStorage  = ()=>{
             Assumption_word.none.forEach(element=>{
               document.getElementById("btn_"+element).classList.add("AssumptionNone");
             })
-          }
-          // 文字最大使用回数
-          if(localStorage.getItem("max_use") != null){
-            max_use = JSON.parse(localStorage.getItem("max_use"));
           }
           // 今日のUUID
           if(localStorage.getItem("uuid") != null){
@@ -542,7 +508,15 @@ const DisplayWordUpdate = (wo = history.anser,hb = history.hb) =>{
         var chara_arr = wo[row_ind].split("");
         [0,1,2,3,4].forEach(cha_ind=>{
           $dis_cha = document.getElementById(`dis-${row_ind}-${cha_ind}`)
-          $dis_cha.innerText = chara_arr[cha_ind]
+          if(cha_mode == "kana"){
+            $dis_cha.innerText = chara_arr[cha_ind]
+          }else if(cha_mode == "hira"){
+            if(katakana.indexOf(chara_arr[cha_ind]) != -1){
+              $dis_cha.innerText = hiragana[katakana.indexOf(chara_arr[cha_ind])];
+            }else{
+              $dis_cha.innerText = chara_arr[cha_ind];
+            }
+          }
           $dis_cha.classList.add(`word_${hb[row_ind][cha_ind].toLowerCase()}`)
         })
         done_word[row_ind] = true
@@ -589,7 +563,15 @@ const EndWordUpdate = (time,cha_ind = 0,wo = history.anser,hb = history.hb,row_i
   if(cha_ind > 4)return;
   var chara_arr = wo[row_ind].split("");
   $dis_cha = document.getElementById(`dis-${row_ind}-${cha_ind}`)
-  $dis_cha.innerText = chara_arr[cha_ind]
+  if(cha_mode == "kana"){
+    $dis_cha.innerText = chara_arr[cha_ind]
+  }else if(cha_mode == "hira"){
+    if(katakana.indexOf(chara_arr[cha_ind]) != -1){
+      $dis_cha.innerText = hiragana[katakana.indexOf(chara_arr[cha_ind])];
+    }else{
+      $dis_cha.innerText = chara_arr[cha_ind];
+    }
+  }
   $dis_cha.classList.add(`word_${hb[row_ind][cha_ind].toLowerCase()}`)
   setTimeout(EndWordUpdate, time,time,cha_ind+1);
 };
@@ -719,13 +701,27 @@ $input.addEventListener('input',(e)=>{
 const Word_input = (word_arr = game_data.anser,row = game_data.now_solve.row) =>{
   word_arr.forEach((cha,cha_ind)=>{
     $dis_cha = document.getElementById(`dis-${row}-${cha_ind}`)
-    $dis_cha.innerText = cha.replace(/－/g,"　")
+    if(cha_mode == "kana"){
+      $dis_cha.innerText = cha.replace(/－/g,"　")
+    }else if(cha_mode == "hira"){
+      if(katakana.indexOf(cha) != -1){
+        // ひらがなカタカナの場合
+        $dis_cha.innerText = hiragana[katakana.indexOf(cha)].replace(/－/g,"　")
+      }else{
+        // その他の場合
+        $dis_cha.innerText = cha.replace(/－/g,"　")
+      }
+    }
   })
 }
 const KeybordButton = (character)=>{
   switch(KeybordButton_Mode){
     case "input":
-      game_data.anser[game_data.now_solve.index] = character;
+      if(cha_mode == "kana"){
+        game_data.anser[game_data.now_solve.index] = character;
+      }else if(cha_mode == "hira"){
+        game_data.anser[game_data.now_solve.index] = hiragana[katakana.indexOf(character)];
+      };
       if(game_data.now_solve.index <4){
         game_data.now_solve.index += 1;
       }
@@ -872,7 +868,7 @@ const KryTypeChange = (type)=>{
 // 回答
 // =================
 document.getElementById("tango_input").addEventListener("submit",(e)=>{
-  if(flag.game_end){return};  
+  if(flag.game_end){return};
   // 値の改変やバグチェック
   if(!flag.wakeup){
     alert("バグ、もしくは不正な操作です。リロードします。\n Error1: Not wake up");
@@ -885,9 +881,11 @@ document.getElementById("tango_input").addEventListener("submit",(e)=>{
   }
   // 異なる文字が入力されていないかチェック。
   var check = false
-  game_data.anser.forEach((element)=>{
-    if(hiragana.includes(element) | katakana.includes(element)){
+  game_data.anser.forEach((element,index)=>{
+    if(katakana.includes(element)){
       ;
+    }else if(hiragana.includes(element)){
+      game_data.anser[index] = katakana[hiragana.indexOf(element)];
     }else{
       if(check){
         if(flag.lang_en){
@@ -978,13 +976,6 @@ document.getElementById("tango_input").addEventListener("submit",(e)=>{
       }
     }
   })
-  // 答えの最大文字数が分かった場合それを保存する
-  Object.keys(cha_hb_priority).forEach(e=>{
-    var ans_cha_count = today_tango_arr.filter(word => word==e).length
-    if(cha_hb_priority[e].length>ans_cha_count){
-      max_use[e] = ans_cha_count;
-    }
-  })
 
   // 文字情報取得
   history.hb_text.hit = Array.from(new Set(history.hb_text.hit.concat(h_word)));
@@ -1013,7 +1004,6 @@ document.getElementById("tango_input").addEventListener("submit",(e)=>{
     localStorage.setItem("pass_day", daily_data.pass_day);
     localStorage.setItem("bf_error8", false);
     localStorage.setItem("tango",JSON.stringify(tango));
-    localStorage.setItem("max_use",JSON.stringify(max_use));
   }
   var _game_end = false;
   if(hit_count == 5 | game_data.now_solve.row == 10)_game_end = true;
@@ -1090,6 +1080,8 @@ const CheckRemaining_all = (progress_re = false) =>{
   // hbリストを参照
   history_of_hb.forEach((element,row)=>{
     // 各試行
+    // 文字使用回数
+    var word_count = {}
     element.forEach((e,cha_ind)=>{
       // 各文字の評価(HIT BLOW)
       // HITの場合は確定BLOWとNOの場合はその位置から除外
@@ -1098,13 +1090,29 @@ const CheckRemaining_all = (progress_re = false) =>{
       }else if(e == "HIT"){
         filter_array = filter_array.filter((word)=>history_of_anser[row][cha_ind] == word[cha_ind]);
       }
+      // 文字の使用回数保存
+      if(Object.keys(word_count).indexOf(history_of_anser[row][cha_ind]) != -1){
+        word_count[history_of_anser[row][cha_ind]] += 1
+      }else{
+        word_count[history_of_anser[row][cha_ind]] = 1
+      }
+    })
+
+    // 答えの単語の文字使用回数が各施行の判別文字使用回数以下にならないように設定=>重複処理
+    Object.keys(word_count).forEach((cha)=>{
+      var ans_cha_count = (tango.yomi.match( new RegExp( cha, "g" ) ) || [] ).length
+      if(word_count[cha]>ans_cha_count){
+        // 文字数において入力が答えの単語より大きい場合、答えの単語の文字使用回数が分かるため答えの単語の文字使用回数と同じ文字使用回数
+        // console.log(cha,word_count[cha],ans_cha_count)
+        filter_array = filter_array.filter((word)=>(word.match( new RegExp( cha, "g" ) ) || [] ).length == ans_cha_count);
+      }else{
+        // 文字数において入力が答えの単語と同じ数か少ない場合、答えの文字使用回数が不明のため入力の文字使用回数以上
+        // console.log("not",cha,word_count[cha],ans_cha_count)
+        filter_array = filter_array.filter((word)=>(word.match( new RegExp( cha, "g" ) ) || [] ).length >= word_count[cha]);
+      }
     })
   });
 
-  // 最大使用回数が分かる場合
-  Object.keys(max_use).forEach(e=>{
-    filter_array = filter_array.filter((word)=>(word.match( new RegExp( e, "g" ) ) || [] ).length == max_use[e])
-  })
 
   RemainShow(filter_array.length);
   if(progress_re){
@@ -1176,13 +1184,6 @@ const End = ()=>{
       alertShow("バグです。動作に一部影響が出ています。\n Error7: flag is not set",2000);
     }
   };
-
-  // 339用データ保存（後日削除）
-  if(!win_b_tf){
-    if(daily_data.pass_day == 339){localStorage.setItem("end339",true)};
-  };
-  // 339用データ保存（後日削除）== ここまで
-
 
   // api用
   var api_num = 0
@@ -1468,7 +1469,7 @@ const DelDay = ()=>{
       alert("ゲームがクリアされているため削除できません。")
       return;
     }
-    var key_len = ['pass_day', 'history_of_hb_text', 'now_solve', 'flag', 'pb_forms', 'color', 'lang', 'bf_error8', 'experience', 'remain', 'Assumption_word', 'history_of_hb', 'history_of_game', 'history_of_anser', 'tango',"max_use","uuid"]
+    var key_len = ['pass_day', 'history_of_hb_text', 'now_solve', 'flag', 'pb_forms', 'color', 'lang', 'bf_error8', 'experience', 'remain', 'Assumption_word', 'history_of_hb', 'history_of_anser', 'tango',"max_use","end339"]
     var kl = key_len.length
     alertShow("削除中です。少々お待ちください。",kl*500)
     for( let i = 0; i < key_len.length; i++ ){
@@ -1490,6 +1491,42 @@ const lsri = (key)=>{
   localStorage.removeItem(key)
 }
 // =================
+// ひらがなカタカナ切り替え
+// =================
+let cha_mode = "kana"
+const ChaChange = (to)=>{
+  if(to == "hira"){
+    katakana.forEach((e,index)=>{document.getElementById(`btn_${e}`).innerText = hiragana[index]});
+    document.getElementById("cha_change").innerText = "カタカナに切り替え"
+    if(flag.lang_en)document.getElementById("cha_change").innerText = "switch to カタカナ";
+    document.getElementById("cha_change").setAttribute("onclick","ChaChange('kana');");
+    [0,1,2,3,4,5,6,7,8,9].forEach(_row=>{
+      [0,1,2,3,4].forEach(_ind=>{
+        var $doc = document.getElementById(`dis-${_row}-${_ind}`);
+        if(katakana.indexOf($doc.innerText) != -1){
+          $doc.innerText = hiragana[katakana.indexOf($doc.innerText)];
+        }
+      })
+    })
+    cha_mode = "hira"
+  }else if(to = "kana"){
+    katakana.forEach((e,index)=>{document.getElementById(`btn_${e}`).innerText = katakana[index]});
+    document.getElementById("cha_change").innerText = "ひらがなに切り替え"
+    if(flag.lang_en)document.getElementById("cha_change").innerText = "switch to ひらがな";
+    document.getElementById("cha_change").setAttribute("onclick","ChaChange('hira');");
+    [0,1,2,3,4,5,6,7,8,9].forEach(_row=>{
+      [0,1,2,3,4].forEach(_ind=>{
+        var $doc = document.getElementById(`dis-${_row}-${_ind}`);
+        if(hiragana.indexOf($doc.innerText) != -1){
+          $doc.innerText = katakana[hiragana.indexOf($doc.innerText)];
+        }
+      })
+    })
+    cha_mode = "kana"
+  }
+}
+
+// =================
 // 英語化
 // =================
 const changeLang = () =>{
@@ -1504,6 +1541,11 @@ const changeLang = () =>{
     document.getElementById("kt_ga").innerText = "濁点等";
     document.getElementById("kt_none").innerText = "非表示";
     document.getElementById("before_tango_h2").innerText ="昨日のたんご：";
+    if(cha_mode == "kana"){
+      document.getElementById("cha_change").innerText = "ひらがなに切り替え";
+    }else if(cha_mode == "hira"){
+      document.getElementById("cha_change").innerText = "カタカナに切り替え";
+    }
     if(!flag.remain_show){
       document.getElementById("remain_unvisi").innerText="（表示）";
     }else{
@@ -1523,6 +1565,11 @@ const changeLang = () =>{
     document.getElementById("kt_ga").innerText = "bottom half";
     document.getElementById("kt_none").innerText = "hidden";
     document.getElementById("before_tango_h2").innerText = "Yesterday たんご：";
+    if(cha_mode == "kana"){
+      document.getElementById("cha_change").innerText = "switch to ひらがな";
+    }else if(cha_mode == "hira"){
+      document.getElementById("cha_change").innerText = "switch to カタカナ";
+    }
     if(!flag.remain_show){
       document.getElementById("remain_unvisi").innerText="（Show）";
     }else{
